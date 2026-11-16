@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { border-radius: 0; -webkit-tap-highlight-color: transparent; }
+.round { border-radius: 9999px; }
+
+html, body, #root { height: 100%; }
+body {
+  margin: 0; background: #F1F4F5; color: #001623;
+  font-family: 'Geist Sans', system-ui, sans-serif; font-size: 15px; line-height: 22px;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+button, input, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+button:disabled { cursor: default; }
+:focus { outline: none; }
+:focus-visible { outline: 2px solid #007A7E; outline-offset: 2px; }
+
+/* illustrations reference "Geist"; fontsource registers "Geist Sans" */
+svg [font-family='Geist'] { font-family: 'Geist Sans', sans-serif; }
+svg [font-family='Geist Mono'] { font-family: 'Geist Mono', monospace; }
+
+.eyebrow { font-family: 'Geist Mono', monospace; font-size: 12px; line-height: 16px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+.mono { font-family: 'Geist Mono', monospace; letter-spacing: 0.02em; }
+.hatch { background-image: repeating-linear-gradient(125deg, rgba(255,255,255,.4) 0 1.5px, transparent 1.5px 5px); }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+@keyframes spin { to { transform: rotate(360deg); } }
+.spin { animation: spin .8s linear infinite; }
+@keyframes bracket-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .5; } }
+.bracket-pulse { animation: bracket-pulse 1.2s ease-in-out infinite; }
+@keyframes amb { 0%, 100% { opacity: .4; } 50% { opacity: 1; } }
+.pn-amb { animation: amb 2.4s ease-in-out infinite; }
+@keyframes pn-pulse2 { 0% { transform: scale(1.2); opacity: .6; } 60%, 100% { transform: scale(1.6); opacity: 0; } }
+.pn-pulse2 { transform-origin: 280px 209px; animation: pn-pulse2 3s ease-out infinite; }
+@keyframes dot-pulse { 0% { box-shadow: 0 0 0 0 rgba(4,120,87,.5); } 100% { box-shadow: 0 0 0 8px rgba(4,120,87,0); } }
+.dot-pulse { animation: dot-pulse .9s ease-out 2; }
+
+.reduce-motion *, .reduce-motion *::before, .reduce-motion *::after { animation: none !important; transition-duration: 0s !important; }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: 0s !important; }
+}

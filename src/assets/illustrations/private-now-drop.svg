@@ -1,0 +1,91 @@
+<svg width="560" height="458" viewBox="0 0 560 458" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="State=Drop">
+<g id="Ambient sparkles">
+<path id="amb-1" d="M84 84.5L85.9 91.5L93 93.5L85.9 95.4L84 102.5L82 95.4L75 93.5L82 91.5L84 84.5Z" fill="#0AD9DC"/>
+<path id="amb-2" opacity="0.5" d="M476 64.5L477.5 69.9L483 71.5L477.5 73L476 78.5L474.4 73L469 71.5L474.4 69.9L476 64.5Z" fill="#0B1F2A"/>
+<path id="amb-3" d="M500 241.5L502.2 249.3L510 251.5L502.2 253.7L500 261.5L497.8 253.7L490 251.5L497.8 249.3L500 241.5Z" fill="#0AD9DC"/>
+<path id="amb-4" opacity="0.6" d="M64 263.5L65.3 268.1L70 269.5L65.3 270.8L64 275.5L62.6 270.8L58 269.5L62.6 268.1L64 263.5Z" fill="#0B1F2A"/>
+<path id="amb-5" d="M150 36.5L151.1 40.4L155 41.5L151.1 42.6L150 46.5L148.9 42.6L145 41.5L148.9 40.4L150 36.5Z" fill="#9BE7E8"/>
+<path id="amb-6" opacity="0.4" d="M420 156.5L421.1 160.4L425 161.5L421.1 162.6L420 166.5L418.9 162.6L415 161.5L418.9 160.4L420 156.5Z" fill="#0AD9DC"/>
+</g>
+<g id="Hatched shadow">
+<path id="shadow-fill" d="M294 221.5L498.3 339.5L294 457.5L89.5996 339.5L294 221.5Z" fill="#E2F8F9" fill-opacity="0.7"/>
+<path id="hatch-1" opacity="0.5" d="M300.9 225.5L96.5 343.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-2" opacity="0.5" d="M308.7 230L104.3 348" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-3" opacity="0.5" d="M316.5 234.5L112.1 352.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-4" opacity="0.5" d="M324.299 239L119.899 357" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-5" opacity="0.5" d="M332.099 243.5L127.699 361.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-6" opacity="0.5" d="M339.9 248L135.5 366" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-7" opacity="0.5" d="M347.6 252.5L143.3 370.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-8" opacity="0.5" d="M355.4 257L151.1 375" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-9" opacity="0.5" d="M363.199 261.5L158.899 379.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-10" opacity="0.5" d="M371 266L166.6 384" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-11" opacity="0.5" d="M378.799 270.5L174.399 388.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-12" opacity="0.5" d="M386.599 275L182.199 393" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-13" opacity="0.5" d="M394.4 279.5L190 397.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-14" opacity="0.5" d="M402.2 284L197.8 402" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-15" opacity="0.5" d="M410 288.5L205.6 406.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-16" opacity="0.5" d="M417.799 293L213.399 411" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-17" opacity="0.5" d="M425.599 297.5L221.199 415.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-18" opacity="0.5" d="M433.4 302L229 420" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-19" opacity="0.5" d="M441.2 306.5L236.8 424.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-20" opacity="0.5" d="M449 311L244.6 429" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-21" opacity="0.5" d="M456.799 315.5L252.399 433.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-22" opacity="0.5" d="M464.599 320L260.199 438" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-23" opacity="0.5" d="M472.4 324.5L268 442.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-24" opacity="0.5" d="M480.2 329L275.8 447" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-25" opacity="0.5" d="M487.9 333.5L283.6 451.5" stroke="#0AD9DC" stroke-linejoin="round"/>
+<path id="hatch-26" opacity="0.5" d="M495.699 338L291.399 456" stroke="#0AD9DC" stroke-linejoin="round"/>
+</g>
+<g id="Guides">
+<path id="ground-outline" d="M280 209.5L477.4 323.5L280 437.5L82.5 323.5L280 209.5Z" stroke="#8C99A3" stroke-linejoin="round" stroke-dasharray="2 4"/>
+</g>
+<g id="Plate / Base">
+<path id="side-left" d="M106.7 301.5L280 401.5V417.5L106.7 317.5V301.5Z" fill="#E9ECEF" stroke="#0B1F2A" stroke-linejoin="round"/>
+<path id="side-right" d="M280 401.5L453.2 301.5V317.5L280 417.5V401.5Z" fill="#DCE1E5" stroke="#0B1F2A" stroke-linejoin="round"/>
+<path id="top" d="M280 201.5L453.2 301.5L280 401.5L106.7 301.5L280 201.5Z" fill="white" stroke="#0B1F2A" stroke-linejoin="round"/>
+</g>
+<g id="Plate / Shielded">
+<path id="side-left_2" d="M134.5 245.5L280 329.5V343.5L134.5 259.5V245.5Z" fill="#E2F8F9" stroke="#0B1F2A" stroke-linejoin="round"/>
+<path id="side-right_2" d="M280 329.5L425.4 245.5V259.5L280 343.5V329.5Z" fill="#9BE7E8" stroke="#0B1F2A" stroke-linejoin="round"/>
+<path id="top_2" d="M280 161.5L425.4 245.5L280 329.5L134.5 245.5L280 161.5Z" fill="#F3FCFC" stroke="#0B1F2A" stroke-linejoin="round"/>
+</g>
+<g id="Plate / Encrypted">
+<path id="side-left_3" d="M150.1 185.5L280 260.5V272.5L150.1 197.5V185.5Z" fill="#9BE7E8" stroke="#0B1F2A" stroke-linejoin="round"/>
+<path id="side-right_3" d="M280 260.5L409.9 185.5V197.5L280 272.5V260.5Z" fill="#0AD9DC" stroke="#0B1F2A" stroke-linejoin="round"/>
+<path id="top_3" d="M280 110.5L409.9 185.5L280 260.5L150.1 185.5L280 110.5Z" fill="#E2F8F9" stroke="#0B1F2A" stroke-linejoin="round"/>
+<g id="Encrypted glyph" opacity="0.2">
+<path id="bracket-l" d="M200.1 171.6L204.8 174.3L202.7 175.5L200.1 174L182.2 184.3L184.8 185.8L182.7 187.1L178 184.3L200.1 171.6Z" fill="#0B1F2A"/>
+<path id="dot-1" d="M201.4 182.4L206.1 185.1L201.4 187.8L196.6 185.1L201.4 182.4Z" fill="#007A7E"/>
+<path id="dot-2" d="M208.5 186.5L213.2 189.2L208.5 191.9L203.8 189.2L208.5 186.5Z" fill="#007A7E"/>
+<path id="dot-3" d="M215.7 190.6L220.4 193.3L215.7 196.1L210.9 193.3L215.7 190.6Z" fill="#007A7E"/>
+<path id="dot-4" d="M222.8 194.699L227.5 197.499L222.8 200.199L218.1 197.499L222.8 194.699Z" fill="#007A7E"/>
+<path id="dot-5" d="M229.9 198.799L234.7 201.599L229.9 204.299L225.2 201.599L229.9 198.799Z" fill="#007A7E"/>
+<path id="dot-6" d="M237.1 203L241.8 205.7L237.1 208.4L232.4 205.7L237.1 203Z" fill="#007A7E"/>
+<path id="dot-7" d="M244.2 207.1L249 209.8L244.2 212.6L239.5 209.8L244.2 207.1Z" fill="#007A7E"/>
+<path id="bracket-r" d="M267.6 210.6L262.9 207.9L260.8 209.1L263.4 210.6L245.5 220.9L242.9 219.4L240.8 220.6L245.5 223.3L267.6 210.6Z" fill="#0B1F2A"/>
+</g>
+</g>
+<g id="Puck / Seal">
+<path id="edge" d="M243.2 156.5C243.2 162.13 247.072 167.53 253.964 171.511C260.856 175.492 270.204 177.729 279.95 177.729C289.697 177.729 299.044 175.492 305.936 171.511C312.828 167.53 316.7 162.13 316.7 156.5V170.5C316.7 176.13 312.828 181.53 305.936 185.511C299.044 189.492 289.697 191.729 279.95 191.729C270.204 191.729 260.856 189.492 253.964 185.511C247.072 181.53 243.2 176.13 243.2 170.5V156.5Z" fill="#061520" stroke="#0B1F2A" stroke-linejoin="round"/>
+<path id="face" d="M280 177.701C300.269 177.701 316.7 168.209 316.7 156.501C316.7 144.792 300.269 135.301 280 135.301C259.731 135.301 243.3 144.792 243.3 156.501C243.3 168.209 259.731 177.701 280 177.701Z" fill="#13293A" stroke="#0B1F2A"/>
+<g id="Asterisk">
+<path id="arm-1" d="M280 144.201V168.801" stroke="#0AD9DC" stroke-width="4" stroke-linecap="square" stroke-linejoin="round"/>
+<path id="arm-2" d="M261.5 150.301L298.4 162.601" stroke="#0AD9DC" stroke-width="4" stroke-linecap="square" stroke-linejoin="round"/>
+<path id="arm-3" d="M298.4 150.301L261.5 162.601" stroke="#0AD9DC" stroke-width="4" stroke-linecap="square" stroke-linejoin="round"/>
+</g>
+</g>
+<g id="Coin drop">
+<g id="Trail">
+<path id="trail-1" d="M268 12.5V40.5" stroke="#8C99A3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 3"/>
+<path id="trail-2" d="M280 0.5V40.5" stroke="#8C99A3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 3"/>
+<path id="trail-3" d="M292 16.5V40.5" stroke="#8C99A3" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 3"/>
+</g>
+<g id="Coin / USDC">
+<path id="edge_2" d="M260 60.5C260 63.55 262.107 66.4751 265.858 68.6317C269.609 70.7884 274.696 72 280 72C285.304 72 290.391 70.7884 294.142 68.6317C297.893 66.4751 300 63.55 300 60.5V66.5C300 69.55 297.893 72.4751 294.142 74.6317C290.391 76.7884 285.304 78 280 78C274.696 78 269.609 76.7884 265.858 74.6317C262.107 72.4751 260 69.55 260 66.5V60.5Z" fill="#1F5FA8" stroke="#0B1F2A" stroke-linejoin="round"/>
+<path id="face_2" d="M280 72C291.046 72 300 66.8513 300 60.5C300 54.1487 291.046 49 280 49C268.954 49 260 54.1487 260 60.5C260 66.8513 268.954 72 280 72Z" fill="#2775CA" stroke="#0B1F2A"/>
+<path id="mark" d="M280 66.7992C286.075 66.7992 291 63.9786 291 60.4992C291 57.0198 286.075 54.1992 280 54.1992C273.925 54.1992 269 57.0198 269 60.4992C269 63.9786 273.925 66.7992 280 66.7992Z" stroke="white" stroke-width="1.4"/>
+</g>
+</g>
+</g>
+</svg>

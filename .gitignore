@@ -1,0 +1,8 @@
+node_modules
+dist
+.DS_Store
+*.local
+
+# local source material, not part of the app
+/06.png
+/fable-prototype-pack.zip

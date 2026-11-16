@@ -1,0 +1,266 @@
+{
+ "wallets": [
+  {
+   "id": "metamask",
+   "name": "MetaMask",
+   "detected": true
+  },
+  {
+   "id": "walletconnect",
+   "name": "WalletConnect",
+   "detected": false
+  }
+ ],
+ "account": {
+  "address": "0x7a3f4c2e9b1d8a6f5e3c2b1a0d9e8f7a6b5c91c2",
+  "short": "0x7a3f…91c2"
+ },
+ "networks": [
+  {
+   "chainId": 11155111,
+   "name": "Ethereum",
+   "dot": "#047857"
+  },
+  {
+   "chainId": 421614,
+   "name": "Arbitrum",
+   "dot": "#047857"
+  },
+  {
+   "chainId": 84532,
+   "name": "Base",
+   "dot": "#047857"
+  },
+  {
+   "chainId": 999999,
+   "name": "Unsupported EVM",
+   "dot": "#A15C07",
+   "unsupported": true
+  }
+ ],
+ "prices": {
+  "USDC": 1,
+  "ETH": 3202
+ },
+ "assets": [
+  {
+   "symbol": "USDC",
+   "name": "USD Coin",
+   "wrapped": "fUSDC",
+   "icon": "#2775CA",
+   "public": 1250.0,
+   "private": 1000.0
+  },
+  {
+   "symbol": "ETH",
+   "name": "Ether",
+   "wrapped": "fETH",
+   "icon": "#627EEA",
+   "public": 0.2,
+   "private": 0.1338
+  }
+ ],
+ "summary": {
+  "publicUsd": 1890.4,
+  "privateUsd": 1428.35,
+  "totalUsd": 3318.75
+ },
+ "permit": {
+  "status": "active",
+  "daysLeft": 29,
+  "durations": [
+   7,
+   30,
+   90
+  ],
+  "default": 30
+ },
+ "activity": [
+  {
+   "id": "a1",
+   "kind": "shield",
+   "asset": "USDC",
+   "label": "Shield USDC → fUSDC",
+   "amount": "+500.00 fUSDC",
+   "when": "Today · 12:04",
+   "hash": "0x9f2c…a83e",
+   "status": "confirmed"
+  },
+  {
+   "id": "a2",
+   "kind": "permit",
+   "label": "Permit signed",
+   "amount": "—",
+   "when": "Today · 12:01 · valid 30 days",
+   "status": "confirmed"
+  },
+  {
+   "id": "a3",
+   "kind": "transfer-out",
+   "asset": "ETH",
+   "label": "Sent fETH privately",
+   "amount": "−[*****] fETH",
+   "when": "Yesterday · to 0xA4…19c2",
+   "status": "confirmed"
+  },
+  {
+   "id": "a4",
+   "kind": "unshield-claim",
+   "asset": "USDC",
+   "label": "Unshield fUSDC → USDC",
+   "amount": "+120.00 USDC",
+   "when": "Nov 12 · claimed",
+   "status": "confirmed"
+  }
+ ],
+ "apps": [
+  {
+   "name": "AlphaEngine",
+   "abbr": "AE",
+   "desc": "Execution · trading",
+   "tag": "Live"
+  },
+  {
+   "name": "Obolos",
+   "abbr": "OB",
+   "desc": "Compliance",
+   "tag": "Live"
+  },
+  {
+   "name": "Confidential Trading",
+   "abbr": "CT",
+   "desc": "Trading",
+   "tag": "Soon"
+  },
+  {
+   "name": "Fluton",
+   "abbr": "FL",
+   "desc": "Intra · SDK",
+   "tag": "Soon"
+  },
+  {
+   "name": "Privara",
+   "abbr": "PV",
+   "desc": "Payments",
+   "tag": "Soon"
+  }
+ ],
+ "delaysMs": {
+  "connect": 900,
+  "signPermit": 1100,
+  "approve": 1400,
+  "shield": 1600,
+  "unshieldRequest": 1400,
+  "decrypt": 4000,
+  "claim": 1300,
+  "send": 1500,
+  "reveal": 600
+ },
+ "copy": {
+  "hero": [
+   "Your balance. Your eyes only.",
+   "Shield the tokens you already have. Only you can see your private balance."
+  ],
+  "welcomeCtas": [
+   "Start by learning",
+   "I've used Fhenix before"
+  ],
+  "connect": [
+   "Get started",
+   "Tap a wallet to connect.",
+   "Fhenix App never asks for your recovery phrase."
+  ],
+  "permit": [
+   "Create a permit",
+   "Only you can decrypt your private balances. A free permit lets CoFHE and the on-chain access list verify that it's you.",
+   "Your balances",
+   "Amounts you send and receive",
+   "That a shield happened",
+   "Valid for",
+   "Sign permit",
+   "Not now"
+  ],
+  "expired": "Permit expired. Renew it to see your private balances.",
+  "none": "Create a permit to see your private balances.",
+  "shieldNote": "≈ $0.12 fee · ~30 sec · the amount is visible on-chain, your balance is not",
+  "unshieldNotes": [
+   "Step 1 of 3 · then decrypt and claim",
+   "Claim unlocks after decryption · ~30 sec",
+   "Decrypted · ready to claim"
+  ],
+  "privateNow": [
+   "Shield complete",
+   "Everything is private now",
+   "500.00 USDC is now fUSDC. Your balance is sealed, and only you can read it.",
+   "Reveal shows 500.00 fUSDC to you only, with your permit.",
+   "Go to dashboard",
+   "Shield more"
+  ],
+  "toasts": [
+   "Address copied",
+   "Privacy on",
+   "Permit not created. Private balances stay hidden.",
+   "Shielded 500 USDC",
+   "Unshield requested. Claim it from Activity on your Dashboard",
+   "Unshielded 500.00 USDC",
+   "Sent privately",
+   "Transaction cancelled",
+   "Transaction failed · Try again"
+  ],
+  "tutorial": [
+   [
+    "Your dashboard",
+    "Public balances are visible to anyone on-chain. Private balances are encrypted — only you can read them."
+   ],
+   [
+    "See your private balances",
+    "Create a free permit — a signature, not a transaction. Only you can decrypt [*******] into [1,000.00]."
+   ],
+   [
+    "Shield a token",
+    "Shielding moves tokens from public to private. We've filled in 10.00 USDC."
+   ],
+   [
+    "Everything is private now",
+    "You finished the tour. Shield whenever you're ready — your private balance stays yours."
+   ]
+  ],
+  "unsupported": "Fhenix App isn't available on {network} yet."
+ },
+ "permitsList": [
+  {
+   "name": "Fhenix App · this device",
+   "abbr": "FX",
+   "status": "active",
+   "note": "Expires in 30 days",
+   "action": "Revoke"
+  },
+  {
+   "name": "Obolos",
+   "abbr": "OB",
+   "status": "expiring",
+   "note": "Expires in 2 days",
+   "action": "Renew"
+  },
+  {
+   "name": "AlphaEngine",
+   "abbr": "AE",
+   "status": "active",
+   "note": "Expires Dec 4",
+   "action": "Revoke"
+  }
+ ],
+ "send": {
+  "to": "0x91b2…7c40",
+  "amount": "100.00",
+  "asset": "fUSDC",
+  "fee": "≈ $0.08",
+  "visible": "Recipient, that a transfer happened",
+  "steps": [
+   "Encrypt",
+   "Confirm",
+   "Sent"
+  ],
+  "tx": "0x4b7e…19d0"
+ }
+}

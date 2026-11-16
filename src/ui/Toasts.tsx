@@ -1,0 +1,58 @@
+import { AnimatePresence, motion } from 'framer-motion'
+import tokens from '../assets/tokens.json'
+import { M, useMotion } from '../lib/motion'
+import { nav, useStore } from '../state/store'
+import Icon from './Icon'
+
+/** Desktop: bottom-right, 360 wide. Mobile: full width − 40, 12 above the tab bar. Max 3, auto-hide 3.2s. */
+export default function Toasts() {
+  const { s, act, mobile } = useStore()
+  const { t } = useMotion()
+  const from = mobile ? { opacity: 0, y: 16 } : { opacity: 0, x: 24 }
+  return (
+    <div
+      className="pointer-events-none absolute z-50 flex flex-col gap-2"
+      style={mobile ? { left: 20, right: 20, bottom: tokens.size.tabBar + 12 } : { right: 32, bottom: 32, width: 360 }}
+      aria-live="polite"
+      role="status"
+    >
+      <AnimatePresence initial={false}>
+        {s.toasts.map(x => {
+          const fail = x.kind === 'fail'
+          return (
+            <motion.div
+              key={x.id}
+              layout
+              initial={from}
+              animate={{ opacity: 1, x: 0, y: 0, transition: { duration: t(M.toast.inMs) } }}
+              exit={{ ...from, transition: { duration: t(M.toast.outMs) } }}
+              transition={{ duration: t(M.toast.inMs) }}
+              className="pointer-events-auto flex items-center gap-3 border border-line bg-white py-3 pl-4 pr-3 shadow-[0_8px_24px_rgba(0,22,35,.10)]"
+              style={{ borderLeft: `3px solid ${fail ? tokens.color.danger : x.kind === 'success' ? tokens.color.accent : tokens.color.lineStrong}` }}
+            >
+              <span className={`flex h-7 w-7 shrink-0 items-center justify-center ${fail ? 'bg-dangerSoft text-danger' : x.kind === 'success' ? 'bg-accent text-ink' : 'bg-surface2 text-ink2'}`}>
+                <Icon name={fail ? 'alert' : x.kind === 'success' ? 'check' : 'info'} size={fail ? 16 : x.kind === 'success' ? 16 : 14} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="text-[14px] font-medium leading-5">{x.title}</div>
+                {x.body && <div className="text-[13px] leading-[18px] text-ink3">{x.body}</div>}
+              </div>
+              {x.action && (
+                <button
+                  type="button"
+                  className="shrink-0 px-2 py-2 text-[13px] font-medium text-accentInk hover:underline"
+                  onClick={() => {
+                    if (x.action?.route) nav(x.action.route)
+                    act.dismissToast(x.id)
+                  }}
+                >
+                  {x.action.label}
+                </button>
+              )}
+            </motion.div>
+          )
+        })}
+      </AnimatePresence>
+    </div>
+  )
+}

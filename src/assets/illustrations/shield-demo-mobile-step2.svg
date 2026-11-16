@@ -1,0 +1,131 @@
+<svg width="358" height="316" viewBox="0 0 358 316" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Step=2">
+<g clip-path="url(#clip0_712_3915)">
+<path d="M0 0H358V316H0V0Z" fill="#F5F6F7"/>
+<g id="Progress" clip-path="url(#clip1_712_3915)">
+<rect id="seg 1" x="16" y="16" width="103.333" height="3" fill="#0B1F2A"/>
+<rect id="seg 2" x="127.333" y="16" width="103.333" height="3" fill="#0AD9DC"/>
+<rect id="seg 3" x="238.667" y="16" width="103.333" height="3" fill="#DDE4E8"/>
+</g>
+<g id="Stage">
+<g id="Connectors">
+<path id="Vector" d="M110.1 191.8L101.42 186.79L151.98 157.6" stroke="#0B1F2A" stroke-width="0.75" stroke-linecap="round" stroke-dasharray="3 3"/>
+<path id="Vector_2" d="M206.02 157.6L256.58 186.79L252.5 189.5" stroke="#0B1F2A" stroke-width="0.75" stroke-linecap="round" stroke-dasharray="3 3"/>
+</g>
+<g id="Plate / Wallet">
+<path id="side-left" d="M19.6904 169.602L79.9604 204.402V212.802L19.6904 178.002V169.602Z" fill="#E9ECEF" stroke="#0B1F2A" stroke-width="0.75" stroke-linejoin="round"/>
+<path id="side-right" d="M79.96 204.402L140.24 169.602V178.002L79.96 212.802V204.402Z" fill="#DCE1E5" stroke="#0B1F2A" stroke-width="0.75" stroke-linejoin="round"/>
+<path id="top" d="M79.9604 134.801L140.24 169.601L79.9604 204.401L19.6904 169.601L79.9604 134.801Z" fill="white" stroke="#0B1F2A" stroke-width="0.75" stroke-linejoin="round"/>
+</g>
+<g id="Plate / Shielded" opacity="0.45">
+<path id="side-left_2" d="M217.76 169.602L278.04 204.402V212.802L217.76 178.002V169.602Z" fill="#E2F8F9" stroke="#0B1F2A" stroke-width="0.75" stroke-linejoin="round"/>
+<path id="side-right_2" d="M278.04 204.402L338.31 169.602V178.002L278.04 212.802V204.402Z" fill="#9BE7E8" stroke="#0B1F2A" stroke-width="0.75" stroke-linejoin="round"/>
+<path id="top_2" d="M278.04 134.801L338.31 169.601L278.04 204.401L217.76 169.601L278.04 134.801Z" fill="white" stroke="#0B1F2A" stroke-width="0.75" stroke-linejoin="round"/>
+</g>
+<g id="Coins">
+<g id="coin-1">
+<path id="edge" d="M167.98 139.6C167.98 141.286 169.142 142.904 171.208 144.097C173.275 145.29 176.078 145.96 179 145.96C181.923 145.96 184.726 145.29 186.793 144.097C188.859 142.904 190.02 141.286 190.02 139.6V143.2C190.02 144.886 188.859 146.504 186.793 147.697C184.726 148.89 181.923 149.56 179 149.56C176.078 149.56 173.275 148.89 171.208 147.697C169.142 146.504 167.98 144.886 167.98 143.2V139.6Z" fill="black" stroke="#0B1F2A" stroke-width="0.75"/>
+<path id="face" d="M179 145.96C185.087 145.96 190.02 143.113 190.02 139.6C190.02 136.088 185.087 133.24 179 133.24C172.914 133.24 167.98 136.088 167.98 139.6C167.98 143.113 172.914 145.96 179 145.96Z" fill="#0B1F2A" stroke="#0B1F2A" stroke-width="0.75"/>
+<path id="mark" d="M173.24 141.271L172.58 139.681L176.31 139.271L173.63 137.751L175.8 136.501L178.43 138.051L179.13 135.891L181.89 136.271L180.98 138.451L184.76 137.931L185.42 139.521L181.69 139.931L184.37 141.451L182.2 142.701L179.57 141.151L178.87 143.311L176.11 142.931L177.01 140.751L173.24 141.271Z" fill="#0AD9DC"/>
+</g>
+<g id="coin-2">
+<path id="edge_2" d="M119.131 158.199C119.131 159.887 120.292 161.505 122.36 162.698C124.428 163.892 127.232 164.562 130.156 164.562C133.08 164.562 135.884 163.892 137.952 162.698C140.019 161.505 141.181 159.887 141.181 158.199V161.799C141.181 163.487 140.019 165.105 137.952 166.298C135.884 167.492 133.08 168.162 130.156 168.162C127.232 168.162 124.428 167.492 122.36 166.298C120.292 165.105 119.131 163.487 119.131 161.799V158.199Z" fill="#1F5FA8" stroke="#0B1F2A" stroke-width="0.75"/>
+<path id="face_2" d="M130.161 164.56C136.247 164.56 141.181 161.712 141.181 158.2C141.181 154.687 136.247 151.84 130.161 151.84C124.074 151.84 119.141 154.687 119.141 158.2C119.141 161.712 124.074 164.56 130.161 164.56Z" fill="#2775CA" stroke="#0B1F2A" stroke-width="0.75"/>
+<path id="mark_2" d="M130.161 161.699C133.507 161.699 136.221 160.132 136.221 158.199C136.221 156.266 133.507 154.699 130.161 154.699C126.814 154.699 124.101 156.266 124.101 158.199C124.101 160.132 126.814 161.699 130.161 161.699Z" stroke="white" stroke-width="0.84"/>
+</g>
+<g id="coin-3">
+<path id="edge_3" d="M67.9004 165.4C67.9004 167.087 69.0614 168.705 71.1281 169.898C73.1947 171.09 75.9977 171.76 78.9204 171.76C81.8431 171.76 84.6461 171.09 86.7127 169.898C88.7794 168.705 89.9404 167.087 89.9404 165.4V169C89.9404 170.687 88.7794 172.305 86.7127 173.498C84.6461 174.69 81.8431 175.36 78.9204 175.36C75.9977 175.36 73.1947 174.69 71.1281 173.498C69.0614 172.305 67.9004 170.687 67.9004 169V165.4Z" fill="#1F5FA8" stroke="#0B1F2A" stroke-width="0.75"/>
+<path id="face_3" d="M78.9204 171.761C85.0066 171.761 89.9404 168.914 89.9404 165.401C89.9404 161.888 85.0066 159.041 78.9204 159.041C72.8342 159.041 67.9004 161.888 67.9004 165.401C67.9004 168.914 72.8342 171.761 78.9204 171.761Z" fill="#2775CA" stroke="#0B1F2A" stroke-width="0.75"/>
+<path id="mark_3" d="M78.9203 168.9C82.2672 168.9 84.9804 167.333 84.9804 165.4C84.9804 163.467 82.2672 161.9 78.9203 161.9C75.5735 161.9 72.8604 163.467 72.8604 165.4C72.8604 167.333 75.5735 168.9 78.9203 168.9Z" stroke="white" stroke-width="0.84"/>
+</g>
+</g>
+<g id="Encryption layer">
+<g id="sheet-1">
+<path id="top_3" d="M179 114.4L233.04 145.6L179 176.8L124.96 145.6L179 114.4Z" fill="white" fill-opacity="0.42" stroke="#0B1F2A" stroke-width="0.75" stroke-linejoin="round"/>
+</g>
+<g id="sheet-2">
+<path id="top_4" d="M179 94L233.04 125.2L179 156.4L124.96 125.2L179 94Z" fill="white" fill-opacity="0.42" stroke="#0B1F2A" stroke-width="0.75" stroke-linejoin="round"/>
+</g>
+<g id="sheet-3">
+<path id="top_5" d="M179 73.5996L233.04 104.8L179 136L124.96 104.8L179 73.5996Z" fill="white" fill-opacity="0.42" stroke="#0B1F2A" stroke-width="0.75" stroke-linejoin="round"/>
+</g>
+<path id="Vector_3" d="M179 114.4V73.5996" stroke="#8C99A3" stroke-width="0.75" stroke-linecap="round" stroke-dasharray="2 3"/>
+<path id="Vector_4" d="M233.04 145.599V104.799" stroke="#8C99A3" stroke-width="0.75" stroke-linecap="round" stroke-dasharray="2 3"/>
+<path id="Vector_5" d="M179 176.8V136" stroke="#8C99A3" stroke-width="0.75" stroke-linecap="round" stroke-dasharray="2 3"/>
+<path id="Vector_6" d="M124.96 145.599V104.799" stroke="#8C99A3" stroke-width="0.75" stroke-linecap="round" stroke-dasharray="2 3"/>
+</g>
+<g id="Glow">
+<path id="Vector_7" d="M147.82 95.2008L179 113.201L210.18 95.2008V56.8008L179 38.8008L147.82 56.8008V95.2008Z" fill="url(#paint0_linear_712_3915)"/>
+</g>
+<g id="Puck">
+<path id="side-left_3" d="M147.82 95.1992L179 113.199V122.799L147.82 104.799V95.1992Z" fill="#13242E" stroke="#0B1F2A" stroke-width="0.75" stroke-linejoin="round"/>
+<path id="side-right_3" d="M179 113.199L210.18 95.1992V104.799L179 122.799V113.199Z" fill="black" stroke="#0B1F2A" stroke-width="0.75" stroke-linejoin="round"/>
+<path id="top_6" d="M179 77.1992L210.18 95.1992L179 113.199L147.82 95.1992L179 77.1992Z" fill="#0B1F2A" stroke="#0B1F2A" stroke-width="0.75" stroke-linejoin="round"/>
+<path id="asterisk" d="M168.53 98.229L167.33 95.339L174.11 94.599L169.24 91.839L173.18 89.559L177.96 92.369L179.24 88.459L184.25 89.149L182.61 93.119L189.47 92.169L190.67 95.059L183.89 95.799L188.76 98.559L184.82 100.839L180.04 98.019L178.76 101.939L173.75 101.249L175.39 97.279L168.53 98.229Z" fill="#0AD9DC"/>
+<path id="Vector_8" d="M179 81.7598C179.53 81.7598 179.96 81.33 179.96 80.7998C179.96 80.2696 179.53 79.8398 179 79.8398C178.47 79.8398 178.04 80.2696 178.04 80.7998C178.04 81.33 178.47 81.7598 179 81.7598Z" fill="#5B6F7D"/>
+<path id="Vector_9" d="M203.94 96.1583C204.471 96.1583 204.9 95.7285 204.9 95.1983C204.9 94.6681 204.471 94.2383 203.94 94.2383C203.41 94.2383 202.98 94.6681 202.98 95.1983C202.98 95.7285 203.41 96.1583 203.94 96.1583Z" fill="#5B6F7D"/>
+<path id="Vector_10" d="M179 110.559C179.53 110.559 179.96 110.129 179.96 109.599C179.96 109.068 179.53 108.639 179 108.639C178.47 108.639 178.04 109.068 178.04 109.599C178.04 110.129 178.47 110.559 179 110.559Z" fill="#5B6F7D"/>
+<path id="Vector_11" d="M154.061 96.1583C154.591 96.1583 155.021 95.7285 155.021 95.1983C155.021 94.6681 154.591 94.2383 154.061 94.2383C153.53 94.2383 153.101 94.6681 153.101 95.1983C153.101 95.7285 153.53 96.1583 154.061 96.1583Z" fill="#5B6F7D"/>
+</g>
+<g id="Packet">
+<path id="Vector_12" d="M111.81 182.889C112.97 182.889 113.91 181.949 113.91 180.789C113.91 179.63 112.97 178.689 111.81 178.689C110.65 178.689 109.71 179.63 109.71 180.789C109.71 181.949 110.65 182.889 111.81 182.889Z" fill="#0AD9DC" stroke="#0B1F2A" stroke-width="0.75"/>
+</g>
+<rect id="Glyph / wallet label" opacity="0.55" width="22.272" height="2" transform="matrix(0.866025 0.5 -0.866025 0.5 46.6836 162.012)" fill="#0B1F2A"/>
+<text id="Label / wallet amount" transform="matrix(0.866025 0.5 -0.866025 0.5 41.335 165.1)" fill="#0B1F2A" style="white-space: pre" xml:space="preserve" font-family="Geist Mono" font-size="7" font-weight="600" letter-spacing="0em"><tspan x="0" y="6.985">&#x2212;250.00 USDC</tspan></text>
+<rect id="Glyph / shielded label" opacity="0.55" width="22.272" height="2" transform="matrix(0.866025 0.5 -0.866025 0.5 243.032 163.012)" fill="#0B1F2A"/>
+<text id="Label / shielded amount" transform="matrix(0.866025 0.5 -0.866025 0.5 239.062 166)" fill="#0B1F2A" style="white-space: pre" xml:space="preserve" font-family="Geist Mono" font-size="5.5" font-weight="600" letter-spacing="0em"><tspan x="0" y="5.4525">awaiting&#x2026; fUSDC</tspan></text>
+<rect id="Glyph / Hash / 2 a" width="31.2" height="1.5" transform="matrix(0.866025 0.5 -0.866025 0.5 143.363 142.975)" fill="#0B1F2A"/>
+<rect id="Glyph / Hash / 2 b" width="18.72" height="1.5" transform="matrix(0.866025 0.5 -0.866025 0.5 140.115 144.85)" fill="#0B1F2A"/>
+<rect id="Glyph / Hash / 1 a" width="31.2" height="1.5" transform="matrix(0.866025 0.5 -0.866025 0.5 143.363 122.574)" fill="#0B1F2A"/>
+<rect id="Glyph / Hash / 1 b" width="18.72" height="1.5" transform="matrix(0.866025 0.5 -0.866025 0.5 140.115 124.449)" fill="#0B1F2A"/>
+</g>
+<g id="Caption" clip-path="url(#clip2_712_3915)">
+<g id="Row" clip-path="url(#clip3_712_3915)">
+<text id="counter" fill="#007A7E" style="white-space: pre" xml:space="preserve" font-family="Geist Mono" font-size="12" font-weight="500" letter-spacing="0.02em"><tspan x="16" y="251.26">02 / 03</tspan></text>
+<text id="title" fill="#0B1F2A" style="white-space: pre" xml:space="preserve" font-family="Geist" font-size="17" font-weight="600" letter-spacing="0em"><tspan x="78" y="253.035">Shield tokens</tspan></text>
+<g id="Gauge">
+<rect x="270.5" y="243.5" width="71" height="7" fill="white"/>
+<rect x="270.5" y="243.5" width="71" height="7" stroke="#0B1F2A"/>
+<g id="fill" clip-path="url(#clip4_712_3915)">
+<rect id="Rectangle" x="274" y="240" width="1.2" height="14" transform="rotate(35 274 240)" fill="#0AD9DC"/>
+<rect id="Rectangle_2" x="278" y="240" width="1.2" height="14" transform="rotate(35 278 240)" fill="#0AD9DC"/>
+<rect id="Rectangle_3" x="282" y="240" width="1.2" height="14" transform="rotate(35 282 240)" fill="#0AD9DC"/>
+<rect id="Rectangle_4" x="286" y="240" width="1.2" height="14" transform="rotate(35 286 240)" fill="#0AD9DC"/>
+<rect id="Rectangle_5" x="290" y="240" width="1.2" height="14" transform="rotate(35 290 240)" fill="#0AD9DC"/>
+<rect id="Rectangle_6" x="294" y="240" width="1.2" height="14" transform="rotate(35 294 240)" fill="#0AD9DC"/>
+<rect id="Rectangle_7" x="298" y="240" width="1.2" height="14" transform="rotate(35 298 240)" fill="#0AD9DC"/>
+<rect id="Rectangle_8" x="302" y="240" width="1.2" height="14" transform="rotate(35 302 240)" fill="#0AD9DC"/>
+<rect id="Rectangle_9" x="306" y="240" width="1.2" height="14" transform="rotate(35 306 240)" fill="#0AD9DC"/>
+<rect id="Rectangle_10" x="310" y="240" width="1.2" height="14" transform="rotate(35 310 240)" fill="#0AD9DC"/>
+<rect id="Rectangle_11" x="314" y="240" width="1.2" height="14" transform="rotate(35 314 240)" fill="#0AD9DC"/>
+<rect id="Rectangle_12" x="318" y="240" width="1.2" height="14" transform="rotate(35 318 240)" fill="#0AD9DC"/>
+</g>
+</g>
+</g>
+<text id="caption" fill="#34495A" style="white-space: pre" xml:space="preserve" font-family="Geist" font-size="14" letter-spacing="0em"><tspan x="16" y="277.97">Shielding seals the amount into an encrypted </tspan><tspan x="16" y="295.97">fToken on CoFHE.</tspan></text>
+</g>
+</g>
+<path d="M357.5 0.5V315.5H0.5V0.5H357.5Z" stroke="#E3E7EA"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_712_3915" x1="147.82" y1="113.201" x2="147.82" y2="38.8008" gradientUnits="userSpaceOnUse">
+<stop stop-color="#0AD9DC" stop-opacity="0.55"/>
+<stop offset="1" stop-color="#0AD9DC" stop-opacity="0"/>
+</linearGradient>
+<clipPath id="clip0_712_3915">
+<path d="M0 0H358V316H0V0Z" fill="white"/>
+</clipPath>
+<clipPath id="clip1_712_3915">
+<rect width="326" height="3" fill="white" transform="translate(16 16)"/>
+</clipPath>
+<clipPath id="clip2_712_3915">
+<rect width="326" height="64" fill="white" transform="translate(16 236)"/>
+</clipPath>
+<clipPath id="clip3_712_3915">
+<rect width="326" height="22" fill="white" transform="translate(16 236)"/>
+</clipPath>
+<clipPath id="clip4_712_3915">
+<rect width="43" height="8" fill="white" transform="translate(270 243)"/>
+</clipPath>
+</defs>
+</svg>
