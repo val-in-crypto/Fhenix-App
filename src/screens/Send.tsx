@@ -1,3 +1,4 @@
+import { Sep, separate } from '../ui/Sep'
 import { motion, useAnimationControls } from 'framer-motion'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { FullAddress, Identicon, RecipientField, isEvmAddress, resolveRecipient, useRecipientField, type Recipient } from '../components/RecipientField'
@@ -9,6 +10,7 @@ import AmountBox from '../ui/AmountBox'
 import Button from '../ui/Button'
 import ChainIcon from '../ui/ChainIcon'
 import Icon from '../ui/Icon'
+import SegmentedSwitch from '../ui/SegmentedSwitch'
 import Masked from '../ui/Masked'
 
 const { send, sendCopy: copy } = data
@@ -19,15 +21,7 @@ const balanceLabel = (mode: BalanceMode) => mode === 'priv' ? 'Confidential' : '
 const query = () => new URLSearchParams(location.hash.split('?')[1] ?? location.search)
 
 function BalanceSwitch({ value, onChange }: { value: BalanceMode; onChange: (mode: BalanceMode) => void }) {
-  return (
-    <div role="group" aria-label="Source balance" className="flex border border-line bg-surface2 p-0.5">
-      {balanceModes.map(mode => (
-        <button key={mode} type="button" aria-pressed={value === mode} onClick={() => onChange(mode)} className={`flex items-center gap-2 border px-2 py-1.5 text-[13px] ${value === mode ? mode === 'priv' ? 'border-accent bg-accentSoft font-semibold' : 'border-line bg-surface font-semibold' : 'border-transparent text-ink3'}`}>
-          <span aria-hidden className={`size-2 shrink-0 ${mode === 'priv' ? 'bg-accent' : 'bg-lineStrong'}`} />{balanceLabel(mode)}
-        </button>
-      ))}
-    </div>
-  )
+  return <SegmentedSwitch label="Source balance" value={value} onChange={onChange} options={[{ value: 'priv', label: 'Confidential' }, { value: 'pub', label: 'Public' }]} />
 }
 
 function SendRows({ rows, highlightAmount }: { rows: [string, ReactNode][]; highlightAmount?: boolean }) {
@@ -184,13 +178,13 @@ export default function Send() {
     !recipient || !hasAmount || over || lookalike,
   )
   const actions = sent ? sentActions : reviewing ? reviewActions : formAction
-  const note = reviewing ? copy.walletNote : !sent ? `${send.fee} network fee · ${confidential ? 'amount stays confidential' : 'amount visible on-chain'}` : null
+  const note = reviewing ? copy.walletNote : !sent ? `${send.fee} network fee\u001f${confidential ? 'amount stays confidential' : 'amount visible on-chain'}` : null
 
   return (
     <Page bottom={mobile && (
       <div className="flex flex-col gap-2">
         {actions}
-        {note && <p className={`text-center text-[13px] leading-5 ${secondary}`}>{note}</p>}
+        {note && <p className={`text-center text-[13px] leading-5 ${secondary}`}>{separate(note)}</p>}
       </div>
     )}>
       <div ref={content} className={`mx-auto flex w-full max-w-[560px] flex-col gap-6 ${mobile ? '' : 'border border-line bg-surface p-8'}`}>
@@ -225,7 +219,7 @@ export default function Send() {
                 [copy.balance, <span className="flex items-center gap-2"><span className={`size-2 ${confidential ? 'bg-accent' : 'bg-lineStrong'}`} />{balanceLabel(activeMode)} {unit}</span>],
                 [copy.to, <RecipientSummary recipient={recipient} mobile={mobile} firstTime={firstTime} />],
                 ['Amount', <span className={`mono inline-block font-medium ${confidential ? 'text-accentInk' : ''}`}>{formatted} {unit}</span>],
-                [copy.network, <div className="flex flex-wrap items-center gap-1">{networkDisplay} <span className={secondary}>· {copy.walletNetwork}</span></div>],
+                [copy.network, <div className="flex flex-wrap items-center gap-1">{networkDisplay} <span className={secondary}><Sep />{copy.walletNetwork}</span></div>],
                 [mobile ? copy.fee : copy.networkFee, send.fee],
               ]} />
               <p className={`flex items-start gap-2 bg-surface2 p-4 text-[15px] leading-5 ${secondary}`}>

@@ -143,7 +143,7 @@ export function NetworkChip() {
   )
 }
 
-/** Shield · Unshield · Send — top-right on desktop, under the hero on mobile */
+/** Shield\u001fUnshield\u001fSend — top-right on desktop, under the hero on mobile */
 export function ActionRow({ stretch }: { stretch?: boolean }) {
   const go = useGo()
   const items: [Route, string, string][] = [
@@ -197,7 +197,6 @@ function Sidebar({ route }: { route: Route }) {
     <aside className="no-scrollbar flex h-full shrink-0 flex-col overflow-y-auto px-4 pb-5 pt-6" style={{ width: tokens.size.sidebar }}>
       <button type="button" className="mb-6 shrink-0 self-start px-2" onClick={() => go('dashboard')} aria-label="Fhenix App home"><Logo /></button>
       <nav className="flex flex-col gap-1" aria-label="Main">
-        <div className="eyebrow text-ink3">Menu</div>
         {NAV.slice(0, 3).map(row)}
         {soon('Trading', 'trading-candles')}
         {divider}
@@ -228,7 +227,7 @@ function Sidebar({ route }: { route: Route }) {
 export function PermitChip() {
   const { s, act } = useStore()
   const active = s.permit === 'active'
-  const label = active ? `Permit · ${Math.max(0, s.permitDays - 1)} days` : s.permit === 'expired' ? 'Permit expired · Renew' : 'No permit · Create'
+  const label = active ? `Permit\u001f${Math.max(0, s.permitDays - 1)} days` : s.permit === 'expired' ? 'Permit expired\u001fRenew' : 'No permit\u001fCreate'
   return (
     <button type="button" onClick={event => event.metaKey || event.ctrlKey ? nav('permits') : act.renew()} className="flex h-10 items-center gap-2 border border-line bg-surface px-3 text-[13px] font-medium hover:border-lineStrong">
       <span aria-hidden className={`round size-2 ${active ? 'bg-live' : 'border border-ink3'}`} />{label}

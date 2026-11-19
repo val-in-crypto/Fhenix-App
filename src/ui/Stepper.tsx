@@ -1,3 +1,4 @@
+import { Sep, separate } from './Sep'
 import { motion } from 'framer-motion'
 import { M, easeInOut, useMotion } from '../lib/motion'
 import Icon from './Icon'
@@ -59,7 +60,7 @@ export default function Stepper({ steps, active, variant = 'bars' }: Props) {
               <span className={`truncate ${done || on ? 'font-medium text-ink' : 'text-ink3'}`}>{st.label}</span>
               {done && <Icon name="check" size={14} className="text-accentInk" />}
             </div>
-            {st.sub && <div className="mt-1 truncate text-[12px] leading-4 text-ink3">{st.sub}</div>}
+            {st.sub && <div className="mt-1 truncate text-[12px] leading-4 text-ink3">{separate(st.sub)}</div>}
           </li>
         )
       })}

@@ -1,3 +1,4 @@
+import { Sep, separate } from '../ui/Sep'
 import type { ReactNode } from 'react'
 import { fmtPrivate, fmtPublic, fmtUsd, num, trimAmt } from '../lib/format'
 import { Page } from '../shell/AppShell'
@@ -7,7 +8,8 @@ import Button from '../ui/Button'
 import Icon from '../ui/Icon'
 import Masked from '../ui/Masked'
 import Stepper from '../ui/Stepper'
-import SwapButton from '../ui/SwapButton'
+import SwapForm from '../ui/SwapForm'
+import SegmentedSwitch from '../ui/SegmentedSwitch'
 import { decOf } from '../ui/TokenRow'
 
 /** Result card shared by "Claimed" and "Sent privately". */
@@ -38,7 +40,7 @@ export function DoneCard({ title, body, rows, primary, secondary }: { title: str
 const Helper = ({ children, mobile }: { children: ReactNode; mobile: boolean }) => (
   <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-[13px] leading-[18px] text-ink3">
     {mobile && <Icon name="info" />}
-    {children}
+    {separate(children)}
   </p>
 )
 
@@ -112,7 +114,7 @@ export default function ShieldFlow({ mode }: { mode: 'shield' | 'unshield' }) {
           Confirm in wallet…
         </Button>
       )
-    helper = sStep === 0 ? (mobile ? '≈ $0.12 fee · ~30 sec' : copy.shieldNote) : sStep === 1 ? (mobile ? 'Step 1 of 2 · one-time approval' : `Step 1 of 2 · a one-time approval lets Fhenix App shield your ${sym}`) : 'Step 2 of 2 · confirm in wallet'
+    helper = sStep === 0 ? (mobile ? '≈ $0.12 fee\u001f~30 sec' : copy.shieldNote) : sStep === 1 ? (mobile ? 'Step 1 of 2\u001fone-time approval' : `Step 1 of 2\u001fa one-time approval lets Fhenix App shield your ${sym}`) : 'Step 2 of 2\u001fconfirm in wallet'
   } else {
     const over = amt > b.priv && !locked
     const f = fmtPublic(s.pendingUnshield?.amount ?? amt, dec)
@@ -126,7 +128,7 @@ export default function ShieldFlow({ mode }: { mode: 'shield' | 'unshield' }) {
           {u === 4 ? 'Claiming…' : `Claim ${f} ${sym}`}
         </Button>
       )
-    helper = u <= 1 ? (mobile ? copy.unshieldNotes[0] : 'Step 1 of 3 · you claim the USDC after CoFHE decrypts it') : u === 2 ? copy.unshieldNotes[1] : mobile ? copy.unshieldNotes[2] : `Decrypted. Claim to move ${f} ${sym} to your wallet.`
+    helper = u <= 1 ? (mobile ? copy.unshieldNotes[0] : 'Step 1 of 3\u001fyou claim the USDC after CoFHE decrypts it') : u === 2 ? copy.unshieldNotes[1] : mobile ? copy.unshieldNotes[2] : `Decrypted. Claim to move ${f} ${sym} to your wallet.`
   }
 
   return (
@@ -136,18 +138,12 @@ export default function ShieldFlow({ mode }: { mode: 'shield' | 'unshield' }) {
       bottom={
         <>
           {cta}
-          <Helper mobile={mobile}>{helper}</Helper>
+          <Helper mobile={mobile}>{separate(helper)}</Helper>
         </>
       }
     >
       <div data-tour="shield-form">
-        <div className="flex border border-navy" role="tablist" aria-label="Mode">
-          {(['shield', 'unshield'] as const).map(m => (
-            <button key={m} type="button" role="tab" aria-selected={m === mode} disabled={inFlight && m !== mode} onClick={() => m !== mode && swap()} className={`h-9 flex-1 text-[13px] font-medium capitalize  ${m === mode ? 'bg-navy text-onNavy' : 'bg-surface text-ink2 hover:bg-surface2'}`}>
-              {m}
-            </button>
-          ))}
-        </div>
+        <SegmentedSwitch width="fill" label="Mode" value={mode} onChange={value => { if (value !== mode) swap() }} disabled={inFlight} options={[{ value: 'shield', label: 'Shield' }, { value: 'unshield', label: 'Unshield' }]} />
 
         {shield && sStep > 0 && (
           <div className="mt-5">
@@ -156,28 +152,15 @@ export default function ShieldFlow({ mode }: { mode: 'shield' | 'unshield' }) {
         )}
 
         <div className="mt-5">
-          <AmountBox
-            label={shield ? 'You shield' : 'You unshield'}
-            balance={
-              shield ? (
-                <>Balance {fmtPublic(b.pub, dec)}</>
-              ) : (
-                <>
-                  Balance <Masked value={b.priv} hidden={masked} dec={dec} pulse={u === 2} />
-                </>
-              )
-            }
-            onMax={locked ? undefined : max}
-            value={raw}
-            onChange={locked ? undefined : setAmt}
-            token={shield ? sym : wrapped}
-            usd={fmtUsd(amt * prices[sym])}
-            confidential={!shield}
-            swapEdge="bottom"
-            disabled={locked}
+          <SwapForm flipped={!shield} onSwap={swap} disabled={inFlight}
+            from={{
+              label: shield ? 'You shield' : 'You unshield',
+              balance: shield ? <>Balance {fmtPublic(b.pub, dec)}</> : <>Balance <Masked value={b.priv} hidden={masked} dec={dec} pulse={u === 2} /></>,
+              onMax: locked ? undefined : max, value: raw, onChange: locked ? undefined : setAmt, token: shield ? sym : wrapped,
+              usd: fmtUsd(amt * prices[sym]), confidential: !shield, disabled: locked,
+            }}
+            to={{ amount: shield ? fmtPrivate(masked ? undefined : amt, dec) : fmtPublic(amt, dec), unit: shield ? wrapped : sym, confidential: shield }}
           />
-          <SwapButton flipped={!shield} onClick={swap} ring={mobile ? 'var(--color-bg)' : 'var(--color-surface)'} disabled={inFlight} />
-          <ReceiveBox amount={shield ? fmtPrivate(masked ? undefined : amt, dec) : fmtPublic(amt, dec)} unit={shield ? wrapped : sym} confidential={shield} />
         </div>
 
         {!shield && (
@@ -185,7 +168,7 @@ export default function ShieldFlow({ mode }: { mode: 'shield' | 'unshield' }) {
             <Stepper
               steps={[
                 { label: 'Unshield', sub: u >= 2 ? 'Request sent' : 'Request' },
-                { label: 'Decrypt', sub: u === 2 ? 'CoFHE decrypting · ~30 sec' : u > 2 ? 'Decrypted' : '~30 sec' },
+                { label: 'Decrypt', sub: u === 2 ? 'CoFHE decrypting\u001f~30 sec' : u > 2 ? 'Decrypted' : '~30 sec' },
                 { label: 'Claim', sub: u >= 3 ? 'Ready to claim' : 'To your wallet' },
               ]}
               active={u <= 1 ? 0 : u === 2 ? 1 : 2}

@@ -47,3 +47,16 @@ svg [font-family='Geist Mono'] { font-family: 'Geist Mono', monospace; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition-duration: 0s !important; }
 }
+
+.sep { color: var(--color-separator); white-space: pre; }
+.field-wrapper { border: 1px solid var(--color-ink-3); }
+.field-wrapper:hover:not([aria-disabled="true"]) { border-color: var(--color-ink); }
+.field-wrapper:focus-within:not([aria-disabled="true"]) { border-color: var(--color-accent); box-shadow: 0 0 0 3px var(--color-ring-focus); }
+.field-wrapper[aria-invalid="true"], .field-wrapper[aria-invalid="true"]:focus-within { border-color: var(--color-danger); box-shadow: 0 0 0 3px var(--color-ring-error); }
+.field-wrapper[aria-disabled="true"] { border-color: var(--color-line); background: var(--color-surface-2); color: var(--color-ink-3); box-shadow: none; }
+.field-wrapper input, .field-wrapper input:focus, .field-wrapper input:focus-visible { outline: none; border: 0; background: transparent; box-shadow: none; }
+.field-wrapper.confidential-box { border-color: var(--color-confidential-border); background: var(--color-accent-soft); }
+.field-wrapper.confidential-box:hover:not([aria-disabled="true"]) { border-color: var(--color-ink); }
+.field-wrapper.confidential-box:focus-within:not([aria-disabled="true"]) { border-color: var(--color-accent); }
+.field-wrapper.confidential-box[aria-invalid="true"] { border-color: var(--color-danger); }
+.field-segment { align-self: stretch; border: 0; border-left: 1px solid var(--color-line); padding: 0 16px; display: flex; align-items: center; gap: 8px; }

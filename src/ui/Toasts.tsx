@@ -1,3 +1,4 @@
+import { Sep, separate } from './Sep'
 import { AnimatePresence, motion } from 'framer-motion'
 import tokens from '../assets/tokens.json'
 import { M, useMotion } from '../lib/motion'
@@ -34,8 +35,8 @@ export default function Toasts() {
                 <Icon name={fail ? 'alert' : x.kind === 'success' ? 'check' : 'info'} size={fail ? 16 : x.kind === 'success' ? 16 : 14} />
               </span>
               <div className="min-w-0 flex-1">
-                <div className="text-[14px] font-medium leading-5">{x.title}</div>
-                {x.body && <div className="text-[13px] leading-[18px] text-ink3">{x.body}</div>}
+                <div className="text-[14px] font-medium leading-5">{separate(x.title)}</div>
+                {x.body && <div className="text-[13px] leading-[18px] text-ink3">{separate(x.body)}</div>}
               </div>
               {x.action && (
                 <button

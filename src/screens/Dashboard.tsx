@@ -1,3 +1,4 @@
+import { Sep, separate } from '../ui/Sep'
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useMotion } from '../lib/motion'
@@ -103,7 +104,7 @@ function FundCard({ mobile }: { mobile: boolean }) {
   const tiles = [
     { t: 'Receive from another wallet', d: <span className="mono text-[12px]">{data.account.short}</span>, a: 'Copy address', on: act.copyAddress },
     { t: 'Bridge from another network', d: 'From Ethereum or another L2', a: 'Open bridge ↗' },
-    { t: 'Get test tokens', d: 'Testnet faucet · USDC and ETH', a: 'Open faucet ↗' },
+    { t: 'Get test tokens', d: 'Testnet faucet\u001fUSDC and ETH', a: 'Open faucet ↗' },
   ]
   return (
     <section className={`${card} ${mobile ? 'p-5' : 'p-6'}`}>
@@ -187,7 +188,7 @@ export default function Dashboard() {
             </button>
             {!mobile && <Button size={48} arrow className="ml-auto w-[168px]" onClick={() => nav('shield')}>Shield</Button>}
           </div>
-          {mobile ? <div className="mt-4"><ActionRow stretch /></div> : <p className="mt-2 text-[13px] text-ink3">{empty ? `No balances yet · ${net.name}` : `2 assets · ${net.name}${net.unsupported ? '' : ' Sepolia'}`}</p>}
+          {mobile ? <div className="mt-4"><ActionRow stretch /></div> : <p className="mt-2 text-[13px] text-ink3">{separate(empty ? `No balances yet\u001f${net.name}` : `2 assets\u001f${net.name}${net.unsupported ? '' : ' Sepolia'}`)}</p>}
           <div className={mobile ? 'mt-4' : 'mt-6'}>
             <RatioBar priv={u.priv} pub={u.pub} hidden={masked && !empty} compact={mobile} />
           </div>

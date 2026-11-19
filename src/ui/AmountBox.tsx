@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import Icon from './Icon'
+import Field from './Field'
 import { Coin } from './TokenRow'
 
 type Props = {
@@ -15,19 +16,20 @@ type Props = {
   confidential?: boolean
   /** which edge touches the swap button (gets 24 padding) */
   swapEdge?: 'bottom' | 'none'
+  invalid?: boolean
   disabled?: boolean
   visibility?: string
   maxLabel?: string
 }
 
 /** One amount box for shield, unshield and send. */
-export default function AmountBox({ label, balance, onMax, value, onChange, token, usd, confidential, swapEdge = 'none', disabled, visibility, maxLabel = 'MAX' }: Props) {
+export default function AmountBox({ label, balance, onMax, value, onChange, token, usd, confidential, swapEdge = 'none', disabled, invalid, visibility, maxLabel = 'MAX' }: Props) {
   return (
-    <div
-      className={`border p-5 ${swapEdge === 'bottom' ? 'pb-6' : ''} ${confidential ? 'confidential-box border-accentSoft bg-accentSoft' : visibility ? 'border-line bg-surface' : 'border-line bg-surface2'}`}
+    <Field invalid={invalid} disabled={disabled}
+      className={`p-5 ${swapEdge === 'bottom' ? 'h-[159px] pb-6' : ''} ${confidential ? 'confidential-box border-accentSoft bg-accentSoft' : visibility ? 'border-line bg-surface' : 'border-line bg-surface'}`}
     >
       <div className="flex items-center justify-between gap-3">
-        <span className="text-[13px] leading-[18px] text-ink2">{label}</span>
+        <span className="text-[15px] leading-5 text-ink3">{label}</span>
         <span className="flex items-center gap-2 text-[13px] leading-[18px] text-ink3">
           {balance}
           {onMax && (
@@ -63,7 +65,7 @@ export default function AmountBox({ label, balance, onMax, value, onChange, toke
           </span>
         )}
       </div>
-    </div>
+    </Field>
   )
 }
 
@@ -71,11 +73,11 @@ export default function AmountBox({ label, balance, onMax, value, onChange, toke
 export function ReceiveBox({ amount, unit, confidential, label = 'You receive' }: { amount: string; unit: string; confidential?: boolean; label?: string }) {
   return (
     <div
-      className={`flex items-center justify-between gap-3 border p-5 pt-6 ${confidential ? 'confidential-box border-accentSoft bg-accentSoft' : 'border-line bg-surface2'}`}
+      className={`flex items-center justify-between h-[66px] gap-2 border px-5 pb-5 pt-6 ${confidential ? 'confidential-box border-accentSoft bg-accentSoft' : 'border-line bg-surface'}`}
     >
-      <span className="text-[13px] leading-[18px] text-ink2">{label}</span>
+      <span className="text-[15px] leading-5 text-ink3">{label}</span>
       <span className="text-[15px] font-medium tabular-nums">
-        {amount} <span className={confidential ? 'text-accentInk' : 'text-ink2'}>{unit}</span>
+        {amount} <span className={'text-accentInk'}>{unit}</span>
       </span>
     </div>
   )

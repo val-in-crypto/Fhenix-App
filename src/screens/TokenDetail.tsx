@@ -1,3 +1,4 @@
+import { Sep, separate } from '../ui/Sep'
 import { useRef } from 'react'
 import { fmtPublic, fmtUsd } from '../lib/format'
 import { data, isMasked, nav, prices, useStore, type Sym } from '../state/store'
@@ -35,7 +36,7 @@ export default function TokenDetail() {
           <div className="flex-1">
             <div className="text-[24px] font-medium leading-[30px] tracking-[-0.01em]">{sym}</div>
             <div className="text-[13px] leading-[18px] text-ink3">
-              {a.name} · {data.networks[s.networkIdx].name}
+              {a.name}<Sep />{data.networks[s.networkIdx].name}
             </div>
           </div>
           <SheetClose onClick={act.closeSheet} />
@@ -47,7 +48,7 @@ export default function TokenDetail() {
               <span className="mono text-[12px] text-accentInk">{a.wrapped}</span>
             </div>
             <Masked value={b.priv} hidden={masked} dec={dec} className="mono mt-2 !whitespace-normal [overflow-wrap:anywhere] text-[clamp(14px,4vw,26px)] font-semibold leading-8" />
-            <div className="mt-2 text-[13px] text-accentInk">{masked ? 'Hidden · reveal it on Dashboard' : 'Decrypted with your permit'}</div>
+            <div className="mt-2 text-[13px] text-accentInk">{separate(masked ? 'Hidden\u001freveal it on Dashboard' : 'Decrypted with your permit')}</div>
           </div>
           <div className="min-w-0 border border-line bg-surface2 p-3 sm:p-5">
             <div className={`flex flex-wrap justify-between gap-x-2 ${mobile ? 'flex-col' : ''}`}>

@@ -1,3 +1,4 @@
+import { Sep, separate } from '../ui/Sep'
 import asterisk from '../assets/fhenix-asterisk.svg?raw'
 import { DOCS_URL, EXPLORER_URL, Page } from '../shell/AppShell'
 import { data, useStore } from '../state/store'
@@ -46,7 +47,7 @@ export default function Apps() {
                 <Tile abbr={a.abbr} />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[15px] font-medium leading-5">{a.name}</span>
-                  <span className="block text-[13px] leading-[18px] text-ink3">{a.desc}</span>
+                  <span className="block text-[13px] leading-[18px] text-ink3">{separate(a.desc)}</span>
                 </span>
                 <Chip tone={a.tag === 'Live' ? 'live' : 'neutral'} dot={a.tag === 'Live'} className="uppercase !tracking-[0.08em]">
                   {a.tag}
@@ -81,7 +82,7 @@ export default function Apps() {
                 </Chip>
               </span>
               <span className="mt-4 text-[19px] font-medium leading-6 tracking-[-0.01em]">{a.name}</span>
-              <span className="eyebrow mt-1 text-ink3">{a.desc}</span>
+              <span className="eyebrow mt-1 text-ink3">{separate(a.desc)}</span>
               <span className="eyebrow mt-auto flex items-center gap-2 pt-6 text-ink">
                 {live ? 'Enter' : 'Notify me'} <Icon name="pixel-arrow" size={10} />
               </span>

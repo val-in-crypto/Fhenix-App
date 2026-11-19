@@ -82,7 +82,7 @@
    "asset": "USDC",
    "label": "Shield USDC → fUSDC",
    "amount": "+500.00 fUSDC",
-   "when": "Today · 12:04",
+   "when": "Today\u001f12:04",
    "hash": "0x9f2c…a83e",
    "status": "confirmed"
   },
@@ -91,7 +91,7 @@
    "kind": "permit",
    "label": "Permit signed",
    "amount": "—",
-   "when": "Today · 12:01 · valid 30 days",
+   "when": "Today\u001f12:01\u001fvalid 30 days",
    "status": "confirmed"
   },
   {
@@ -100,7 +100,7 @@
    "asset": "ETH",
    "label": "Sent fETH confidentially",
    "amount": "−[*****] fETH",
-   "when": "Yesterday · to 0xA4…19c2",
+   "when": "Yesterday\u001fto 0xA4…19c2",
    "status": "confirmed"
   },
   {
@@ -109,7 +109,7 @@
    "asset": "USDC",
    "label": "Unshield fUSDC → USDC",
    "amount": "+120.00 USDC",
-   "when": "Nov 12 · claimed",
+   "when": "Nov 12\u001fclaimed",
    "status": "confirmed"
   }
  ],
@@ -117,7 +117,7 @@
   {
    "name": "AlphaEngine",
    "abbr": "AE",
-   "desc": "Execution · trading",
+   "desc": "Execution\u001ftrading",
    "tag": "Live"
   },
   {
@@ -135,7 +135,7 @@
   {
    "name": "Fluton",
    "abbr": "FL",
-   "desc": "Intra · SDK",
+   "desc": "Intra\u001fSDK",
    "tag": "Soon"
   },
   {
@@ -182,11 +182,11 @@
   ],
   "expired": "Permit expired. Renew it to see your confidential balances.",
   "none": "Create a permit to see your confidential balances.",
-  "shieldNote": "≈ $0.12 fee · ~30 sec · the amount is visible on-chain, your balance is not",
+  "shieldNote": "≈ $0.12 fee\u001f~30 sec\u001fthe amount is visible on-chain, your balance is not",
   "unshieldNotes": [
-   "Step 1 of 3 · then decrypt and claim",
-   "Claim unlocks after decryption · ~30 sec",
-   "Decrypted · ready to claim"
+   "Step 1 of 3\u001fthen decrypt and claim",
+   "Claim unlocks after decryption\u001f~30 sec",
+   "Decrypted\u001fready to claim"
   ],
   "privateNow": [
    "Shield complete",
@@ -205,7 +205,7 @@
    "Unshielded 500.00 USDC",
    "Sent confidentially",
    "Transaction cancelled",
-   "Transaction failed · Try again"
+   "Transaction failed\u001fTry again"
   ],
   "tutorial": [
    [
@@ -229,7 +229,7 @@
  },
  "permitsList": [
   {
-   "name": "Fhenix App · this device",
+   "name": "Fhenix App\u001fthis device",
    "abbr": "FX",
    "status": "active",
    "note": "Expires in 30 days",

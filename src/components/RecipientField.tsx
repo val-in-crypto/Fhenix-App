@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { useMotion } from '../lib/motion'
 import { data } from '../state/store'
 import Icon from '../ui/Icon'
+import Field from '../ui/Field'
 import { getAddress, isAddress } from 'viem'
 
 export type Recipient = { address: string; name?: string; ens?: boolean; firstTime: boolean }
@@ -131,7 +132,7 @@ export function RecipientField({ field, mobile, warnings }: { field: ReturnType<
         </motion.div>
       ) : (
         <>
-          <div className={`flex h-14 items-center gap-1 bg-surface px-2 focus-within:ring-1 ${invalid ? 'border-2 border-danger focus-within:ring-danger' : 'border border-ink3 focus-within:ring-accentInk'}`}>
+          <Field invalid={invalid} className="flex h-14 items-center bg-surface">
             <input
               id="send-to"
               autoFocus={!mobile}
@@ -146,13 +147,10 @@ export function RecipientField({ field, mobile, warnings }: { field: ReturnType<
               onPaste={event => { event.preventDefault(); field.enter(event.clipboardData.getData('text').trim()) }}
               onBlur={event => { if (!event.currentTarget.parentElement?.contains(event.relatedTarget)) field.validate() }}
               onKeyDown={event => { if (event.key === 'Enter') field.validate() }}
-              className={`h-full min-w-0 flex-1 bg-transparent px-1 outline-none placeholder:text-ink3 ${invalid ? 'mono' : ''} ${mobile ? 'text-[15px]' : 'text-[16px]'}`}
+              className={`h-full min-w-0 flex-1 bg-transparent px-4 outline-none placeholder:text-ink3 ${invalid ? 'mono' : ''} ${mobile ? 'text-[15px]' : 'text-[16px]'}`}
             />
-            {invalid && <button type="button" aria-label={copy.clear} onClick={field.clear} className="flex h-10 w-8 shrink-0 items-center justify-center text-danger"><Icon name="close" size={18} /></button>}
-            <button type="button" className={`${iconButton} !w-auto gap-2 px-3 text-[14px] font-medium`} onClick={() => void paste()}>
-              <Icon name="copy" size={16} />{copy.paste}
-            </button>
-          </div>
+            {draft ? <button type="button" aria-label={copy.clear} onClick={field.clear} className="field-segment shrink-0 text-ink2"><Icon name="close" size={18} /></button> : <button type="button" className="field-segment shrink-0 text-[14px] font-medium" onClick={() => void paste()}><Icon name="copy" size={16} />{copy.paste}</button>}
+          </Field>
           <AnimatePresence initial={false}>
             {invalid && <motion.p id="send-to-error" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: t(150) }} className="text-[15px] leading-5 text-danger">{copy.invalid}</motion.p>}
           </AnimatePresence>

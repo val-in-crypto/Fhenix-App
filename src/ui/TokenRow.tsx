@@ -1,3 +1,4 @@
+import { Sep, separate } from './Sep'
 import { fmtPublic, fmtUsd } from '../lib/format'
 import { data, prices, type Sym } from '../state/store'
 import Icon from './Icon'
@@ -34,7 +35,7 @@ export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick }: Pr
         <span className="min-w-0 flex-1">
           <span className="block text-[15px] font-medium leading-5">{sym}</span>
           <span className="block text-[12px] leading-4 text-ink3">
-            {sym} · {a.wrapped}
+            {sym}<Sep />{a.wrapped}
           </span>
         </span>
         <span className="mono flex min-w-0 flex-col gap-1 text-right text-[13px] leading-4">
@@ -51,7 +52,7 @@ export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick }: Pr
         <span>
           <span className="block text-[15px] font-medium leading-5">{sym}</span>
           <span className="block text-[13px] leading-[18px] text-ink3">
-            {a.name} · {sym} + {a.wrapped}
+            {a.name}<Sep />{sym} + {a.wrapped}
           </span>
         </span>
       </span>

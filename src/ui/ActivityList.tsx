@@ -1,3 +1,4 @@
+import { Sep, separate } from './Sep'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { useMotion } from '../lib/motion'
@@ -59,11 +60,11 @@ export default function ActivityList({ items, hidden }: Props) {
                   </span>
                   <span className="min-w-0 flex-1">
                     <span className="block truncate text-[14px] font-medium leading-5">{a.label.replace(/privately/gi, 'confidentially')}</span>
-                    <span className="block truncate text-[12px] leading-4 text-ink3">{a.when}</span>
+                    <span className="block truncate text-[12px] leading-4 text-ink3">{separate(a.when)}</span>
                   </span>
                   <span className={`mono shrink-0 text-right text-[13px] font-medium leading-4 ${a.priv || a.amount?.includes('[') ? 'text-accentInk' : ''}`}>
                     {a.status === 'pending' ? (
-                      <span className="bracket-pulse text-ink3">pending · {a.amount}</span>
+                      <span className="bracket-pulse text-ink3">pending <Sep /> {a.amount}</span>
                     ) : a.priv ? (
                       <>
                         {a.priv.sign}

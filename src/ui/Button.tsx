@@ -1,3 +1,4 @@
+import { Sep, separate } from './Sep'
 import { motion, type HTMLMotionProps } from 'framer-motion'
 import type { ReactNode } from 'react'
 import { useMotion } from '../lib/motion'
@@ -37,7 +38,7 @@ export default function Button({ variant = 'primary', size = 48, icon, arrow, fu
       {...rest}
     >
       {busy ? <Icon name="spinner" size={18} /> : icon ? <Icon name={icon} size={20} className={variant === 'secondary' ? 'text-ink2' : ''} /> : null}
-      {children}
+      {separate(children)}
       {arrow && !busy && !disabled && <Icon name="pixel-arrow" size={big ? 12 : 10} />}
     </motion.button>
   )

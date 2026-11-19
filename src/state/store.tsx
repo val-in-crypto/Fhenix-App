@@ -59,11 +59,11 @@ export interface State {
   balances: Balances
   activity: Activity[]
   activityOpen: boolean
-  /** 0 form · 1 approve · 2 confirm in wallet */
+  /** 0 form\u001f1 approve\u001f2 confirm in wallet */
   shieldStep: number
-  /** 0 form · 1 requesting · 2 decrypting · 3 claim ready · 4 claiming · 5 claimed */
+  /** 0 form\u001f1 requesting\u001f2 decrypting\u001f3 claim ready\u001f4 claiming\u001f5 claimed */
   unshieldStep: number
-  /** 0 form · 1 encrypt · 2 confirm · 3 sent · 4 sending */
+  /** 0 form\u001f1 encrypt\u001f2 confirm\u001f3 sent\u001f4 sending */
   sendStep: number
   busy: boolean
   amt: { shield: string; unshield: string; send: string }
@@ -249,8 +249,8 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
         if (stale(e)) return
         if (failed()) return set({ signing: false })
         set({ signing: false, permit: 'active', permitDays: days, hidden: false, sheet: null })
-        addAct({ id: uid(), kind: 'permit', label: 'Permit signed', amount: '—', when: `Just now · valid ${days} days`, status: 'confirmed' })
-        toast({ kind: 'success', title: copy.toasts[1], body: `Permit signed · valid ${days} days` })
+        addAct({ id: uid(), kind: 'permit', label: 'Permit signed', amount: '—', when: `Just now\u001fvalid ${days} days`, status: 'confirmed' })
+        toast({ kind: 'success', title: copy.toasts[1], body: `Permit signed\u001fvalid ${days} days` })
         const t = ref.current.tour
         if (t.status === 'active' && t.step === 1) A.tourNext()
       },
@@ -307,7 +307,7 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
           lastShield: amt,
           lastShieldAsset: sym,
           balances: mv(s.balances, sym, -amt, amt),
-          activity: upd(s.activity, id, { status: 'confirmed', when: 'Today · just now · 0x9f2c…a83e' }),
+          activity: upd(s.activity, id, { status: 'confirmed', when: 'Today\u001fjust now\u001f0x9f2c…a83e' }),
         }))
         const s = ref.current
         if (s.tour.status === 'active' && s.tour.step === 2) return A.tourNext()
@@ -330,7 +330,7 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
         if (failed() || amt > ref.current.balances[sym].priv) return set({ busy: false, unshieldStep: 0 })
         const id = uid()
         set(s => ({ busy: false, unshieldStep: 2, pendingUnshield: { id, amount: amt, asset: sym }, balances: mv(s.balances, sym, 0, -amt) }))
-        addAct({ id, kind: 'unshield', label: `Unshield f${sym} → ${sym}`, amount: `+${fmtPublic(amt)} ${sym}`, when: 'Just now · decrypting', status: 'pending' })
+        addAct({ id, kind: 'unshield', label: `Unshield f${sym} → ${sym}`, amount: `+${fmtPublic(amt)} ${sym}`, when: 'Just now\u001fdecrypting', status: 'pending' })
         toast({ kind: 'info', title: 'Unshield requested', body: 'Claim it from Activity on your Dashboard' })
         await A.runDecrypt()
       },
@@ -339,7 +339,7 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
         await wait(D.decrypt)
         if (stale(e)) return
         const p = ref.current.pendingUnshield
-        set(s => ({ unshieldStep: 3, activity: p ? upd(s.activity, p.id, { when: 'Just now · ready to claim' }) : s.activity }))
+        set(s => ({ unshieldStep: 3, activity: p ? upd(s.activity, p.id, { when: 'Just now\u001fready to claim' }) : s.activity }))
       },
       claim: async () => {
         const e = epoch.current
@@ -353,7 +353,7 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
           unshieldStep: 5,
           lastShield: s.lastShield,
           balances: mv(s.balances, p.asset ?? 'USDC', p.amount, 0),
-          activity: upd(s.activity, p.id, { status: 'confirmed', kind: 'unshield-claim', when: 'Today · claimed' }),
+          activity: upd(s.activity, p.id, { status: 'confirmed', kind: 'unshield-claim', when: 'Today\u001fclaimed' }),
         }))
         toast({ kind: 'success', title: `Unshielded ${fmtPublic(p.amount)} ${p.asset ?? 'USDC'}`, body: 'Back in your public wallet balance', action: { label: 'View', route: 'dashboard' } })
       },
@@ -392,7 +392,7 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
           const activity: Activity = {
             id: uid(), kind: 'transfer-out', label: confidential ? `Sent ${unit} confidentially` : `Sent ${unit}`,
             ...(confidential ? { priv: { sign: '−', value, unit } } : { amount: `−${fmtPublic(value, asset === 'ETH' ? 4 : 2)} ${unit}` }),
-            recipientAddress: recipient.address, when: `Just now · to ${to}`, hash: data.send.tx, status: 'confirmed',
+            recipientAddress: recipient.address, when: `Just now\u001fto ${to}`, hash: data.send.tx, status: 'confirmed',
           }
           set(state => ({
             sendStep: 3,

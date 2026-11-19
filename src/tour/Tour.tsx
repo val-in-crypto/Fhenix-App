@@ -1,3 +1,4 @@
+import { Sep, separate } from '../ui/Sep'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useLayoutEffect, useState } from 'react'
 import tokens from '../assets/tokens.json'
@@ -71,7 +72,7 @@ export default function Tour() {
       <div className="absolute left-1/2 z-30 flex -translate-x-1/2 items-center border border-line bg-surface shadow-[0_8px_24px_rgb(var(--shadow-ink)_/_.12)]" style={{ bottom: mobile ? tokens.size.tabBar + 12 : 24 }}>
         <button type="button" onClick={() => act.tourGo(step)} className="flex h-11 items-center gap-2 whitespace-nowrap pl-4 pr-3 text-[13px] font-medium">
           <span className="h-2 w-2 bg-accent" />
-          Resume tour · Step {step + 1} of 4
+          Resume tour <Sep /> Step {step + 1} of 4
         </button>
         <button type="button" aria-label="End tour" onClick={() => act.tourEnd('idle')} className="flex h-11 w-10 items-center justify-center border-l border-line text-ink3 hover:text-ink">
           <Icon name="close" size={14} />

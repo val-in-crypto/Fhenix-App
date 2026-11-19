@@ -1,3 +1,4 @@
+import { Sep, separate } from '../ui/Sep'
 import { useState } from 'react'
 import { Page } from '../shell/AppShell'
 import { data, useStore } from '../state/store'
@@ -22,10 +23,10 @@ export default function Permits() {
             on: () => {
               if (p.action === 'Renew') {
                 setOthers(o => o.map(x => (x.name === p.name ? { ...x, status: 'active', note: `Expires in ${s.permitDays} days`, action: 'Revoke' } : x)))
-                act.toast({ kind: 'success', title: 'Permit renewed', body: `${p.name} · valid ${s.permitDays} days` })
+                act.toast({ kind: 'success', title: 'Permit renewed', body: `${separate(p.name)}\u001fvalid ${s.permitDays} days` })
               } else {
                 setOthers(o => o.filter(x => x.name !== p.name))
-                act.toast({ kind: 'info', title: 'Permit revoked', body: `${p.name} can no longer read your data` })
+                act.toast({ kind: 'info', title: 'Permit revoked', body: `${separate(p.name)} can no longer read your data` })
               }
             },
           })),
@@ -64,7 +65,7 @@ export default function Permits() {
                 </span>
               </span>
               <span className="min-w-0 flex-1">
-                <span className="block truncate text-[15px] font-medium leading-5">{p.name}</span>
+                <span className="block truncate text-[15px] font-medium leading-5">{separate(p.name)}</span>
                 <span className="flex items-center gap-1 text-[13px] leading-[18px] text-ink3">
                   {(p.status === 'expiring' || p.status === 'expired') && <Icon name="alert" size={13} />}
                   {p.note}

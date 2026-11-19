@@ -1,3 +1,4 @@
+import { Sep, separate } from './Sep'
 import type { ReactNode } from 'react'
 
 const tones = {
@@ -13,7 +14,7 @@ export default function Chip({ tone = 'accent', dot, children, className = '' }:
   return (
     <span className={`mono inline-flex items-center gap-1.5 whitespace-nowrap px-2.5 py-1.5 text-[12px] font-medium leading-4 ${tones[tone]} ${className}`}>
       {dot && <span className="round h-1.5 w-1.5 bg-current" />}
-      {children}
+      {separate(children)}
     </span>
   )
 }
