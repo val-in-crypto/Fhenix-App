@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useLayoutEffect, useState } from 'react'
 import tokens from '../assets/tokens.json'
 import PrivateNow from '../illus/PrivateNow'
-import { M, easeInOut, useMotion } from '../lib/motion'
+import { M, useMotion } from '../lib/motion'
 import { TOUR_ROUTES, copy, nav, useRoute, useStore } from '../state/store'
 import Button from '../ui/Button'
 import Icon from '../ui/Icon'
@@ -68,7 +68,7 @@ export default function Tour() {
 
   if (status === 'paused')
     return (
-      <div className="absolute left-1/2 z-30 flex -translate-x-1/2 items-center border border-line bg-white shadow-[0_8px_24px_rgba(0,22,35,.12)]" style={{ bottom: mobile ? tokens.size.tabBar + 12 : 24 }}>
+      <div className="absolute left-1/2 z-30 flex -translate-x-1/2 items-center border border-line bg-surface shadow-[0_8px_24px_rgb(var(--shadow-ink)_/_.12)]" style={{ bottom: mobile ? tokens.size.tabBar + 12 : 24 }}>
         <button type="button" onClick={() => act.tourGo(step)} className="flex h-11 items-center gap-2 whitespace-nowrap pl-4 pr-3 text-[13px] font-medium">
           <span className="h-2 w-2 bg-accent" />
           Resume tour · Step {step + 1} of 4
@@ -164,12 +164,12 @@ export default function Tour() {
         <defs>
           <mask id="tour-mask">
             <rect width="100%" height="100%" fill="white" />
-            <motion.rect fill="black" initial={false} animate={{ x: cut.x, y: cut.y, width: cut.w, height: cut.h }} transition={{ duration: t(M.coachmark.spotlightMs), ease: easeInOut }} />
+            <rect fill="black" x={cut.x} y={cut.y} width={cut.w} height={cut.h} />
           </mask>
         </defs>
-        <rect width="100%" height="100%" fill={tokens.color.scrim} mask="url(#tour-mask)" />
+        <rect width="100%" height="100%" fill='var(--scrim)' mask="url(#tour-mask)" />
         {!centred && (
-          <motion.rect fill="none" stroke={tokens.color.accent} strokeWidth="2" initial={false} animate={{ x: cut.x, y: cut.y, width: cut.w, height: cut.h }} transition={{ duration: t(M.coachmark.spotlightMs), ease: easeInOut }} />
+          <rect fill="none" stroke="var(--color-accent)" strokeWidth="2" x={cut.x} y={cut.y} width={cut.w} height={cut.h} />
         )}
       </svg>
       <div className={centred ? 'absolute inset-0 flex items-center justify-center p-4' : ''}>
@@ -183,7 +183,7 @@ export default function Tour() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: t(M.coachmark.cardMs) }}
-            className={`border-2 border-accent bg-white p-5 shadow-[0_16px_48px_rgba(0,22,35,.2)] ${centred ? 'relative' : 'absolute'}`}
+            className={`border-2 border-accent bg-surface p-5 shadow-[0_16px_48px_rgb(var(--shadow-ink)_/_.2)] ${centred ? 'relative' : 'absolute'}`}
             style={{ width: centred ? Math.min(mobile ? box.w - 32 : 400, 400) : cardW, ...pos }}
           >
             {step === 3 && (

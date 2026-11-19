@@ -3,7 +3,6 @@ import { copy, nav, useStore } from '../state/store'
 import Button from '../ui/Button'
 import Icon from '../ui/Icon'
 
-/** One viewport, no scroll. The demo sits in a size container and scales to whatever height is left. */
 export default function Welcome() {
   const { s, act, mobile } = useStore()
   const learn = () => (s.connected ? act.tourStart() : act.startConnect(true))
@@ -11,10 +10,10 @@ export default function Welcome() {
 
   if (mobile)
     return (
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden px-5 pb-4 pt-2">
+      <div className="welcome-content flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-5 pb-4 pt-2" data-scroll>
         <h1 className="mx-auto max-w-[250px] shrink-0 text-center text-[34px] font-medium leading-10 tracking-[-0.02em]">{copy.hero[0]}</h1>
         <p className="mx-auto mt-3 max-w-[320px] shrink-0 text-center text-[15px] leading-[22px] text-ink2">{copy.hero[1]}</p>
-        <div className="mt-4 flex min-h-0 flex-1 items-center justify-center" style={{ containerType: 'size' }}>
+        <div className="mt-4 flex shrink-0 justify-center">
           <ShieldDemo mobile className="border border-line" />
         </div>
         <div className="mt-4 flex shrink-0 flex-col gap-2">
@@ -34,7 +33,7 @@ export default function Welcome() {
 
   return (
     <div className="h-full overflow-hidden px-8 pb-10 pt-1">
-      <div className="grid h-full max-w-[1184px] grid-cols-[minmax(300px,1fr)_minmax(0,1.25fr)] gap-10 border border-line bg-white px-10 py-10">
+      <div className="grid h-full max-w-[1184px] grid-cols-[minmax(300px,1fr)_minmax(0,1.25fr)] gap-10 border border-line bg-surface px-10 py-10">
         <div className="self-center">
           <h1 className="font-medium leading-[1.07] tracking-[-0.025em]" style={{ fontSize: 'clamp(36px, 3.9vw, 56px)' }}>
             {copy.hero[0]}

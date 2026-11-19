@@ -13,7 +13,6 @@ import Welcome from './screens/Welcome'
 import AppShell from './shell/AppShell'
 import ConnectSheet from './sheets/ConnectSheet'
 import PermitSheet from './sheets/PermitSheet'
-import SendReview from './sheets/SendReview'
 import { nav, useRoute, useStore, type Route } from './state/store'
 import Tour from './tour/Tour'
 import Toasts from './ui/Toasts'
@@ -46,6 +45,10 @@ export default function App() {
   const { t, reduced } = useMotion()
 
   useEffect(() => {
+    if (location.pathname === '/activity') {
+      history.replaceState(null, '', '/#activity')
+      window.dispatchEvent(new HashChangeEvent('hashchange'))
+    }
     if (!location.hash) nav(s.connected ? 'dashboard' : 'welcome')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -57,12 +60,41 @@ export default function App() {
     document.querySelectorAll('[data-scroll]').forEach(el => (el.scrollTop = 0))
   }, [route])
 
+  useEffect(() => {
+    const viewport = window.visualViewport
+    if (!mobile || s.deviceFrame || !viewport) return
+    const root = document.documentElement
+    let frame = 0
+    const sync = () => {
+      const focused = document.activeElement
+      const editing = focused instanceof HTMLInputElement || focused instanceof HTMLTextAreaElement
+      if (editing && viewport.scale === 1 && viewport.height < window.innerHeight - 80) {
+        root.style.setProperty('--app-height', `${viewport.height}px`)
+        cancelAnimationFrame(frame)
+        frame = requestAnimationFrame(() => focused.scrollIntoView({ block: 'nearest' }))
+      } else {
+        root.style.removeProperty('--app-height')
+      }
+    }
+    viewport.addEventListener('resize', sync)
+    window.addEventListener('focusin', sync)
+    window.addEventListener('focusout', sync)
+    sync()
+    return () => {
+      viewport.removeEventListener('resize', sync)
+      window.removeEventListener('focusin', sync)
+      window.removeEventListener('focusout', sync)
+      cancelAnimationFrame(frame)
+      root.style.removeProperty('--app-height')
+    }
+  }, [mobile, s.deviceFrame])
+
   const framed = s.deviceFrame && window.innerWidth >= 480
   // shield and unshield share one screen: no remount, so the swap animates in place
   const viewKey = route === 'unshield' ? 'shield' : route
   return (
     <div className={`h-full ${reduced ? 'reduce-motion' : ''} ${framed ? 'flex items-center justify-center overflow-auto bg-lineStrong' : ''}`}>
-      <div id="app-root" className="relative overflow-hidden bg-bg" style={framed ? { width: 390, height: 844, flexShrink: 0, boxShadow: '0 24px 80px rgba(0,22,35,.35)' } : { height: '100dvh' }}>
+      <div id="app-root" className="relative overflow-hidden bg-bg" style={framed ? { width: 390, height: 844, flexShrink: 0, boxShadow: '0 24px 80px rgb(var(--shadow-ink) / .35)' } : { height: 'var(--app-height, 100dvh)' }}>
         <AppShell route={route}>
           <motion.div key={viewKey} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: t(180) }} className={mobile ? 'flex min-h-0 flex-1 flex-col' : route === 'welcome' ? 'h-full' : ''}>
             {screen(route)}
@@ -72,7 +104,6 @@ export default function App() {
         <ConnectSheet />
         <PermitSheet />
         <TokenDetail />
-        <SendReview />
         <Toasts />
         <DemoPanel />
       </div>

@@ -19,8 +19,8 @@ const SCRUB = [0, 3.2, 7.6]
 
 const STEPS = [
   { tab: 'Connect wallet', col: 'YOUR WALLET', text: 'Your tokens sit in your wallet. Anyone on-chain can see the amount.', lines: ['Your tokens sit in your wallet. Anyone on-chain', 'can see the amount.'], value: '250.00 USDC' },
-  { tab: 'Shield tokens', col: 'ENCRYPTION LAYER', text: 'Shielding seals the amount into an encrypted fToken on CoFHE.', lines: ['Shielding seals the amount into an encrypted', 'fToken on CoFHE.'], value: '250.00 → [••••]' },
-  { tab: 'Use them privately', col: 'SHIELDED BALANCE', text: 'Your balance is now [*******]. Only you can decrypt it with your permit.', lines: ['Your balance is now [*******]. Only you can', 'decrypt it with your permit.'], value: '[••••] fUSDC' },
+  { tab: 'Shield tokens', col: 'CONFIDENTIAL LAYER', text: 'Shielding seals the amount into a confidential fToken on CoFHE.', lines: ['Shielding seals the amount into a confidential', 'fToken on CoFHE.'], value: '250.00 → [••••]' },
+  { tab: 'Use them confidentially', col: 'SHIELDED BALANCE', text: 'Your balance is now [*******]. Only you can decrypt it with your permit.', lines: ['Your balance is now [*******]. Only you can', 'decrypt it with your permit.'], value: '[••••] fUSDC' },
 ]
 
 /* ---------- easing + keyframe tracks ---------- */
@@ -85,14 +85,14 @@ const charEnc = [0, 1, 2, 3, 4, 5].map(i => track([[0, 0], [5.55 + 0.09 * i, 0],
 const gauge = track([[0, 0.12], [5.5, 0.12], [6.3, 0.6, travel], [9.2, 0.6], [9.9, 1, travel], [13.2, 1], [14.8, 0.12, travel], [LOOP, 0.12]])
 
 const SPARKS: { x: number; y: number; s: number; star: boolean; fill: string }[] = [
-  { x: -62, y: -30, s: 0.8, star: true, fill: '#0AD9DC' },
-  { x: -38, y: -62, s: 0.5, star: false, fill: '#0B1F2A' },
-  { x: -8, y: -80, s: 0.9, star: true, fill: '#0AD9DC' },
-  { x: 26, y: -66, s: 0.55, star: false, fill: '#9BE7E8' },
-  { x: 56, y: -38, s: 0.7, star: true, fill: '#0B1F2A' },
-  { x: 72, y: -4, s: 0.5, star: false, fill: '#0AD9DC' },
-  { x: -74, y: 2, s: 0.5, star: false, fill: '#9BE7E8' },
-  { x: 44, y: -88, s: 0.6, star: true, fill: '#0AD9DC' },
+  { x: -62, y: -30, s: 0.8, star: true, fill: 'var(--illo-sparkle)' },
+  { x: -38, y: -62, s: 0.5, star: false, fill: 'var(--illo-label)' },
+  { x: -8, y: -80, s: 0.9, star: true, fill: 'var(--illo-sparkle)' },
+  { x: 26, y: -66, s: 0.55, star: false, fill: 'var(--illo-shielded-2)' },
+  { x: 56, y: -38, s: 0.7, star: true, fill: 'var(--illo-label)' },
+  { x: 72, y: -4, s: 0.5, star: false, fill: 'var(--color-accent)' },
+  { x: -74, y: 2, s: 0.5, star: false, fill: 'var(--illo-shielded-2)' },
+  { x: 44, y: -88, s: 0.6, star: true, fill: 'var(--illo-sparkle)' },
 ]
 const sparkOut = SPARKS.map((_, j) => track([[0, 0], [9.5 + 0.06 * j, 0], [10.2 + 0.06 * j, 1, out], [13.2, 1], [14.2, 0], [LOOP, 0]]))
 const sparkOn = SPARKS.map((_, j) => track([[0, 0], [9.5 + 0.06 * j, 0], [9.75 + 0.06 * j, 1, out], [12.4 + 0.04 * j, 1], [12.8 + 0.04 * j, 0, travel], [LOOP, 0]]))
@@ -100,7 +100,8 @@ const sparkOn = SPARKS.map((_, j) => track([[0, 0], [9.5 + 0.06 * j, 0], [9.75 +
 const PLAIN = '250.00'
 const NOISE = '739251'
 const ENC = '[••••]'
-const INK = '#0B1F2A'
+const INK = 'var(--illo-label)'
+const EDGE = 'var(--illo-edge)'
 const move: CSSProperties = { willChange: 'transform' }
 
 type Els = Record<string, SVGElement | HTMLElement | null>
@@ -167,13 +168,13 @@ function applyStage(els: Els, t: number, ts: number) {
 
 const Coin = ({ k }: { k: number }) => (
   <g data-k={`coin${k}`} style={move}>
-    <path d="M-18.37 0A18.37 10.61 0 0 0 18.37 0V6A18.37 10.61 0 0 1 -18.37 6Z" fill="#1F5FA8" stroke={INK} strokeLinejoin="round" />
+    <path d="M-18.37 0A18.37 10.61 0 0 0 18.37 0V6A18.37 10.61 0 0 1 -18.37 6Z" fill="var(--coin-usdc-side)" stroke={EDGE} strokeLinejoin="round" />
     <ellipse rx="18.37" ry="10.61" fill="#2775CA" stroke={INK} />
     <ellipse rx="10.1" ry="5.83" stroke="white" strokeWidth="1.4" />
     <g data-k={`navy${k}`}>
-      <path d="M-18.37 0A18.37 10.61 0 0 0 18.37 0V6A18.37 10.61 0 0 1 -18.37 6Z" fill="black" stroke={INK} strokeLinejoin="round" />
-      <ellipse rx="18.37" ry="10.61" fill={INK} stroke={INK} />
-      <path transform="translate(-466.8 -281)" d="M457.2 283.78L456.1 281.13L462.31 280.45L457.85 277.92L461.46 275.83L465.84 278.41L467.02 274.82L471.61 275.46L470.1 279.09L476.4 278.22L477.49 280.87L471.28 281.55L475.75 284.08L472.13 286.17L467.75 283.59L466.57 287.18L461.99 286.54L463.49 282.91L457.2 283.78Z" fill="#0AD9DC" />
+      <path d="M-18.37 0A18.37 10.61 0 0 0 18.37 0V6A18.37 10.61 0 0 1 -18.37 6Z" fill="var(--illo-vault-shadow)" stroke={EDGE} strokeLinejoin="round" />
+      <ellipse rx="18.37" ry="10.61" fill="var(--illo-vault-top)" stroke={EDGE} />
+      <path transform="translate(-466.8 -281)" d="M457.2 283.78L456.1 281.13L462.31 280.45L457.85 277.92L461.46 275.83L465.84 278.41L467.02 274.82L471.61 275.46L470.1 279.09L476.4 278.22L477.49 280.87L471.28 281.55L475.75 284.08L472.13 286.17L467.75 283.59L466.57 287.18L461.99 286.54L463.49 282.91L457.2 283.78Z" fill="var(--color-accent)" />
     </g>
   </g>
 )
@@ -195,40 +196,40 @@ function Stage({ time, at = 0, tag = 1 }: { time?: MotionValue<number>; at?: num
     <g ref={root} fill="none">
       <defs>
         <linearGradient id={gid} x1="248.04" y1="194" x2="248.04" y2="70" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#0AD9DC" stopOpacity="0.55" />
-          <stop offset="1" stopColor="#0AD9DC" stopOpacity="0" />
+          <stop stopColor="var(--color-accent)" stopOpacity="0.55" />
+          <stop offset="1" stopColor="var(--color-accent)" stopOpacity="0" />
         </linearGradient>
       </defs>
       <path d="M185.17 325L170.7 316.65L254.97 268" stroke={INK} strokeLinecap="round" strokeDasharray="3 3" />
       <path d="M345.03 268L429.3 316.65L414.83 325" stroke={INK} strokeLinecap="round" strokeDasharray="3 3" />
       {/* public plate */}
-      <path d="M34.4805 288L134.94 346V360L34.4805 302V288Z" fill="#E9ECEF" stroke={INK} strokeLinejoin="round" />
-      <path d="M134.94 346L235.39 288V302L134.94 360V346Z" fill="#DCE1E5" stroke={INK} strokeLinejoin="round" />
-      <path d="M134.94 230L235.39 288L134.94 346L34.4805 288L134.94 230Z" fill="white" stroke={INK} strokeLinejoin="round" />
+      <path d="M34.4805 288L134.94 346V360L34.4805 302V288Z" fill="var(--illo-side-l)" stroke={EDGE} strokeLinejoin="round" />
+      <path d="M134.94 346L235.39 288V302L134.94 360V346Z" fill="var(--illo-side-r)" stroke={EDGE} strokeLinejoin="round" />
+      <path d="M134.94 230L235.39 288L134.94 346L34.4805 288L134.94 230Z" fill="var(--illo-top)" stroke={EDGE} strokeLinejoin="round" />
       {/* private plate: turquoise, lights up when the vault lands */}
       {/* opaque backing in the stage colour: the dimmed plate must still hide the connector that runs under it */}
-      <path d="M364.61 288L465.06 230L565.52 288V302L465.06 360L364.61 302Z" fill="#F5F6F7" />
+      <path d="M364.61 288L465.06 230L565.52 288V302L465.06 360L364.61 302Z" fill="var(--color-stage)" />
       <g data-k="pplate">
-        <path d="M364.61 288L465.06 346V360L364.61 302V288Z" fill="#E2F8F9" stroke={INK} strokeLinejoin="round" />
-        <path d="M465.061 346L565.521 288V302L465.061 360V346Z" fill="#9BE7E8" stroke={INK} strokeLinejoin="round" />
-        <path d="M465.06 230L565.52 288L465.06 346L364.61 288L465.06 230Z" fill="white" stroke={INK} strokeLinejoin="round" />
-        <path data-k="halo" d="M465.06 230L565.52 288L465.06 346L364.61 288L465.06 230Z" fill="#0AD9DC" />
+        <path d="M364.61 288L465.06 346V360L364.61 302V288Z" fill="var(--illo-shielded-1)" stroke={EDGE} strokeLinejoin="round" />
+        <path d="M465.061 346L565.521 288V302L465.061 360V346Z" fill="var(--illo-shielded-2)" stroke={EDGE} strokeLinejoin="round" />
+        <path d="M465.06 230L565.52 288L465.06 346L364.61 288L465.06 230Z" fill="var(--illo-top)" stroke={EDGE} strokeLinejoin="round" />
+        <path data-k="halo" d="M465.06 230L565.52 288L465.06 346L364.61 288L465.06 230Z" fill="var(--color-accent)" />
       </g>
       {/* encryption layer */}
       <g data-k="sheet0" style={move}>
-        <path d="M300 196L390.07 248L300 300L209.93 248L300 196Z" fill="white" fillOpacity="0.6" stroke={INK} strokeLinejoin="round" />
+        <path d="M300 196L390.07 248L300 300L209.93 248L300 196Z" fill="var(--illo-top)" fillOpacity="0.6" stroke={EDGE} strokeLinejoin="round" />
         <rect width="52" height="2.288" transform={`${iso}230.725 243.996)`} fill={INK} />
         <rect width="31.2" height="2.288" transform={`${iso}225.771 246.855)`} fill={INK} />
       </g>
       <g data-k="sheet1" style={move}>
-        <path d="M300 162L390.07 214L300 266L209.93 214L300 162Z" fill="white" fillOpacity="0.6" stroke={INK} strokeLinejoin="round" />
+        <path d="M300 162L390.07 214L300 266L209.93 214L300 162Z" fill="var(--illo-top)" fillOpacity="0.6" stroke={EDGE} strokeLinejoin="round" />
         <rect width="52" height="2.288" transform={`${iso}230.725 209.996)`} fill={INK} />
         <rect width="31.2" height="2.288" transform={`${iso}225.771 212.855)`} fill={INK} />
       </g>
       <g data-k="sheet2" style={move}>
-        <path d="M300 128L390.07 180L300 232L209.93 180L300 128Z" fill="white" fillOpacity="0.6" stroke={INK} strokeLinejoin="round" />
+        <path d="M300 128L390.07 180L300 232L209.93 180L300 128Z" fill="var(--illo-top)" fillOpacity="0.6" stroke={EDGE} strokeLinejoin="round" />
       </g>
-      <path d="M300 196V128M390.069 248V180M300 300V232M209.93 248V180" stroke="#8C99A3" strokeLinecap="round" strokeDasharray="2 3" />
+      <path d="M300 196V128M390.069 248V180M300 300V232M209.93 248V180" stroke="var(--chart-stroke)" strokeLinecap="round" strokeDasharray="2 3" />
       {/* the token */}
       {[0, 1, 2].map(k => (
         <Coin key={k} k={k} />
@@ -238,14 +239,14 @@ function Stage({ time, at = 0, tag = 1 }: { time?: MotionValue<number>; at?: num
         <path d="M248.04 164L300 194L351.96 164V100L300 70L248.04 100V164Z" fill={`url(#${gid})`} />
       </g>
       <g data-k="puck" style={move}>
-        <path d="M248.04 164L300 194V210L248.04 180V164Z" fill="#13242E" stroke={INK} strokeLinejoin="round" />
-        <path d="M300 194L351.96 164V180L300 210V194Z" fill="black" stroke={INK} strokeLinejoin="round" />
-        <path d="M300 134L351.96 164L300 194L248.04 164L300 134Z" fill={INK} stroke={INK} strokeLinejoin="round" />
-        <path d="M282.54 169.05L280.55 164.23L291.84 163L283.73 158.4L290.29 154.6L298.26 159.29L300.41 152.77L308.75 153.92L306.01 160.53L317.46 158.95L319.45 163.77L308.15 165L316.27 169.6L309.71 173.4L301.73 168.71L299.59 175.23L291.25 174.08L293.98 167.47L282.54 169.05Z" fill="#0AD9DC" />
-        <circle cx="300" cy="140" r="1.6" fill="#5B6F7D" />
-        <circle cx="341.57" cy="164" r="1.6" fill="#5B6F7D" />
-        <circle cx="300" cy="188" r="1.6" fill="#5B6F7D" />
-        <circle cx="258.43" cy="164" r="1.6" fill="#5B6F7D" />
+        <path d="M248.04 164L300 194V210L248.04 180V164Z" fill="var(--illo-vault-side)" stroke={EDGE} strokeLinejoin="round" />
+        <path d="M300 194L351.96 164V180L300 210V194Z" fill="var(--illo-vault-shadow)" stroke={EDGE} strokeLinejoin="round" />
+        <path d="M300 134L351.96 164L300 194L248.04 164L300 134Z" fill="var(--illo-vault-top)" stroke={EDGE} strokeLinejoin="round" />
+        <path d="M282.54 169.05L280.55 164.23L291.84 163L283.73 158.4L290.29 154.6L298.26 159.29L300.41 152.77L308.75 153.92L306.01 160.53L317.46 158.95L319.45 163.77L308.15 165L316.27 169.6L309.71 173.4L301.73 168.71L299.59 175.23L291.25 174.08L293.98 167.47L282.54 169.05Z" fill="var(--color-accent)" />
+        <circle cx="300" cy="140" r="1.6" fill="var(--color-ink-3)" />
+        <circle cx="341.57" cy="164" r="1.6" fill="var(--color-ink-3)" />
+        <circle cx="300" cy="188" r="1.6" fill="var(--color-ink-3)" />
+        <circle cx="258.43" cy="164" r="1.6" fill="var(--color-ink-3)" />
       </g>
       {SPARKS.map((s, j) => (
         <g key={j} data-k={`sp${j}`} style={move}>
@@ -255,14 +256,14 @@ function Stage({ time, at = 0, tag = 1 }: { time?: MotionValue<number>; at?: num
       {/* the value: travels with the token, scrambles into bracket notation inside the vault */}
       {tag > 0 && (
         <g data-k="tag" style={move}>
-          <rect x="-26" y="-10" width="52" height="20" fill="white" stroke={INK} />
-          <rect data-k="tagEnc" x="-26" y="-10" width="52" height="20" fill="#E2F8F9" stroke="#007A7E" />
-          <rect data-k="tagLock" x="-27" y="-11" width="54" height="22" stroke="#0AD9DC" strokeWidth="2" />
+          <rect x="-26" y="-10" width="52" height="20" fill="var(--illo-top)" stroke={INK} />
+          <rect data-k="tagEnc" x="-26" y="-10" width="52" height="20" fill="var(--illo-shielded-1)" stroke="var(--color-accent-ink)" />
+          <rect data-k="tagLock" x="-27" y="-11" width="54" height="22" stroke="var(--color-accent)" strokeWidth="2" />
           {[0, 1, 2, 3, 4, 5].map(i => (
             <g key={i} transform={`translate(${(i - 2.5) * 7.4} 4)`} fontFamily="Geist Mono" fontSize="11" fontWeight="600" textAnchor="middle">
               <text data-k={`cp${i}`} fill={INK}>{PLAIN[i]}</text>
-              <text data-k={`cn${i}`} fill="#5B6F7D">{NOISE[i]}</text>
-              <text data-k={`ce${i}`} fill="#007A7E" fontSize={ENC[i] === '•' ? 15 : 11} dy={ENC[i] === '•' ? 1.2 : 0}>{ENC[i]}</text>
+              <text data-k={`cn${i}`} fill="var(--color-ink-3)">{NOISE[i]}</text>
+              <text data-k={`ce${i}`} fill="var(--color-accent-ink)" fontSize={ENC[i] === '•' ? 15 : 11} dy={ENC[i] === '•' ? 1.2 : 0}>{ENC[i]}</text>
             </g>
           ))}
         </g>
@@ -299,42 +300,42 @@ function applyChrome(els: Els, t: number, tabs: (HTMLElement | null)[], stepRef:
   put(els, 'gauge', `scaleX(${gauge(t)})`)
 }
 
-const GREY = '#5B6F7D'
+const GREY = 'var(--color-ink-3)'
 
 function Chrome({ mobile }: { mobile: boolean }) {
   if (mobile)
     return (
       <>
-        <rect width="358" height="316" fill="#F5F6F7" />
+
         {[16, 127.333, 238.667].map((x, i) => (
           <g key={i}>
-            <rect x={x} y="16" width="103.333" height="3" fill="#DDE4E8" />
-            <rect data-k={`line${i}`} x={x} y="16" width="103.333" height="3" fill="#0AD9DC" style={{ transformOrigin: `${x}px 16px`, ...move }} />
+            <rect x={x} y="16" width="103.333" height="3" fill="var(--color-line)" />
+            <rect data-k={`line${i}`} x={x} y="16" width="103.333" height="3" fill="var(--color-accent)" style={{ transformOrigin: `${x}px 16px`, ...move }} />
           </g>
         ))}
         {STEPS.map((s, i) => (
           <g key={i} data-k={`cap${i}`} style={move}>
-            <text x="16" y="251.3" fill="#007A7E" fontFamily="Geist Mono" fontSize="12" fontWeight="500" letterSpacing="0.02em">{`0${i + 1} / 03`}</text>
+            <text x="16" y="251.3" fill="var(--color-accent-ink)" fontFamily="Geist Mono" fontSize="12" fontWeight="500" letterSpacing="0.02em">{`0${i + 1} / 03`}</text>
             <text x="78" y="253" fill={INK} fontFamily="Geist" fontSize="17" fontWeight="600">{s.tab}</text>
-            <text fill="#34495A" fontFamily="Geist" fontSize="14">
+            <text fill="var(--color-ink-2)" fontFamily="Geist" fontSize="14">
               <tspan x="16" y="278">{s.lines[0]}</tspan>
               <tspan x="16" y="296">{s.lines[1]}</tspan>
             </text>
           </g>
         ))}
-        <rect x="270.5" y="243.5" width="71" height="7" fill="white" stroke={INK} />
-        <rect data-k="gauge" x="272.5" y="245.5" width="67" height="3" fill="#0AD9DC" style={{ transformOrigin: '272.5px 245.5px', ...move }} />
+        <rect x="270.5" y="243.5" width="71" height="7" fill="var(--illo-top)" stroke={INK} />
+        <rect data-k="gauge" x="272.5" y="245.5" width="67" height="3" fill="var(--color-accent)" style={{ transformOrigin: '272.5px 245.5px', ...move }} />
       </>
     )
   return (
     <>
-      <rect x="0.5" y="0.5" width="599" height="499" fill="#F5F6F7" stroke="#E3E7EA" />
-      <rect y="47" width="600" height="1" fill="#E3E7EA" />
+      <rect x="0.5" y="0.5" width="599" height="499" fill="none" stroke="var(--color-line)" />
+      <rect y="47" width="600" height="1" fill="var(--color-line)" />
       {STEPS.map((s, i) => {
         const x = 24 + 200 * i
         const label = (on: boolean) => (
           <text data-k={`${on ? 'on' : 'off'}${i}`} x={x + 76} y="28.5" textAnchor="middle">
-            <tspan fill={on ? '#007A7E' : GREY} fontFamily="Geist Mono" fontSize="12" fontWeight="500" letterSpacing="0.02em">{`0${i + 1}`}</tspan>
+            <tspan fill={on ? 'var(--color-accent-ink)' : GREY} fontFamily="Geist Mono" fontSize="12" fontWeight="500" letterSpacing="0.02em">{`0${i + 1}`}</tspan>
             <tspan dx="8" fill={on ? INK : GREY} fontFamily="Geist" fontSize="13" fontWeight={on ? 600 : 500}>{s.tab}</tspan>
           </text>
         )
@@ -342,21 +343,21 @@ function Chrome({ mobile }: { mobile: boolean }) {
           <g key={i}>
             {label(false)}
             {label(true)}
-            <rect data-k={`line${i}`} x={x} y="46" width="152" height="2" fill="#0AD9DC" style={{ transformOrigin: `${x}px 46px`, ...move }} />
+            <rect data-k={`line${i}`} x={x} y="46" width="152" height="2" fill="var(--color-accent)" style={{ transformOrigin: `${x}px 46px`, ...move }} />
             <g fontFamily="Geist Mono" fontSize="12" fontWeight="500" letterSpacing="0.08em" textAnchor="middle">
               <text x={135 + 165 * i} y="402.3" fill={GREY}>{s.col}</text>
               <text data-k={`col${i}`} x={135 + 165 * i} y="402.3" fill={INK}>{s.col}</text>
             </g>
             <g data-k={`cap${i}`} style={move}>
-              <text x="24" y="432.3" fill="#007A7E" fontFamily="Geist Mono" fontSize="12" fontWeight="500" letterSpacing="0.02em">{`0${i + 1} / 03`}</text>
+              <text x="24" y="432.3" fill="var(--color-accent-ink)" fontFamily="Geist Mono" fontSize="12" fontWeight="500" letterSpacing="0.02em">{`0${i + 1} / 03`}</text>
               <text x="86" y="433.3" fill={INK} fontFamily="Geist" fontSize="15" fontWeight="600">{s.tab}</text>
-              <text x="24" y="457.1" fill="#34495A" fontFamily="Geist" fontSize="13">{s.text}</text>
+              <text x="24" y="457.1" fill="var(--color-ink-2)" fontFamily="Geist" fontSize="13">{s.text}</text>
             </g>
           </g>
         )
       })}
-      <rect x="456.5" y="424.5" width="119" height="7" fill="white" stroke={INK} />
-      <rect data-k="gauge" x="458.5" y="426.5" width="115" height="3" fill="#0AD9DC" style={{ transformOrigin: '458.5px 426.5px', ...move }} />
+      <rect x="456.5" y="424.5" width="119" height="7" fill="var(--illo-top)" stroke={INK} />
+      <rect data-k="gauge" x="458.5" y="426.5" width="115" height="3" fill="var(--color-accent)" style={{ transformOrigin: '458.5px 426.5px', ...move }} />
     </>
   )
 }
@@ -364,7 +365,7 @@ function Chrome({ mobile }: { mobile: boolean }) {
 /** prefers-reduced-motion: the three finished states side by side, nothing moves */
 function StaticRow({ mobile, style, className }: { mobile: boolean; style: CSSProperties; className: string }) {
   return (
-    <div className={`shield-demo flex shrink-0 flex-col justify-center border border-[#E3E7EA] bg-stage ${mobile ? 'gap-2 p-3' : 'gap-4 p-6'} ${className}`} style={style} role="group" aria-label="How it works: public, shield, private">
+    <div className={`shield-demo flex shrink-0 flex-col justify-center border border-line bg-stage ${mobile ? 'gap-2 p-3' : 'gap-4 p-6'} ${className}`} style={style} role="group" aria-label="How it works: public, shield, confidential">
       <div className="grid grid-cols-3 gap-2">
         {[1.2, 6.9, 11.2].map((at, i) => (
           <figure key={i} className="m-0 min-w-0">
@@ -386,9 +387,12 @@ function StaticRow({ mobile, style, className }: { mobile: boolean; style: CSSPr
 
 export default function ShieldDemo({ mobile, className = '' }: { mobile: boolean; className?: string }) {
   const { reduced, speed } = useMotion()
-  // Fits the nearest size container (cqw / cqh): as wide as possible without exceeding its height, ratio kept, never cropped.
+  // The mobile screen can scroll. Desktop fits the demo within the space beside the welcome copy.
   const ratio = mobile ? 358 / 316 : 600 / 500
-  const style: CSSProperties = { aspectRatio: String(ratio), width: `min(100cqw, calc(100cqh * ${ratio})${mobile ? '' : ', 600px'})` }
+  const style: CSSProperties = {
+    aspectRatio: String(ratio),
+    width: mobile ? 'min(100%, 420px)' : `min(100cqw, calc(100cqh * ${ratio}), 600px)`,
+  }
 
   const time = useMotionValue(0) // the master timeline, seconds into the loop
   const scrub = useRef<{ stop: () => void } | null>(null)
@@ -437,10 +441,10 @@ export default function ShieldDemo({ mobile, className = '' }: { mobile: boolean
   if (reduced) return <StaticRow mobile={mobile} style={style} className={className} />
 
   return (
-    <div className={`shield-demo relative shrink-0 overflow-hidden ${className}`} style={style} role="group" aria-label="How shielding works: an animated loop in three steps">
+    <div className={`shield-demo relative shrink-0 overflow-hidden bg-stage ${className}`} style={style} role="group" aria-label="How shielding works: an animated loop in three steps">
       <svg ref={svg} viewBox={mobile ? '0 0 358 316' : '0 0 600 500'} className="block h-full w-full" fill="none" aria-hidden>
         <Chrome mobile={mobile} />
-        <g transform={mobile ? 'translate(-1 -3.2) scale(0.6)' : undefined}>
+        <g transform={mobile ? 'translate(-13 -16) scale(0.64)' : undefined}>
           <Stage time={time} tag={mobile ? 1.6 : 1} />
         </g>
       </svg>

@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { useMotion } from '../lib/motion'
 import Icon from './Icon'
 import { Coin } from './TokenRow'
 
@@ -17,23 +16,23 @@ type Props = {
   /** which edge touches the swap button (gets 24 padding) */
   swapEdge?: 'bottom' | 'none'
   disabled?: boolean
+  visibility?: string
+  maxLabel?: string
 }
 
 /** One amount box for shield, unshield and send. */
-export default function AmountBox({ label, balance, onMax, value, onChange, token, usd, confidential, swapEdge = 'none', disabled }: Props) {
-  const { t } = useMotion()
+export default function AmountBox({ label, balance, onMax, value, onChange, token, usd, confidential, swapEdge = 'none', disabled, visibility, maxLabel = 'MAX' }: Props) {
   return (
     <div
-      className={`border p-5 ${swapEdge === 'bottom' ? 'pb-6' : ''} ${confidential ? 'border-accentSoft bg-accentSoft' : 'border-line bg-surface2'}`}
-      style={{ transition: `background-color ${t(200)}s, border-color ${t(200)}s` }}
+      className={`border p-5 ${swapEdge === 'bottom' ? 'pb-6' : ''} ${confidential ? 'confidential-box border-accentSoft bg-accentSoft' : visibility ? 'border-line bg-surface' : 'border-line bg-surface2'}`}
     >
       <div className="flex items-center justify-between gap-3">
         <span className="text-[13px] leading-[18px] text-ink2">{label}</span>
         <span className="flex items-center gap-2 text-[13px] leading-[18px] text-ink3">
           {balance}
           {onMax && (
-            <button type="button" onClick={onMax} disabled={disabled} className="mono bg-accentSoft px-2 py-1 text-[12px] font-medium leading-4 text-accentInk hover:bg-cyanMid" style={confidential ? { background: '#fff' } : undefined}>
-              MAX
+            <button type="button" onClick={onMax} disabled={disabled} className={`mono px-2 py-1 text-[12px] font-medium leading-4 ${confidential ? 'bg-surface text-accentInk hover:bg-accentSoft' : 'bg-surface2 text-ink2 hover:bg-line'}`}>
+              {maxLabel}
             </button>
           )}
         </span>
@@ -48,7 +47,7 @@ export default function AmountBox({ label, balance, onMax, value, onChange, toke
           placeholder="0.00"
           className="w-full min-w-0 bg-transparent text-[38px] font-semibold leading-[44px] tracking-[-0.03em] text-ink placeholder:text-ink3"
         />
-        <span className="flex h-11 shrink-0 items-center gap-2 border border-line bg-white px-2.5 text-[15px] font-medium">
+        <span className="flex h-11 shrink-0 items-center gap-2 border border-line bg-surface px-2.5 text-[15px] font-medium">
           <Coin sym={token.replace(/^f/, '')} size={24} shielded={token.startsWith('f')} />
           {token}
           <Icon name="chevron-down" className="text-ink3" />
@@ -56,6 +55,7 @@ export default function AmountBox({ label, balance, onMax, value, onChange, toke
       </div>
       <div className="mt-2 flex items-center justify-between gap-3">
         <span className={`mono text-[12px] leading-4 ${confidential ? 'text-accentInk' : 'text-ink3'}`}>≈ {usd}</span>
+        {visibility && <span className="eyebrow text-ink3">{visibility}</span>}
         {confidential && (
           <span className="eyebrow flex items-center gap-1.5 text-accentInk">
             <Icon name="lock" />
@@ -69,11 +69,9 @@ export default function AmountBox({ label, balance, onMax, value, onChange, toke
 
 /** Box 2 "You receive" */
 export function ReceiveBox({ amount, unit, confidential, label = 'You receive' }: { amount: string; unit: string; confidential?: boolean; label?: string }) {
-  const { t } = useMotion()
   return (
     <div
-      className={`flex items-center justify-between gap-3 border p-5 pt-6 ${confidential ? 'border-accentSoft bg-accentSoft' : 'border-line bg-surface2'}`}
-      style={{ transition: `background-color ${t(200)}s, border-color ${t(200)}s` }}
+      className={`flex items-center justify-between gap-3 border p-5 pt-6 ${confidential ? 'confidential-box border-accentSoft bg-accentSoft' : 'border-line bg-surface2'}`}
     >
       <span className="text-[13px] leading-[18px] text-ink2">{label}</span>
       <span className="text-[15px] font-medium tabular-nums">

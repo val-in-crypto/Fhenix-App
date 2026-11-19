@@ -47,7 +47,7 @@ export default function Sheet({ open, onClose, label, width = tokens.size.dialog
     return () => {
       cancelAnimationFrame(raf)
       document.removeEventListener('keydown', onKey, true)
-      prev?.focus?.()
+      prev?.focus?.({ preventScroll: true })
     }
   }, [open])
 
@@ -57,7 +57,7 @@ export default function Sheet({ open, onClose, label, width = tokens.size.dialog
         <div className={`absolute inset-0 z-40 flex ${mobile ? 'items-end' : 'items-center justify-center p-6'}`}>
           <motion.div
             className="absolute inset-0"
-            style={{ background: tokens.color.scrim }}
+            style={{ background: 'var(--scrim)' }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -71,9 +71,9 @@ export default function Sheet({ open, onClose, label, width = tokens.size.dialog
               aria-modal="true"
               aria-label={label}
               tabIndex={-1}
-              className="no-scrollbar relative max-h-[92%] w-full overflow-y-auto bg-white outline-none"
+              className="no-scrollbar relative max-h-full w-full overflow-y-auto bg-surface outline-none"
               initial={{ y: '100%' }}
-              animate={{ y: 0, transition: { duration: t(M.sheet.openMs), ease: easeOut } }}
+              animate={{ y: 0, transition: { duration: t(280), ease: easeOut } }}
               exit={{ y: '100%', transition: { duration: t(M.sheet.closeMs), ease: 'easeIn' } }}
               drag="y"
               dragControls={controls}
@@ -85,7 +85,7 @@ export default function Sheet({ open, onClose, label, width = tokens.size.dialog
               <div className="flex cursor-grab touch-none justify-center pb-2.5 pt-2.5" onPointerDown={e => controls.start(e)} data-grabber>
                 <span className="block h-1 w-10 bg-lineStrong" />
               </div>
-              <div className="flex flex-col gap-5 px-6 pb-8">{children}</div>
+              <div className="flex flex-col gap-5 px-5 pb-[max(32px,env(safe-area-inset-bottom))]">{children}</div>
             </motion.div>
           ) : (
             <motion.div
@@ -94,7 +94,7 @@ export default function Sheet({ open, onClose, label, width = tokens.size.dialog
               aria-modal="true"
               aria-label={label}
               tabIndex={-1}
-              className="no-scrollbar relative flex max-h-full flex-col gap-6 overflow-y-auto bg-white p-8 shadow-[0_24px_64px_rgba(0,22,35,.18)] outline-none"
+              className="no-scrollbar relative flex max-h-full flex-col gap-6 overflow-y-auto bg-surface p-8 shadow-[0_24px_64px_rgb(var(--shadow-ink)_/_.18)] outline-none"
               style={{ width }}
               initial={{ opacity: 0, scale: 0.98, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -112,7 +112,7 @@ export default function Sheet({ open, onClose, label, width = tokens.size.dialog
 
 export function SheetClose({ onClick }: { onClick: () => void }) {
   return (
-    <button type="button" aria-label="Close" onClick={onClick} className="flex h-10 w-10 shrink-0 items-center justify-center bg-surface2 text-ink2 hover:bg-line">
+    <button type="button" aria-label="Close" onClick={onClick} className="flex h-11 w-11 shrink-0 items-center justify-center bg-surface2 text-ink2 hover:bg-line">
       <Icon name="close" size={18} />
     </button>
   )

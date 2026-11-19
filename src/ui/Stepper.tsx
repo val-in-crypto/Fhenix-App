@@ -13,8 +13,7 @@ type Props = {
 
 export default function Stepper({ steps, active, variant = 'bars' }: Props) {
   const { t } = useMotion()
-  const fill = { duration: t(M.stepper.barFillMs), ease: easeInOut }
-  const color = `color ${t(M.stepper.labelColorMs)}s, background-color ${t(M.stepper.labelColorMs)}s`
+  const fill = { duration: t(280), ease: easeInOut }
 
   if (variant === 'line')
     return (
@@ -25,12 +24,12 @@ export default function Stepper({ steps, active, variant = 'bars' }: Props) {
           return (
             <li key={st.label} className={`flex items-center gap-3 ${i < steps.length - 1 ? 'flex-1' : ''}`} aria-current={on ? 'step' : undefined}>
               <span
-                className={`mono flex h-5 w-5 shrink-0 items-center justify-center text-[11px] font-medium ${done ? 'bg-accent text-ink' : on ? 'bg-navy text-white' : 'border border-lineStrong bg-white text-ink3'}`}
-                style={{ transition: color }}
+                className={`mono flex h-5 w-5 shrink-0 items-center justify-center text-[11px] font-medium ${done ? 'bg-accent text-onAccent' : on ? 'bg-navy text-onNavy' : 'border border-lineStrong bg-surface text-ink3'}`}
+
               >
                 {done ? <Icon name="check" size={14} /> : i + 1}
               </span>
-              <span className={`whitespace-nowrap text-[13px] leading-[18px] ${done || on ? 'font-medium text-ink' : 'text-ink3'}`} style={{ transition: color }}>
+              <span className={`whitespace-nowrap text-[13px] leading-[18px] ${done || on ? 'font-medium text-ink' : 'text-ink3'}`}>
                 {st.label}
               </span>
               {i < steps.length - 1 && (
@@ -55,7 +54,7 @@ export default function Stepper({ steps, active, variant = 'bars' }: Props) {
               <motion.div className="absolute inset-0 origin-left bg-accent" initial={false} animate={{ scaleX: on || done ? 1 : 0 }} transition={fill} />
               <motion.div className="absolute inset-0 bg-navy" initial={false} animate={{ opacity: done ? 1 : 0 }} transition={{ duration: t(200) }} />
             </div>
-            <div className="mt-2 flex items-center gap-1.5 text-[13px] leading-[18px]" style={{ transition: color }}>
+            <div className="mt-2 flex items-center gap-1.5 text-[13px] leading-[18px]">
               <span className="mono text-[12px] text-accentInk">{String(i + 1).padStart(2, '0')}</span>
               <span className={`truncate ${done || on ? 'font-medium text-ink' : 'text-ink3'}`}>{st.label}</span>
               {done && <Icon name="check" size={14} className="text-accentInk" />}

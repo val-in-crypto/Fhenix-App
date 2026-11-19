@@ -6,13 +6,15 @@ import { useMotion } from '../lib/motion'
 import { data, nav, useStore, type Route } from '../state/store'
 import Button from '../ui/Button'
 import Chip from '../ui/Chip'
+import ChainIcon from '../ui/ChainIcon'
+import ThemeSwitch from '../ui/ThemeSwitch'
 import Icon from '../ui/Icon'
 
 const NAV: { route: Route; label: string; icon: string; badge?: string; also?: Route[] }[] = [
   { route: 'dashboard', label: 'Dashboard', icon: 'wallet', also: ['welcome'] },
   { route: 'shield', label: 'Shield', icon: 'shield', also: ['unshield', 'success'] },
   { route: 'send', label: 'Send', icon: 'send' },
-  { route: 'apps', label: 'Apps', icon: 'apps-grid', badge: String(data.apps.length) },
+  { route: 'apps', label: 'Apps', icon: 'apps-grid', badge: String(data.apps.filter(app => app.tag === 'Live').length) },
   { route: 'permits', label: 'Permits', icon: 'permit-key' },
 ]
 const isActive = (n: (typeof NAV)[number], r: Route) => n.route === r || !!n.also?.includes(r)
@@ -23,7 +25,7 @@ function useGo() {
 }
 
 export const Logo = ({ height = 25 }: { height?: number }) => (
-  <span aria-label="Fhenix App" role="img" className="inline-flex [&>svg]:h-full [&>svg]:w-auto" style={{ height }} dangerouslySetInnerHTML={{ __html: logoRaw }} />
+  <span aria-label="Fhenix App" role="img" className="fhenix-logo inline-flex [&>svg]:h-full [&>svg]:w-auto" style={{ height }} dangerouslySetInnerHTML={{ __html: logoRaw }} />
 )
 
 /* ---------- dropdown ---------- */
@@ -53,7 +55,7 @@ function Dropdown({ button, children, align = 'left' }: { button: (open: boolean
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
             transition={{ duration: t(120) }}
-            className={`absolute top-full z-30 mt-1 min-w-[220px] border border-line bg-white py-1 shadow-[0_12px_32px_rgba(0,22,35,.12)] ${align === 'right' ? 'right-0' : 'left-0'}`}
+            className={`absolute top-full z-30 mt-1 min-w-[220px] border border-line bg-surface py-1 shadow-[0_12px_32px_rgb(var(--shadow-ink)_/_.12)] ${align === 'right' ? 'right-0' : 'left-0'}`}
           >
             {children(() => setOpen(false))}
           </motion.div>
@@ -79,7 +81,7 @@ function NetworkItems({ close }: { close: () => void }) {
       {data.networks.map((n, i) => (
         <MenuItem
           key={n.chainId}
-          icon={<span className="round h-2 w-2" style={{ background: n.dot }} />}
+          icon={<ChainIcon chainId={n.chainId} />}
           right={i === s.networkIdx ? <Icon name="check" size={16} className="text-accentInk" /> : null}
           onClick={() => {
             if (i !== s.networkIdx) act.setNetwork(i)
@@ -97,12 +99,12 @@ export function WalletChip() {
   const { act, mobile } = useStore()
   return (
     <Dropdown
-      align={mobile ? 'right' : 'left'}
+      align="right"
       button={(open, toggle) => (
-        <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-11 items-center gap-2 border border-line bg-white pl-2 pr-2.5 hover:border-lineStrong">
-          <span className="round h-6 w-6" style={{ background: 'conic-gradient(from 210deg, #001623, #007A7E, #0AD9DC, #001623)' }} />
+        <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-10 items-center gap-2 border border-line bg-surface pl-2 pr-2.5 hover:border-lineStrong">
+          <span className="round h-6 w-6" style={{ background: 'var(--wallet-identicon)' }} />
           <span className="mono text-[12px] font-medium">{data.account.short}</span>
-          {mobile && <Icon name="copy" size={14} className="text-ink3" />}
+          <Icon name="copy" size={14} className="text-ink3" />
           <Icon name="chevron-down" className="text-ink3" />
         </button>
       )}
@@ -128,9 +130,10 @@ export function NetworkChip() {
   const n = data.networks[s.networkIdx]
   return (
     <Dropdown
+      align="right"
       button={(open, toggle) => (
-        <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-11 items-center gap-2 border border-line bg-white px-3 text-[13px] font-medium hover:border-lineStrong">
-          <span key={n.chainId} className="round dot-pulse h-2 w-2" style={{ background: n.dot }} />
+        <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-10 items-center gap-2 border border-line bg-surface px-3 text-[13px] font-medium hover:border-lineStrong">
+          <ChainIcon chainId={n.chainId} />
           {n.name}
         </button>
       )}
@@ -160,124 +163,107 @@ export function ActionRow({ stretch }: { stretch?: boolean }) {
 }
 
 /* ---------- desktop ---------- */
+export const EXPLORER_URL = 'https://explorer.fhenix.io/status'
+export const DOCS_URL = 'https://docs.fhenix.io/cofhe'
+
+const sideRow = 'relative flex h-10 w-full shrink-0 items-center gap-3 px-4 text-left text-[14px]'
+const divider = <div aria-hidden className="shrink-0 py-3"><div className="h-px bg-line" /></div>
+
 function Sidebar({ route }: { route: Route }) {
   const go = useGo()
-  return (
-    <aside className="flex h-full shrink-0 flex-col px-4 pb-14 pt-7" style={{ width: tokens.size.sidebar }}>
-      <button type="button" className="self-start px-2" onClick={() => go('dashboard')} aria-label="Fhenix App home">
-        <Logo />
+  const row = (n: (typeof NAV)[number]) => {
+    const active = isActive(n, route) && route !== 'welcome'
+    return (
+      <button key={n.route} type="button" aria-current={active ? 'page' : undefined} onClick={() => go(n.route)} className={`${sideRow} ${active ? 'bg-surface font-semibold text-ink' : 'text-ink2 hover:bg-surface/60'}`}>
+        {active && <span className="absolute inset-y-2 left-0 w-0.5 bg-accent" />}
+        <Icon name={n.icon} size={18} />
+        <span className="flex-1">{n.label}</span>
+        {n.badge && <span className="mono bg-surface2 px-2 py-0.5 text-[12px] text-ink2">{n.badge}</span>}
       </button>
-      <div className="eyebrow mt-6 px-2 text-ink3" style={{ fontSize: 11 }}>Menu</div>
-      <nav className="mt-2 flex flex-col gap-1" aria-label="Main">
-        {NAV.map(n => {
-          const on = isActive(n, route) && route !== 'welcome'
-          return (
-            <button key={n.route} type="button" aria-current={on ? 'page' : undefined} onClick={() => go(n.route)} className={`relative flex h-10 items-center gap-3 px-4 text-left text-[14px] ${on ? 'bg-white font-medium text-ink' : 'text-ink2 hover:bg-white/60'}`}>
-              {on && <motion.span layoutId="nav-bar" className="absolute bottom-0 left-0 top-0 w-[3px] bg-accent" />}
-              <Icon name={n.icon} size={20} />
-              <span className="flex-1">{n.label}</span>
-              {n.badge && <span className="mono bg-surface2 px-2 py-0.5 text-[11px] text-ink2">{n.badge}</span>}
-            </button>
-          )
-        })}
-        <button type="button" disabled aria-disabled className="flex h-10 items-center gap-3 px-4 text-left text-[14px] text-ink3">
-          <Icon name="trading-candles" size={20} />
-          <span className="flex-1">Trading</span>
-          <span className="mono bg-surface2 px-2 py-0.5 text-[11px]">Soon</span>
-        </button>
+    )
+  }
+  const soon = (label: string, icon: string) => (
+    <button type="button" disabled aria-disabled="true" title="Coming soon" className={`${sideRow} text-ink2`}>
+      <Icon name={icon} size={18} /><span className="flex-1">{label}</span>
+      <span className="mono bg-surface2 px-2 py-0.5 text-[12px] text-ink3">Soon</span>
+    </button>
+  )
+  const external = (label: string, url: string, icon: string) => (
+    <a href={url} target="_blank" rel="noopener" className={`${sideRow} text-ink2 hover:bg-surface/60`}>
+      <Icon name={icon} size={18} /><span className="flex-1">{label}</span><Icon name="arrow-up-right" size={14} />
+    </a>
+  )
+  return (
+    <aside className="no-scrollbar flex h-full shrink-0 flex-col overflow-y-auto px-4 pb-5 pt-6" style={{ width: tokens.size.sidebar }}>
+      <button type="button" className="mb-6 shrink-0 self-start px-2" onClick={() => go('dashboard')} aria-label="Fhenix App home"><Logo /></button>
+      <nav className="flex flex-col gap-1" aria-label="Main">
+        <div className="eyebrow text-ink3">Menu</div>
+        {NAV.slice(0, 3).map(row)}
+        {soon('Trading', 'trading-candles')}
+        {divider}
+        <div className="eyebrow text-ink3">Ecosystem</div>
+        {row(NAV[3])}
+        {soon('fUSD', 'fusd')}
+        {soon('TGE', 'tge')}
+        {external('Fhenix Explorer', EXPLORER_URL, 'explorer')}
       </nav>
-      <div className="mt-auto">
-        <div className="border border-line bg-white p-3">
-          <div className="flex items-center justify-between">
-            <span className="eyebrow text-ink2" style={{ fontSize: 11 }}>CoFHE network</span>
-            <Chip tone="live" dot className="!px-2 !py-1 !text-[11px]">LIVE</Chip>
+      <div className="min-h-6 flex-1" />
+      <div className="flex shrink-0 flex-col gap-1">
+        <div className="min-h-[100px] border border-line bg-surface p-3">
+          <div className="flex items-center justify-between gap-2">
+            <span className="eyebrow text-ink2">CoFHE network</span>
+            <Chip tone="live" dot className="!px-2 !py-1 !text-[12px]">LIVE</Chip>
           </div>
-          <p className="mt-2 text-[12px] leading-4 text-ink3">Coprocessor online. State stays encrypted on-chain.</p>
+          <p className="mt-2 text-[12px] leading-4 text-ink3">Coprocessor online. State stays confidential on-chain.</p>
         </div>
-        <a href="#" onClick={e => e.preventDefault()} className="mt-2 flex h-10 items-center gap-3 px-4 text-[14px] text-ink2 hover:bg-white/60">
-          <Icon name="book" size={20} />
-          <span className="flex-1">Docs</span>
-          <Icon name="arrow-up-right" />
-        </a>
-        <div className="flex h-10 items-center gap-3 px-4 text-[14px] text-ink2">
-          <Icon name="moon" size={20} />
-          <span className="flex-1">Dark mode</span>
-          <span role="img" aria-label="Dark mode off (not available in the prototype)" className="flex h-3.5 w-7 items-center bg-line p-0.5">
-            <span className="h-2.5 w-2.5 bg-white" />
-          </span>
-        </div>
+        {row(NAV[4])}
+        {divider}
+        {external('Docs', DOCS_URL, 'book')}
+        <ThemeSwitch />
       </div>
     </aside>
   )
 }
 
+export function PermitChip() {
+  const { s, act } = useStore()
+  const active = s.permit === 'active'
+  const label = active ? `Permit · ${Math.max(0, s.permitDays - 1)} days` : s.permit === 'expired' ? 'Permit expired · Renew' : 'No permit · Create'
+  return (
+    <button type="button" onClick={event => event.metaKey || event.ctrlKey ? nav('permits') : act.renew()} className="flex h-10 items-center gap-2 border border-line bg-surface px-3 text-[13px] font-medium hover:border-lineStrong">
+      <span aria-hidden className={`round size-2 ${active ? 'bg-live' : 'border border-ink3'}`} />{label}
+    </button>
+  )
+}
+
+const mobileTitles: Partial<Record<Route, string>> = { shield: 'Shield', unshield: 'Shield', send: 'Send', apps: 'Apps', permits: 'Permits', success: 'Shield' }
+
 function TopBar({ route }: { route: Route }) {
   const { s, act, mobile } = useStore()
-  if (mobile)
-    return (
-      <header className="flex shrink-0 items-center justify-between px-5" style={{ height: tokens.size.topBarMobile }}>
-        <Logo height={22} />
-        {s.connected ? (
-          <WalletChip />
-        ) : (
-          <Button size={44} onClick={() => act.startConnect(false)} className="!text-[15px]">
-            Connect
-          </Button>
-        )}
-      </header>
-    )
+  const connect = <Button size={44} onClick={() => act.startConnect(false)} className="!text-[15px]">Connect</Button>
+  if (mobile) return (
+    <header className="z-20 flex shrink-0 items-center justify-between gap-2 px-5" style={{ height: tokens.size.topBarMobile }}>
+      {mobileTitles[route] ? <h1 className="text-[19px] font-semibold">{mobileTitles[route]}</h1> : <Logo height={22} />}
+      {s.connected ? <WalletChip /> : connect}
+    </header>
+  )
   return (
-    <header className="flex h-[76px] shrink-0 items-center justify-between gap-4 px-8">
-      {s.connected ? (
-        <div className="flex items-center gap-2">
-          <WalletChip />
-          <NetworkChip />
-        </div>
-      ) : (
-        <span />
-      )}
-      {!s.connected ? (
-        <Button size={44} icon="wallet" onClick={() => act.startConnect(false)}>
-          Connect
-        </Button>
-      ) : route === 'dashboard' ? (
-        <ActionRow />
-      ) : null}
+    <header className="z-20 flex h-[108px] shrink-0 items-center justify-end gap-2 px-8">
+      {s.connected ? <><PermitChip /><NetworkChip /><WalletChip /></> : connect}
     </header>
   )
 }
 
 /* ---------- mobile ---------- */
-function StatusBar() {
-  return (
-    <div className="flex shrink-0 items-end justify-between px-7 pb-2.5 text-[15px] font-semibold" style={{ height: tokens.size.statusBar }} aria-hidden>
-      <span>9:41</span>
-      <span className="flex items-center gap-1.5 pb-1">
-        <span className="flex items-end gap-[2px]">
-          {[4, 6, 8, 10].map(h => (
-            <span key={h} className="w-[3px] bg-ink" style={{ height: h }} />
-          ))}
-        </span>
-        <svg width="15" height="11" viewBox="0 0 15 11" fill="none">
-          <path d="M1 4.2C4.6 0.9 10.4 0.9 14 4.2M3.3 6.6C5.7 4.5 9.3 4.5 11.7 6.6M5.7 9C6.8 8.1 8.2 8.1 9.3 9" stroke="#001623" strokeWidth="1.6" />
-        </svg>
-        <span className="flex h-[11px] w-[22px] items-center border border-ink p-[1.5px]">
-          <span className="h-full w-full bg-ink" />
-        </span>
-      </span>
-    </div>
-  )
-}
-
 function TabBar({ route }: { route: Route }) {
   const go = useGo()
   return (
-    <nav className="shrink-0 border-t border-line bg-bg" style={{ height: tokens.size.tabBar }} aria-label="Main">
+    <nav className="mobile-tabs shrink-0 border-t border-line bg-bg" style={{ minHeight: `calc(${tokens.size.tabBar}px + env(safe-area-inset-bottom))` }} aria-label="Main">
       <div className="flex px-2">
         {NAV.map(n => {
           const on = isActive(n, route)
           return (
-            <button key={n.route} type="button" aria-current={on ? 'page' : undefined} onClick={() => go(n.route)} className={`relative flex flex-1 flex-col items-center gap-1 pb-1 pt-2.5 text-[12px] leading-4 ${on ? 'font-semibold text-ink' : 'font-medium text-ink3'}`}>
+            <button key={n.route} type="button" aria-current={on ? 'page' : undefined} onClick={() => go(n.route)} className={`relative flex flex-1 flex-col items-center gap-1 pb-1 pt-2.5 text-[12px] leading-4 max-[369px]:text-[11px] ${on ? 'font-semibold text-ink' : 'font-medium text-ink3'}`}>
               {on && <motion.span layoutId="tab-ind" className="absolute top-0 h-0.5 w-5 bg-accent" />}
               <Icon name={n.icon} size={20} />
               {n.label}
@@ -294,23 +280,42 @@ function TabBar({ route }: { route: Route }) {
 
 /* ---------- page layout ---------- */
 type PageProps = { children: ReactNode; bottom?: ReactNode; narrow?: boolean; card?: boolean }
+
+function MobileActionBar({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const bar = ref.current
+    const root = bar?.closest<HTMLElement>('#app-root')
+    if (!bar || !root) return
+    const update = () => root.style.setProperty('--action-bar-height', `${bar.offsetHeight}px`)
+    const observer = new ResizeObserver(update)
+    observer.observe(bar)
+    update()
+    return () => {
+      observer.disconnect()
+      root.style.removeProperty('--action-bar-height')
+    }
+  }, [])
+  return <div ref={ref} className="shrink-0 px-5 pb-4 pt-3">{children}</div>
+}
+
 /** Mobile: scroll area + pinned bottom bar (CTA → 12 → helper → 16 → tabs). Desktop: content column, optional centred 536 card. */
 export function Page({ children, bottom, narrow, card }: PageProps) {
   const { mobile } = useStore()
   if (mobile)
     return (
       <div className="flex min-h-0 flex-1 flex-col">
-        <div className="no-scrollbar min-h-0 flex-1 overflow-y-auto px-5 pb-6 pt-2" data-scroll>
+        <div className="no-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-6 pt-2" data-scroll>
           {children}
         </div>
-        {bottom && <div className="shrink-0 px-5 pb-4 pt-3">{bottom}</div>}
+        {bottom && <MobileActionBar>{bottom}</MobileActionBar>}
       </div>
     )
   return (
     <div className="px-8 pb-10 pt-1">
       <div className={narrow ? 'mx-auto' : 'max-w-[1184px]'} style={narrow ? { width: 536 } : undefined}>
         {card ? (
-          <div className="border border-line bg-white p-6">
+          <div className="border border-line bg-surface p-6">
             {children}
             {bottom && <div className="mt-6">{bottom}</div>}
           </div>
@@ -329,15 +334,14 @@ export default function AppShell({ route, children }: { route: Route; children: 
   const { mobile } = useStore()
   if (mobile)
     return (
-      <div className="flex h-full flex-col bg-bg">
-        <StatusBar />
+      <div className={`mobile-shell app-wash grid h-full bg-bg ${route === 'welcome' ? 'grid-rows-[auto_minmax(0,1fr)]' : 'grid-rows-[auto_minmax(0,1fr)_auto]'}`}>
         <TopBar route={route} />
         <main className="flex min-h-0 flex-1 flex-col">{children}</main>
-        <TabBar route={route} />
+        {route !== 'welcome' && <TabBar route={route} />}
       </div>
     )
   return (
-    <div className="flex h-full bg-bg">
+    <div className="app-wash flex h-full bg-bg">
       <Sidebar route={route} />
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar route={route} />

@@ -31,11 +31,11 @@ export default function PermitSheet() {
         <p className="mt-2 text-[15px] leading-[22px] text-ink2">{c[1]}</p>
       </div>
       <div className="bg-surface2 p-4">
-        <div className="eyebrow text-ink3" style={{ fontSize: 11 }}>What stays private</div>
+        <div className="eyebrow text-ink3" style={{ fontSize: 11 }}>What stays confidential</div>
         <ul className="mt-3 flex flex-col gap-3">
           {rows.map(([icon, label, note]) => (
             <li key={label} className="flex items-center gap-3 text-[14px] leading-5">
-              <span className={`flex h-7 w-7 items-center justify-center bg-white ${icon === 'lock' ? 'text-accentInk' : 'text-ink3'}`}>
+              <span className={`flex h-7 w-7 items-center justify-center bg-surface ${icon === 'lock' ? 'text-accentInk' : 'text-ink3'}`}>
                 <Icon name={icon} size={icon === 'lock' ? 13 : 15} />
               </span>
               <span className="flex-1">{label}</span>

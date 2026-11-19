@@ -20,8 +20,8 @@ export default function ConnectSheet() {
           const busy = s.connecting === w.id
           return (
             <li key={w.id}>
-              <button type="button" disabled={!!s.connecting} onClick={() => act.connect(w.id)} className={`flex h-16 w-full items-center gap-3 border px-4 text-left ${busy ? 'border-accent bg-accentSoft' : 'border-line bg-white hover:border-lineStrong'} ${s.connecting && !busy ? 'opacity-50' : ''}`}>
-                <span className="flex h-8 w-8 items-center justify-center text-[15px] font-semibold text-ink" style={{ background: '#F6851B' }}>
+              <button type="button" disabled={!!s.connecting} onClick={() => act.connect(w.id)} className={`flex h-16 w-full items-center gap-3 border px-4 text-left ${busy ? 'border-accent bg-accentSoft' : 'border-line bg-surface hover:border-lineStrong'} ${s.connecting && !busy ? 'opacity-50' : ''}`}>
+                <span className="flex h-8 w-8 items-center justify-center text-[15px] font-semibold text-onAccent" style={{ background: '#F6851B' }}>
                   {w.name[0]}
                 </span>
                 <span className="flex-1 text-[16px] font-medium">{busy ? 'Connecting…' : w.name}</span>

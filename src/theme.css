@@ -1,0 +1,147 @@
+:root {
+  color-scheme: light;
+  --color-bg: #F1F4F5;
+  --color-surface: #FFFFFF;
+  --color-surface-2: #F6F8F9;
+  --color-stage: #F5F6F7;
+  --color-line: #DDE4E8;
+  --color-line-strong: #C9D3D9;
+  --color-ink: #001623;
+  --color-ink-2: #34495A;
+  --color-ink-3: #5B6F7D;
+  --color-accent: #0AD9DC;
+  --color-on-accent: #001623;
+  --color-accent-ink: #007A7E;
+  --color-accent-soft: #E2F8F9;
+  --color-confidential-border: transparent;
+  --color-cyan-mid: #9BE7E8;
+  --color-navy: #001623;
+  --color-navy-line: #001623;
+  --color-on-navy: #E8F3F5;
+  --color-on-navy-2: #B4C4CC;
+  --color-live: #047857;
+  --color-live-soft: #E3F6EF;
+  --color-danger: #C2281D;
+  --color-danger-soft: #FDECEA;
+  --color-warn: #A15C07;
+  --color-warn-soft: #FEF4E4;
+  --color-soon: #5B6F7D;
+  --color-soon-soft: #E2F8F9;
+  --button-primary-hover: #4CE8E9;
+  --button-disabled-fill: #C4F1F2;
+  --button-disabled-ink: #34495A;
+  --button-ghost-border: #1E3A4A;
+  --button-ghost-hover: #597683;
+  --button-ghost-fill-hover: #0A2A3A;
+  --focus-ring: #007A7E;
+  --scrim: rgb(0 22 35 / .45);
+  --shadow-ink: 0 22 35;
+  --radius-control: 0px;
+  --radius-card: 0px;
+  --radius-sheet: 0px;
+  --gradient-sky: #3BB9F7;
+  --chart-stroke: #8C99A3;
+  --illo-ink: #0B1F2A;
+  --illo-side-l: #E9ECEF;
+  --illo-side-r: #DCE1E5;
+  --illo-top: #FFFFFF;
+  --illo-edge: var(--illo-ink);
+  --illo-shielded-1: #E2F8F9;
+  --illo-shielded-2: #9BE7E8;
+  --illo-label: var(--illo-ink);
+  --illo-sparkle: #0AD9DC;
+  --app-wash: none;
+  --hero-wash: none;
+  --welcome-wash: none;
+  --ratio-fill: repeating-linear-gradient(125deg, rgb(255 255 255 / .4) 0 1.5px, transparent 1.5px 5px);
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #001623;
+  --color-surface: #072433;
+  --color-surface-2: #0D2C3D;
+  --color-stage: #072433;
+  --color-line: #23394E;
+  --color-line-strong: #3A5A70;
+  --color-ink: #F2F7F9;
+  --color-ink-2: #C9D6DE;
+  --color-ink-3: #9DB2C0;
+  --color-accent-ink: #2EE3E5;
+  --color-accent-soft: #003246;
+  --color-confidential-border: rgb(10 217 220 / .35);
+  --color-cyan-mid: #398287;
+  --color-navy: #183E53;
+  --color-navy-line: #3A5A70;
+  --color-on-navy: #F2F7F9;
+  --color-on-navy-2: #C9D6DE;
+  --color-live: #4CC38A;
+  --color-live-soft: #0B2E2A;
+  --color-danger: #EF7C72;
+  --color-danger-soft: #2B1A20;
+  --color-warn: #E0A54A;
+  --color-warn-soft: #2A2414;
+  --color-soon: #9DB2C0;
+  --color-soon-soft: #0D2C3D;
+  --button-disabled-fill: #0D2C3D;
+  --button-disabled-ink: #9DB2C0;
+  --button-ghost-border: #23394E;
+  --button-ghost-hover: #3A5A70;
+  --button-ghost-fill-hover: #0D2C3D;
+  --focus-ring: #0AD9DC;
+  --scrim: rgb(0 22 35 / .74);
+  --chart-stroke: var(--color-ink-3);
+  --illo-side-l: #0D2C3D;
+  --illo-side-r: #072433;
+  --illo-top: #183E53;
+  --illo-edge: rgb(10 217 220 / .55);
+  --illo-shielded-1: #06393F;
+  --illo-shielded-2: #0A4148;
+  --illo-label: #EAEFF1;
+  --illo-sparkle: rgb(46 227 229 / .7);
+  --app-wash: linear-gradient(to bottom, transparent 55%, rgb(24 62 83 / .45));
+  --hero-wash: radial-gradient(50% 100% at 100% 0%, rgb(10 217 220 / .26), transparent), radial-gradient(at 0% 100%, rgb(59 185 247 / .05), transparent);
+  --welcome-wash: radial-gradient(ellipse at center, rgb(10 217 220 / .18), transparent 74%);
+  --ratio-fill: linear-gradient(90deg, var(--color-accent), var(--gradient-sky));
+}
+
+[data-theme="dark"] [data-hero-gradient="B"] {
+  --hero-wash: linear-gradient(to bottom, var(--color-surface), var(--color-navy));
+  border-image: linear-gradient(135deg, rgb(10 217 220 / .9), rgb(59 185 247 / .5), var(--color-line)) 1;
+  box-shadow: 0 0 40px rgb(10 217 220 / .1);
+}
+
+:root {
+  --wallet-identicon: conic-gradient(from 210deg, var(--color-on-accent), var(--color-accent-ink), var(--color-accent), var(--color-on-accent));
+}
+[data-theme="dark"] {
+  --chain-ethereum: #C9D6DE;
+  --wallet-identicon: conic-gradient(from 210deg, var(--color-navy), var(--color-accent), var(--color-ink), var(--color-navy));
+}
+.fhenix-logo svg path[fill="#001623"] { fill: var(--color-ink); }
+.fhenix-logo svg path[fill="#5B6F7D"] { fill: var(--color-ink-3); }
+[data-theme="dark"] .chain-ethereum svg path { fill: var(--chain-ethereum); }
+.recipient-identicon {
+  background: linear-gradient(135deg, hsl(var(--identicon-hue) 66% 70%), hsl(calc(var(--identicon-hue) + 40) 75% 34%));
+}
+:root {
+  --illo-vault-top: #0B1F2A;
+  --illo-vault-side: #13242E;
+  --illo-vault-shadow: #000000;
+  --coin-usdc-side: #1F5FA8;
+}
+[data-theme="dark"] {
+  --illo-vault-top: #183E53;
+  --illo-vault-side: #0D2C3D;
+  --illo-vault-shadow: #072433;
+}
+.shield-demo { background-image: var(--welcome-wash); }
+[data-theme="dark"] .success-illustration [fill="#E9ECEF"] { fill: var(--illo-side-l); }
+[data-theme="dark"] .success-illustration [fill="#DCE1E5"] { fill: var(--illo-side-r); }
+[data-theme="dark"] .success-illustration [fill="#F3FCFC"] { fill: var(--illo-top); }
+[data-theme="dark"] .success-illustration [fill="#E2F8F9"] { fill: var(--illo-shielded-1); }
+[data-theme="dark"] .success-illustration [fill="#9BE7E8"] { fill: var(--illo-shielded-2); }
+[data-theme="dark"] .success-illustration [stroke="#0B1F2A"] { stroke: var(--illo-edge); }
+[data-theme="dark"] .success-illustration [fill="white"] { fill: var(--illo-top); }
+[data-theme="dark"] .success-illustration [id="Confetti"] [fill="#0AD9DC"],
+[data-theme="dark"] .success-illustration [id^="amb-"][fill="#0AD9DC"] { fill: var(--illo-sparkle); }

@@ -4,9 +4,9 @@ const tones = {
   accent: 'bg-accentSoft text-accentInk',
   live: 'bg-liveSoft text-live',
   neutral: 'bg-surface2 text-ink3',
-  line: 'bg-white text-ink2 border border-line',
+  line: 'bg-surface text-ink2 border border-line',
   danger: 'bg-dangerSoft text-danger',
-  navy: 'bg-navy text-white',
+  navy: 'bg-navy text-onNavy',
 } as const
 
 export default function Chip({ tone = 'accent', dot, children, className = '' }: { tone?: keyof typeof tones; dot?: boolean; children: ReactNode; className?: string }) {

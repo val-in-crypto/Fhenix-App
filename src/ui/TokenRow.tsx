@@ -10,7 +10,7 @@ export const decOf = (sym: string) => (sym === 'ETH' ? 4 : 2)
 /** Square token tile (Figma); shielded variant carries a small navy lock badge. */
 export function Coin({ sym, size = 32, shielded }: { sym: string; size?: number; shielded?: boolean }) {
   return (
-    <span className="relative inline-flex shrink-0 items-center justify-center font-semibold text-white" style={{ width: size, height: size, background: meta[sym]?.icon ?? '#001623', fontSize: Math.max(11, size * 0.42) }}>
+    <span className="relative inline-flex shrink-0 items-center justify-center font-semibold text-white" style={{ width: size, height: size, background: meta[sym]?.icon ?? 'var(--color-on-accent)', fontSize: Math.max(11, size * 0.42) }}>
       {sym === 'ETH' ? 'Ξ' : '$'}
       {shielded && (
         <span className="absolute -bottom-0.5 -right-0.5 flex items-center justify-center bg-navy text-accent" style={{ width: size * 0.42, height: size * 0.42 }}>
@@ -37,11 +37,10 @@ export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick }: Pr
             {sym} · {a.wrapped}
           </span>
         </span>
-        <span className="mono grid grid-cols-[auto_auto] items-baseline gap-x-2 gap-y-1 text-right text-[13px] leading-4">
-          <span className="eyebrow text-ink3" style={{ fontSize: 11 }}>Public</span>
-          <span className="font-medium tabular-nums">{fmtPublic(pub, dec)}</span>
-          <span className="eyebrow text-accentInk" style={{ fontSize: 11 }}>Private</span>
-          <Masked value={priv} hidden={hidden} dec={dec} className="font-medium text-accentInk" />
+        <span className="mono flex min-w-0 flex-col gap-1 text-right text-[13px] leading-4">
+          <span className="flex items-center justify-end gap-2"><span className="size-2 shrink-0 bg-accent" /><Masked value={priv} hidden={hidden} dec={dec} /></span>
+          <span className="flex items-center justify-end gap-2"><span className="size-2 shrink-0 bg-lineStrong" />{fmtPublic(pub, dec)}</span>
+
         </span>
       </button>
     )
@@ -57,12 +56,12 @@ export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick }: Pr
         </span>
       </span>
       <span className="text-right">
-        <span className="mono block text-[14px] font-medium leading-5 tabular-nums">{fmtPublic(pub, dec)}</span>
-        <span className="block text-[13px] leading-[18px] text-ink3">{fmtUsd(pub * prices[sym])}</span>
-      </span>
-      <span className="text-right">
         <Masked value={priv} hidden={hidden} dec={dec} className="mono block text-[14px] font-medium leading-5" />
         <span className="block text-[13px] leading-[18px] text-accentInk">{a.wrapped}</span>
+      </span>
+      <span className="text-right">
+        <span className="mono block text-[14px] font-medium leading-5 tabular-nums">{fmtPublic(pub, dec)}</span>
+        <span className="block text-[13px] leading-[18px] text-ink3">{fmtUsd(pub * prices[sym])}</span>
       </span>
       <Icon name="chevron-down" className="-rotate-90 text-ink3" />
     </button>

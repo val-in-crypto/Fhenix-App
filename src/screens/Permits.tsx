@@ -4,7 +4,7 @@ import { data, useStore } from '../state/store'
 import Button from '../ui/Button'
 import Icon from '../ui/Icon'
 
-const INTRO = 'Only you can decrypt your private data. A permit lets CoFHE and the on-chain access list verify your access — for you, or an app you trust.'
+const INTRO = 'Only you can decrypt your confidential data. A permit lets CoFHE and the on-chain access list verify your access — for you, or an app you trust.'
 
 export default function Permits() {
   const { s, act, mobile } = useStore()
@@ -42,19 +42,19 @@ export default function Permits() {
       <p className="text-[14px] leading-5 text-ink2">{INTRO}</p>
 
       {s.permit === 'expired' && (
-        <div className="mt-4 flex items-center gap-3 border border-line bg-white p-4 text-[13px] font-medium leading-[18px]" role="status">
+        <div className="mt-4 flex items-center gap-3 border border-line bg-surface p-4 text-[13px] font-medium leading-[18px]" role="status">
           <Icon name="permit-key" className="text-accentInk" />
-          Your permit for this device expired. Renew it to read your private balances.
+          Your permit for this device expired. Renew it to read your confidential balances.
         </div>
       )}
 
       {rows.length === 0 ? (
-        <div className="mt-4 border border-line bg-white px-5 py-8 text-center">
+        <div className="mt-4 border border-line bg-surface px-5 py-8 text-center">
           <div className="text-[15px] font-medium">No permits yet</div>
-          <div className="mt-1 text-[13px] leading-[18px] text-ink3">Create one to decrypt your private balances on this device.</div>
+          <div className="mt-1 text-[13px] leading-[18px] text-ink3">Create one to decrypt your confidential balances on this device.</div>
         </div>
       ) : (
-        <ul className="mt-4 border border-line bg-white px-4">
+        <ul className="mt-4 border border-line bg-surface px-4">
           {rows.map((p, i) => (
             <li key={p.name} className={`flex items-center gap-3 py-3 ${i ? 'border-t border-line' : ''}`}>
               <span className="mono relative flex h-10 w-10 shrink-0 items-center justify-center bg-navy text-[12px] font-medium text-accent">
@@ -78,7 +78,7 @@ export default function Permits() {
         </ul>
       )}
 
-      <label className="mt-4 flex h-[52px] items-center gap-3 border border-line bg-white px-4 text-[14px]">
+      <label className="mt-4 flex h-[52px] items-center gap-3 border border-line bg-surface px-4 text-[14px]">
         <Icon name="clock" size={18} className="text-ink2" />
         <span className="flex-1">New permits last</span>
         <span className="relative flex items-center gap-1 font-medium">

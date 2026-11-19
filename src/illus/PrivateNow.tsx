@@ -79,7 +79,7 @@ export default function PrivateNow({ scale = 1 }: { scale?: number }) {
     let dead = false
     const run = (a: Pose, b: Pose, ms: number, ease: readonly number[]) =>
       new Promise<void>(res => {
-        const c = animate(0, 1, { duration: ms / 1000 / speed, ease: ease as [number, number, number, number], onUpdate: t => apply(mix(a, b, t)), onComplete: res })
+        const c = animate(0, 1, { duration: Math.min(ms, 300) / 1000 / speed, ease: ease as [number, number, number, number], onUpdate: t => apply(mix(a, b, t)), onComplete: res })
         stop = () => c.stop()
       })
     const hold = (ms: number) => new Promise<void>(res => setTimeout(res, ms / speed))
@@ -100,5 +100,5 @@ export default function PrivateNow({ scale = 1 }: { scale?: number }) {
     }
   }, [reduced])
 
-  return <div ref={host} role="img" aria-label="Your tokens sealed into a private balance" style={{ width: 560 * scale, maxWidth: '100%', aspectRatio: '560 / 456' }} dangerouslySetInnerHTML={{ __html: composed }} />
+  return <div ref={host} className="success-illustration" role="img" aria-label="Your tokens sealed into a confidential balance" style={{ width: 560 * scale, maxWidth: '100%', aspectRatio: '560 / 456' }} dangerouslySetInnerHTML={{ __html: composed }} />
 }

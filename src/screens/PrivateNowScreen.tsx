@@ -6,15 +6,18 @@ import { copy, nav, useStore } from '../state/store'
 import Button from '../ui/Button'
 import Icon from '../ui/Icon'
 import Masked from '../ui/Masked'
+import { decOf } from '../ui/TokenRow'
 
 /** #/success — "Everything is private now". Light page, no card, centred column 560 / 350. */
 export default function PrivateNowScreen() {
   const { s, act, mobile } = useStore()
   const [shown, setShown] = useState(false)
   const [busy, setBusy] = useState(false)
-  const amount = fmtPublic(s.lastShield)
-  const sub = copy.privateNow[2].replace('500.00', amount)
-  const hint = copy.privateNow[3].replace('500.00', amount)
+  const sym = s.lastShieldAsset
+  const dec = decOf(sym)
+  const amount = fmtPublic(s.lastShield, dec)
+  const sub = copy.privateNow[2].replace('500.00', s.permit === 'active' ? `[${amount}]` : '[*******]').replace(/USDC/g, sym)
+  const hint = copy.privateNow[3].replace('500.00', shown && s.permit === 'active' ? `[${amount}]` : '[*******]').replace(/USDC/g, sym)
   const reveal = async () => {
     if (shown) return setShown(false)
     if (s.permit !== 'active') return act.openSheet('permit')
@@ -31,11 +34,11 @@ export default function PrivateNowScreen() {
         <h1 className={`font-medium ${mobile ? 'mt-1 text-[28px] leading-[34px] tracking-[-0.02em]' : 'mt-3 text-[40px] leading-[48px] tracking-[-0.025em]'}`}>{copy.privateNow[1]}</h1>
         <p className="mt-3 max-w-[420px] text-[15px] leading-[22px] text-ink2">{sub}</p>
 
-        <div className="mt-6 flex w-full items-center justify-between gap-3 border border-line bg-white p-4 text-left" style={{ maxWidth: 416 }}>
+        <div className="mt-6 flex w-full items-center justify-between gap-3 border border-line bg-surface p-4 text-left" style={{ maxWidth: 416 }}>
           <div className="min-w-0">
-            <div className="text-[13px] leading-[18px] text-ink3">Private balance</div>
+            <div className="text-[13px] leading-[18px] text-ink3">Confidential balance</div>
             <div className="mono mt-1 text-[22px] font-medium leading-7 text-accentInk">
-              <Masked value={s.lastShield} hidden={!shown} pulse={busy} /> <span className="text-[15px]">fUSDC</span>
+              <Masked value={s.lastShield} hidden={!shown || s.permit !== 'active'} dec={dec} pulse={busy} /> <span className="text-[15px]">f{sym}</span>
             </div>
           </div>
           <Button variant="secondary" size={44} icon={shown ? 'eye-off' : 'eye'} onClick={reveal} disabled={busy} aria-pressed={shown}>

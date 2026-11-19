@@ -98,7 +98,7 @@
    "id": "a3",
    "kind": "transfer-out",
    "asset": "ETH",
-   "label": "Sent fETH privately",
+   "label": "Sent fETH confidentially",
    "amount": "−[*****] fETH",
    "when": "Yesterday · to 0xA4…19c2",
    "status": "confirmed"
@@ -159,7 +159,7 @@
  "copy": {
   "hero": [
    "Your balance. Your eyes only.",
-   "Shield the tokens you already have. Only you can see your private balance."
+   "Shield the tokens you already have. Only you can see your confidential balance."
   ],
   "welcomeCtas": [
    "Start by learning",
@@ -172,7 +172,7 @@
   ],
   "permit": [
    "Create a permit",
-   "Only you can decrypt your private balances. A free permit lets CoFHE and the on-chain access list verify that it's you.",
+   "Only you can decrypt your confidential balances. A free permit lets CoFHE and the on-chain access list verify that it's you.",
    "Your balances",
    "Amounts you send and receive",
    "That a shield happened",
@@ -180,8 +180,8 @@
    "Sign permit",
    "Not now"
   ],
-  "expired": "Permit expired. Renew it to see your private balances.",
-  "none": "Create a permit to see your private balances.",
+  "expired": "Permit expired. Renew it to see your confidential balances.",
+  "none": "Create a permit to see your confidential balances.",
   "shieldNote": "≈ $0.12 fee · ~30 sec · the amount is visible on-chain, your balance is not",
   "unshieldNotes": [
    "Step 1 of 3 · then decrypt and claim",
@@ -190,7 +190,7 @@
   ],
   "privateNow": [
    "Shield complete",
-   "Everything is private now",
+   "Everything is confidential now",
    "500.00 USDC is now fUSDC. Your balance is sealed, and only you can read it.",
    "Reveal shows 500.00 fUSDC to you only, with your permit.",
    "Go to dashboard",
@@ -199,30 +199,30 @@
   "toasts": [
    "Address copied",
    "Privacy on",
-   "Permit not created. Private balances stay hidden.",
+   "Permit not created. Confidential balances stay hidden.",
    "Shielded 500 USDC",
    "Unshield requested. Claim it from Activity on your Dashboard",
    "Unshielded 500.00 USDC",
-   "Sent privately",
+   "Sent confidentially",
    "Transaction cancelled",
    "Transaction failed · Try again"
   ],
   "tutorial": [
    [
     "Your dashboard",
-    "Public balances are visible to anyone on-chain. Private balances are encrypted — only you can read them."
+    "Public balances are visible to anyone on-chain. Only you can read confidential balances."
    ],
    [
-    "See your private balances",
+    "See your confidential balances",
     "Create a free permit — a signature, not a transaction. Only you can decrypt [*******] into [1,000.00]."
    ],
    [
     "Shield a token",
-    "Shielding moves tokens from public to private. We've filled in 10.00 USDC."
+    "Shielding moves tokens from public to confidential. We've filled in 10.00 USDC."
    ],
    [
-    "Everything is private now",
-    "You finished the tour. Shield whenever you're ready — your private balance stays yours."
+    "Everything is confidential now",
+    "You finished the tour. Shield whenever you're ready — your confidential balance stays yours."
    ]
   ],
   "unsupported": "Fhenix App isn't available on {network} yet."
@@ -251,16 +251,59 @@
   }
  ],
  "send": {
-  "to": "0x91b2…7c40",
+  "to": {
+   "ens": "mira.eth",
+   "address": "0x91b2e4f0c7d3a95b18e6f2c4d7a03b9e5c177c40",
+   "firstTime": true
+  },
   "amount": "100.00",
   "asset": "fUSDC",
   "fee": "≈ $0.08",
-  "visible": "Recipient, that a transfer happened",
-  "steps": [
-   "Encrypt",
-   "Confirm",
-   "Sent"
-  ],
   "tx": "0x4b7e…19d0"
+ },
+ "sendContacts": {
+  "alice.eth": "0x3c8d5fed7e42b16acd42f5cc88b942789e11a21f",
+  "0x5e1a…09bc": "0x5e1a9c4fd431b152eab5e74003e262dab7f109bc",
+  "Account 2": "0x7b445adb9f248ac08166caa6200523aefd6be310"
+ },
+ "sendContractAddresses": ["0x000000000000000000000000000000000000c0fe"],
+ "sendCopy": {
+  "to": "To",
+  "addressLabel": "EVM ADDRESS OR ENS",
+  "placeholder": "Address or ENS name",
+  "paste": "Paste",
+  "clear": "Clear recipient",
+  "helper": "Paste an address or ENS name.",
+  "enterRecipient": "Enter an address",
+  "invalid": "This isn't a valid EVM address. It should start with 0x and be 42 characters long.",
+  "enterValid": "Enter a valid address",
+  "ens": "ENS NAME",
+  "edit": "Edit",
+  "valid": "Valid EVM address",
+  "firstTimeNote": "First time sending to this address. Check the full address, especially the middle characters.",
+  "enterAmount": "Enter an amount",
+  "youSend": "You send",
+  "balance": "Balance",
+  "review": "Review transaction",
+  "reviewHelper": "Check everything before you confirm in your wallet.",
+  "from": "From",
+  "account": "Account 1",
+  "firstTime": "FIRST TIME",
+  "network": "Network",
+  "walletNetwork": "follows your wallet",
+  "networkFee": "Network fee",
+  "fee": "Fee",
+  "lockNote": "The amount stays confidential. The recipient and the fact that a transfer happened are visible on-chain.",
+  "confirm": "Confirm in wallet",
+  "back": "Back",
+  "walletNote": "You'll confirm in your wallet",
+  "permitNeeded": "Create a permit to use your confidential balance.",
+  "encrypting": "Encrypting…",
+  "confirming": "Confirm in wallet…",
+  "sending": "Sending…",
+  "sent": "Sent confidentially",
+  "transaction": "Transaction",
+  "dashboard": "Go to dashboard",
+  "again": "Send another"
  }
 }

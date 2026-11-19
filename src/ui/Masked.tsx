@@ -33,26 +33,21 @@ export default function Masked({ value, hidden, dec = 2, bare, prefix = '', puls
     }
     const was = prev.current
     prev.current = off
-    if (reduced || was === off) {
+    if (reduced || off || was === off) {
       setTxt(target)
       setOp(1)
       return
     }
     const timers: number[] = []
     let iv = 0
-    if (!off) {
-      iv = window.setInterval(() => setTxt(scramble()), 50)
-      timers.push(
-        window.setTimeout(() => {
-          clearInterval(iv)
-          setOp(0)
-          timers.push(window.setTimeout(() => (setTxt(target), setOp(1)), 75 / speed))
-        }, 300 / speed),
-      )
-    } else {
-      setOp(0)
-      timers.push(window.setTimeout(() => (setTxt(target), setOp(1)), 100 / speed))
-    }
+    iv = window.setInterval(() => setTxt(scramble()), 50)
+    timers.push(
+      window.setTimeout(() => {
+        clearInterval(iv)
+        setOp(0)
+        timers.push(window.setTimeout(() => (setTxt(target), setOp(1)), 75 / speed))
+      }, 225 / speed),
+    )
     return () => {
       clearInterval(iv)
       timers.forEach(clearTimeout)
@@ -65,7 +60,7 @@ export default function Masked({ value, hidden, dec = 2, bare, prefix = '', puls
   return (
     <span className={`inline-block whitespace-nowrap tabular-nums ${pulse ? 'bracket-pulse' : ''} ${className}`} aria-label={off ? 'hidden' : undefined}>
       {prefix}
-      <span style={{ opacity: op, transition: `opacity ${reduced ? 0 : 75 / speed}ms linear` }}>{txt}</span>
+      <span style={{ opacity: off ? 1 : op, transition: `opacity ${reduced ? 0 : 75 / speed}ms linear` }}>{off ? MASK : txt}</span>
     </span>
   )
 }

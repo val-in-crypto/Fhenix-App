@@ -15,7 +15,7 @@ function Seg<T extends string | number>({ value, options, onChange, label }: { v
   return (
     <div className="flex bg-surface2 p-0.5" role="group" aria-label={label}>
       {options.map(([v, l]) => (
-        <button key={String(v)} type="button" aria-pressed={v === value} onClick={() => onChange(v)} className={`px-2.5 py-1.5 text-[12px] font-medium leading-4 ${v === value ? 'bg-navy text-white' : 'text-ink2 hover:text-ink'}`}>
+        <button key={String(v)} type="button" aria-pressed={v === value} onClick={() => onChange(v)} className={`px-2.5 py-1.5 text-[12px] font-medium leading-4 ${v === value ? 'bg-navy text-onNavy' : 'text-ink2 hover:text-ink'}`}>
           {l}
         </button>
       ))}
@@ -25,7 +25,7 @@ function Seg<T extends string | number>({ value, options, onChange, label }: { v
 const Check = ({ label, checked, onChange, disabled }: { label: string; checked: boolean; onChange: (v: boolean) => void; disabled?: boolean }) => (
   <label className={`flex h-8 cursor-pointer items-center justify-between gap-3 text-[13px] text-ink2 ${disabled ? 'opacity-50' : ''}`}>
     {label}
-    <input type="checkbox" className="h-4 w-4 accent-[#007A7E]" checked={checked} disabled={disabled} onChange={e => onChange(e.target.checked)} />
+    <input type="checkbox" className="h-4 w-4 accent-accentInk" checked={checked} disabled={disabled} onChange={e => onChange(e.target.checked)} />
   </label>
 )
 
@@ -87,7 +87,7 @@ export default function DemoPanel() {
     ['Connect wallet', { connected: false, permit: 'none', sheet: { name: 'connect' } }, 'welcome'],
     ['Create permit', { permit: 'none', sheet: { name: 'permit' } }, 'dashboard'],
     ['Dashboard · default', {}, 'dashboard'],
-    ['Dashboard · encrypted (permit expired)', { permit: 'expired' }, 'dashboard'],
+    ['Dashboard · confidential (permit expired)', { permit: 'expired' }, 'dashboard'],
     ['Dashboard · no permit', { permit: 'none' }, 'dashboard'],
     ['Dashboard · empty', { permit: 'none', balances: zeroBalances(), activity: [] }, 'dashboard'],
     ['Dashboard · token detail', { sheet: { name: 'token', arg: 'USDC' } }, 'dashboard'],
@@ -114,7 +114,7 @@ export default function DemoPanel() {
     ['State · transaction failed', {}, 'shield', fail],
   ]
   const toastSet = () => {
-    act.toast({ kind: 'success', title: 'Shielded 500 USDC', body: '500.00 fUSDC is now private', action: { label: 'View', route: 'dashboard' } })
+    act.toast({ kind: 'success', title: 'Shielded 500 USDC', body: '500.00 fUSDC is now confidential', action: { label: 'View', route: 'dashboard' } })
     setTimeout(() => act.toast({ kind: 'info', title: 'Unshield requested', body: 'Claim it from Activity on your Dashboard' }), 250)
     setTimeout(fail, 500)
   }
@@ -130,7 +130,7 @@ export default function DemoPanel() {
             transition={{ duration: t(160) }}
             role="dialog"
             aria-label="Demo controls"
-            className="absolute bottom-full left-0 mb-2 flex w-[300px] flex-col gap-3 border border-line bg-white p-4 shadow-[0_16px_48px_rgba(0,22,35,.22)]"
+            className="absolute bottom-full left-0 mb-2 flex w-[300px] flex-col gap-3 border border-line bg-surface p-4 shadow-[0_16px_48px_rgb(var(--shadow-ink)_/_.22)]"
           >
             <div className="flex items-center justify-between">
               <span className="eyebrow text-ink">Demo controls</span>
@@ -146,7 +146,7 @@ export default function DemoPanel() {
                   const j = J[Number(e.target.value)]
                   if (j) act.jump(j[1], j[2], j[3])
                 }}
-                className="h-9 border border-line bg-white px-2 text-[13px] text-ink"
+                className="h-9 border border-line bg-surface px-2 text-[13px] text-ink"
               >
                 <option value="" disabled>
                   Choose a screen or state…
@@ -165,7 +165,7 @@ export default function DemoPanel() {
               <Seg<Permit> label="Permit" value={s.permit} options={[['none', 'None'], ['active', 'Active'], ['expired', 'Expired']]} onChange={v => act.set({ permit: v, ...(v === 'active' ? { hidden: false } : {}) })} />
             </Row>
             <Row label="Network">
-              <select aria-label="Network" value={s.networkIdx} onChange={e => act.setNetwork(Number(e.target.value))} className="h-8 border border-line bg-white px-2 text-[13px] text-ink">
+              <select aria-label="Network" value={s.networkIdx} onChange={e => act.setNetwork(Number(e.target.value))} className="h-8 border border-line bg-surface px-2 text-[13px] text-ink">
                 {data.networks.map((n, i) => (
                   <option key={n.chainId} value={i}>
                     {n.name}
@@ -184,7 +184,7 @@ export default function DemoPanel() {
           </motion.div>
         )}
       </AnimatePresence>
-      <button type="button" aria-expanded={open} onClick={() => setOpen(o => !o)} className="mono flex h-8 items-center gap-1.5 bg-navy px-3 text-[12px] font-medium text-white shadow-[0_4px_12px_rgba(0,22,35,.25)] hover:bg-ink2">
+      <button type="button" aria-expanded={open} onClick={() => setOpen(o => !o)} className="mono flex h-8 items-center gap-1.5 bg-navy px-3 text-[12px] font-medium text-white shadow-[0_4px_12px_rgb(var(--shadow-ink)_/_.25)] hover:bg-ink2">
         <Icon name={open ? 'close' : 'apps-grid'} size={12} />
         Demo
       </button>
