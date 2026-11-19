@@ -283,14 +283,13 @@ function applyChrome(els: Els, t: number, tabs: (HTMLElement | null)[], stepRef:
     put(els, `off${i}`, undefined, 1 - vis)
     put(els, `col${i}`, undefined, vis)
     put(els, `line${i}`, `scaleX(${clamp01(since / LENS[i])})`, (1 - exit) * clamp01(since / 0.15))
-    // captions slide up 8px with a short blur; the block itself never fades as a whole
+    // Captions move and fade without animating paint properties.
     const cap = els[`cap${i}`]
     if (cap) {
       cap.style.opacity = String(vis)
       // once invisible it glides back below the line, so re-entry starts from where it already is
       const back = clamp01((since - LENS[i] - 0.5) / 1)
       cap.style.transform = `translateY(${8 * (1 - enter) - 8 * exit + 16 * exit * back}px)`
-      cap.style.filter = vis > 0.995 ? 'none' : `blur(${(4 * (1 - vis)).toFixed(2)}px)`
     }
     if (since < LENS[i] && stepRef.current !== i) {
       stepRef.current = i

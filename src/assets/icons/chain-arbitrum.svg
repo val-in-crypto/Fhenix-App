@@ -1,7 +1,7 @@
 <svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="glyph">
-<path id="Vector" d="M8 1L14 4.5V11.5L8 15L2 11.5V4.5L8 1Z" fill="#213147"/>
-<path id="Vector_2" d="M5.6 11L8.3 4.6H9.6L6.9 11H5.6Z" fill="white"/>
-<path id="Vector_3" d="M8.4 11L10.1 7L11.2 9.6L10.6 11H8.4Z" fill="#28A0F0"/>
+<path id="Vector" d="M8 1L14 4.5V11.5L8 15L2 11.5V4.5L8 1Z" fill="var(--brand-arbitrum)"/>
+<path id="Vector_2" d="M5.6 11L8.3 4.6H9.6L6.9 11H5.6Z" fill="var(--brand-white)"/>
+<path id="Vector_3" d="M8.4 11L10.1 7L11.2 9.6L10.6 11H8.4Z" fill="var(--brand-arbitrum-accent)"/>
 </g>
 </svg>

@@ -27,11 +27,11 @@ function BalanceSwitch({ value, onChange }: { value: BalanceMode; onChange: (mod
   return <SegmentedSwitch label="Source balance" value={value} onChange={onChange} options={[{ value: 'priv', label: 'Confidential' }, { value: 'pub', label: 'Public' }]} />
 }
 
-function SendRows({ rows, highlightAmount }: { rows: [string, ReactNode][]; highlightAmount?: boolean }) {
+function SendRows({ rows, highlightAmount, stackRecipient }: { rows: [string, ReactNode][]; highlightAmount?: boolean; stackRecipient?: boolean }) {
   return (
     <dl className="divide-y divide-line border-y border-line">
       {rows.map(([label, value]) => (
-        <div key={label} className={`grid grid-cols-[minmax(64px,1fr)_minmax(0,3fr)] items-start gap-2 py-3 sm:gap-4 ${label === copy.to ? 'max-[1023px]:grid-cols-1' : ''} ${highlightAmount && label === 'Amount' ? 'confidential-box bg-accentSoft px-3' : ''}`}>
+        <div key={label} className={`grid ${stackRecipient && label === copy.to ? 'grid-cols-1' : 'grid-cols-[minmax(64px,1fr)_minmax(0,3fr)]'} items-start gap-2 py-3 sm:gap-4 ${label === copy.to ? 'max-[1023px]:grid-cols-1' : ''} ${highlightAmount && label === 'Amount' ? 'confidential-box bg-accentSoft px-3' : ''}`}>
           <dt className={`pt-0.5 text-[13px] leading-5 ${secondary}`}>{label}</dt>
           <dd className="min-w-0 break-words text-[15px] leading-5">{value}</dd>
         </div>
@@ -240,7 +240,7 @@ export default function Send() {
     <SuccessModal open={Boolean(result)} onClose={() => setResult(undefined)} illustration={<SuccessIllustration kind="sent" />} eyebrow="Send complete"
       title={result?.confidential ? 'Sent confidentially' : 'Sent'} body={result && `${result.recipient.name ?? shortAddress(result.recipient.address)} will see ${displayAmount(result.amount, result.confidential)} ${result.confidential ? 'f' : ''}${result.sym} in their ${result.confidential ? 'confidential' : 'public'} balance.`}
       secondaryLabel="Send another" onSecondary={() => setResult(undefined)}>
-      {result && <div className="bg-surface2 px-4"><SendRows rows={[
+      {result && <div className="bg-surface2 px-3"><SendRows stackRecipient rows={[
         ['To', <RecipientSummary recipient={result.recipient} mobile={mobile} />],
         ['Amount', <span className={`mono ${result.confidential ? 'text-accentInk' : ''}`}>{displayAmount(result.amount, result.confidential)} {result.confidential ? 'f' : ''}{result.sym}</span>],
         ['From', result.confidential ? 'Confidential balance' : 'Public balance'],

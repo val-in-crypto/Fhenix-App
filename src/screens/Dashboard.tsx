@@ -155,6 +155,7 @@ export default function Dashboard() {
   return (
     <Page>
       <div className="flex flex-col gap-6">
+        {s.pendingUnshield && s.unshieldStep >= 3 && <div className="flex items-center justify-between gap-3 border border-line bg-accentSoft p-4 text-[15px]"><span>1 unshield ready to claim</span><Button size={44} disabled={s.busy} onClick={act.claim}>{s.busy ? 'Claiming…' : 'Claim'}</Button></div>}
         {s.permit !== 'active' && !empty && (
           <div data-tour="permit-banner" className={`flex items-center gap-3 ${s.permit === 'expired' ? 'bg-dangerSoft' : 'border border-line bg-surface'} ${mobile ? 'p-3 pl-4' : 'px-5 py-3'}`} role="status">
             <Icon name="permit-key" className={s.permit === 'expired' ? 'text-danger' : 'text-accentInk'} />

@@ -1,6 +1,6 @@
 <svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="glyph">
-<path id="Vector" d="M14.3 8C14.3 11.4794 11.4794 14.3 8 14.3C4.52061 14.3 1.7 11.4794 1.7 8C1.7 4.52061 4.52061 1.7 8 1.7C11.4794 1.7 14.3 4.52061 14.3 8Z" stroke-width="1.4" stroke="#5B6770"/>
-<path id="Vector_2" d="M5 8H11" stroke-width="1.4" stroke="#5B6770"/>
+<path id="Vector" d="M14.3 8C14.3 11.4794 11.4794 14.3 8 14.3C4.52061 14.3 1.7 11.4794 1.7 8C1.7 4.52061 4.52061 1.7 8 1.7C11.4794 1.7 14.3 4.52061 14.3 8Z" stroke-width="1.4" stroke="var(--color-ink-3)"/>
+<path id="Vector_2" d="M5 8H11" stroke-width="1.4" stroke="var(--color-ink-3)"/>
 </g>
 </svg>

@@ -55,8 +55,8 @@ export default function SuccessModal({ open, onClose, illustration, eyebrow, tit
             {children && <div className="w-full text-left">{children}</div>}
           </div>
           <div className={`flex shrink-0 gap-2 ${mobile ? 'flex-col' : ''}`}>
-            <Button size={mobile ? 52 : 48} full className="flex-1" arrow onClick={onClose}>Done</Button>
-            <Button size={mobile ? 52 : 48} full className="flex-1" variant="secondary" onClick={onSecondary}>{secondaryLabel}</Button>
+            <Button size={mobile ? 52 : 48} full className={mobile ? 'shrink-0' : 'flex-1'} arrow onClick={onClose}>Done</Button>
+            <Button size={mobile ? 52 : 48} full className={mobile ? 'shrink-0' : 'flex-1'} variant="secondary" onClick={onSecondary}>{secondaryLabel}</Button>
           </div>
           {transaction && <div className="mt-4 shrink-0 text-center text-[12px] text-ink3">{transaction}</div>}
         </motion.div>

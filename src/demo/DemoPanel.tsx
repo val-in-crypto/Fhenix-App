@@ -99,7 +99,7 @@ export default function DemoPanel() {
     ['Unshield — form', {}, 'unshield'],
     ['Unshield — decrypting', unsh(2), 'unshield', act.runDecrypt],
     ['Unshield — claim ready', unsh(3), 'unshield'],
-    ['Unshield — claimed', unsh(5, true), 'unshield'],
+    ['Unshield — claimed', { ...unsh(0, true), pendingUnshield: null, success: { kind: 'unshield', amount: 500, asset: 'USDC', networkIdx: 0 }, amt: { shield: '', unshield: '', send: '' } }, 'unshield'],
     ['Send — form', {}, 'send'],
     ['Send — review & confirm', {}, 'send', act.sendOpen],
     ['Send — sent', { sendStep: 3, balances: bal(0, -100) }, 'send'],
@@ -144,7 +144,7 @@ export default function DemoPanel() {
                 value=""
                 onChange={e => {
                   const j = J[Number(e.target.value)]
-                  if (j) act.jump(j[1], j[2], j[3])
+                  if (j) { setOpen(false); act.jump(j[1], j[2], j[3]) }
                 }}
                 className="h-9 border border-line bg-surface px-2 text-[13px] text-ink"
               >

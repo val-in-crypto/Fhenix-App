@@ -3,6 +3,8 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { useMotion } from '../lib/motion'
 import type { Activity } from '../state/store'
+import { useStore } from '../state/store'
+import Button from './Button'
 import Icon from './Icon'
 import Masked from './Masked'
 
@@ -27,6 +29,7 @@ export function FilterChips({ value, onChange }: { value: Filter; onChange: (f: 
 type Props = { items: Activity[]; hidden: boolean }
 
 export default function ActivityList({ items, hidden }: Props) {
+  const { s, act } = useStore()
   const { t } = useMotion()
   const [filter, setFilter] = useState<Filter>('All')
   const [hideValues, setHideValues] = useState(() => {
@@ -81,7 +84,7 @@ export default function ActivityList({ items, hidden }: Props) {
                       a.amount
                     )}
                   </span>
-                  <Icon name="arrow-up-right" className="text-ink3" />
+                  {a.id === s.pendingUnshield?.id && s.unshieldStep >= 3 ? <Button size={44} disabled={s.busy} onClick={act.claim}>{s.busy ? 'Claiming…' : 'Claim'}</Button> : <Icon name="arrow-up-right" className="text-ink3" />}
                 </div>
               </motion.li>
             ))}

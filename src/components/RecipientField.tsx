@@ -84,7 +84,7 @@ export function useRecipientField() {
 
 export function FullAddress({ address, mobile }: { address: string; mobile: boolean }) {
   return (
-    <span className={`mono block whitespace-nowrap font-normal leading-5 ${mobile ? 'text-[12px]' : 'text-[13px]'}`} aria-label={address}>
+    <span tabIndex={0} className={`mono block max-w-full overflow-x-auto whitespace-nowrap font-normal leading-5 ${mobile ? 'text-[12px]' : 'text-[13px]'}`} aria-label={address}>
       <span className="text-ink">{address.slice(0, 6)}</span><span className="text-ink3">{address.slice(6, -4)}</span><span className="text-ink">{address.slice(-4)}</span>
     </span>
   )

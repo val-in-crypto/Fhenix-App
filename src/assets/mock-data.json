@@ -81,7 +81,7 @@
    "kind": "shield",
    "asset": "USDC",
    "label": "Shield USDC → fUSDC",
-   "amount": "+500.00 fUSDC",
+   "priv": { "sign": "+", "value": 500, "unit": "fUSDC" },
    "when": "Today\u001f12:04",
    "hash": "0x9f2c…a83e",
    "status": "confirmed"
