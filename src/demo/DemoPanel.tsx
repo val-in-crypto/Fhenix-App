@@ -184,7 +184,7 @@ export default function DemoPanel() {
           </motion.div>
         )}
       </AnimatePresence>
-      <button type="button" aria-expanded={open} onClick={() => setOpen(o => !o)} className="mono flex h-8 items-center gap-1.5 bg-navy px-3 text-[12px] font-medium text-white shadow-[0_4px_12px_rgb(var(--shadow-ink)_/_.25)] hover:bg-ink2">
+      <button type="button" aria-expanded={open} onClick={() => setOpen(o => !o)} className="mono flex h-8 items-center gap-1.5 bg-navy px-3 text-[12px] font-medium text-[var(--brand-white)] shadow-[0_4px_12px_rgb(var(--shadow-ink)_/_.25)] hover:bg-ink2">
         <Icon name={open ? 'close' : 'apps-grid'} size={12} />
         Demo
       </button>

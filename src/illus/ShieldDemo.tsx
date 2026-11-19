@@ -170,7 +170,7 @@ const Coin = ({ k }: { k: number }) => (
   <g data-k={`coin${k}`} style={move}>
     <path d="M-18.37 0A18.37 10.61 0 0 0 18.37 0V6A18.37 10.61 0 0 1 -18.37 6Z" fill="var(--coin-usdc-side)" stroke={EDGE} strokeLinejoin="round" />
     <ellipse rx="18.37" ry="10.61" fill="var(--brand-usdc)" stroke={INK} />
-    <ellipse rx="10.1" ry="5.83" stroke="white" strokeWidth="1.4" />
+    <ellipse rx="10.1" ry="5.83" stroke="var(--brand-white)" strokeWidth="1.4" />
     <g data-k={`navy${k}`}>
       <path d="M-18.37 0A18.37 10.61 0 0 0 18.37 0V6A18.37 10.61 0 0 1 -18.37 6Z" fill="var(--illo-vault-shadow)" stroke={EDGE} strokeLinejoin="round" />
       <ellipse rx="18.37" ry="10.61" fill="var(--illo-vault-top)" stroke={EDGE} />

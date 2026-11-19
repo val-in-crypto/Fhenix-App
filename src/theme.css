@@ -13,6 +13,9 @@
   --brand-usdc: #2775CA;
   --brand-eth: #627EEA;
   --brand-metamask: #F6851B;
+  --brand-white: #FFFFFF;
+  --mask-white: #FFFFFF;
+  --mask-black: #000000;
   --color-ink: #001623;
   --color-ink-2: #34495A;
   --color-ink-3: #5B6F7D;
@@ -128,8 +131,6 @@
   --chain-ethereum: #C9D6DE;
   --wallet-identicon: conic-gradient(from 210deg, var(--color-navy), var(--color-accent), var(--color-ink), var(--color-navy));
 }
-.fhenix-logo svg path[fill="#001623"] { fill: var(--color-ink); }
-.fhenix-logo svg path[fill="#5B6F7D"] { fill: var(--color-ink-3); }
 [data-theme="dark"] .chain-ethereum svg path { fill: var(--chain-ethereum); }
 .recipient-identicon {
   background: linear-gradient(135deg, hsl(var(--identicon-hue) 66% 70%), hsl(calc(var(--identicon-hue) + 40) 75% 34%));
@@ -146,15 +147,6 @@
   --illo-vault-shadow: #072433;
 }
 .shield-demo { background-image: var(--welcome-wash); }
-[data-theme="dark"] .success-illustration [fill="#E9ECEF"] { fill: var(--illo-side-l); }
-[data-theme="dark"] .success-illustration [fill="#DCE1E5"] { fill: var(--illo-side-r); }
-[data-theme="dark"] .success-illustration [fill="#F3FCFC"] { fill: var(--illo-top); }
-[data-theme="dark"] .success-illustration [fill="#E2F8F9"] { fill: var(--illo-shielded-1); }
-[data-theme="dark"] .success-illustration [fill="#9BE7E8"] { fill: var(--illo-shielded-2); }
-[data-theme="dark"] .success-illustration [stroke="#0B1F2A"] { stroke: var(--illo-edge); }
-[data-theme="dark"] .success-illustration [fill="white"] { fill: var(--illo-top); }
-[data-theme="dark"] .success-illustration [id="Confetti"] [fill="#0AD9DC"],
-[data-theme="dark"] .success-illustration [id^="amb-"][fill="#0AD9DC"] { fill: var(--illo-sparkle); }
 
 /* Success illustrations exported from Figma. */
 :root { --illustration-sent-color-1: #007A7E; }

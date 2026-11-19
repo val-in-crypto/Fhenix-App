@@ -164,8 +164,8 @@ export default function Tour() {
       <svg className="absolute inset-0 h-full w-full" aria-hidden>
         <defs>
           <mask id="tour-mask">
-            <rect width="100%" height="100%" fill="white" />
-            <rect fill="black" x={cut.x} y={cut.y} width={cut.w} height={cut.h} />
+            <rect width="100%" height="100%" fill="var(--mask-white)" />
+            <rect fill="var(--mask-black)" x={cut.x} y={cut.y} width={cut.w} height={cut.h} />
           </mask>
         </defs>
         <rect width="100%" height="100%" fill='var(--scrim)' mask="url(#tour-mask)" />
