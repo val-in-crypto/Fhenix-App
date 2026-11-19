@@ -102,7 +102,7 @@ export function WalletChip() {
     <Dropdown
       align="right"
       button={(open, toggle) => (
-        <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-10 items-center gap-2 border border-line bg-surface pl-2 pr-2.5 hover:border-lineStrong">
+        <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-11 items-center gap-2 border border-line bg-surface pl-2 pr-2.5 hover:border-lineStrong">
           <span className="round h-6 w-6" style={{ background: 'var(--wallet-identicon)' }} />
           <span className="mono text-[12px] font-medium">{data.account.short}</span>
           <Icon name="copy" size={14} className="text-ink3" />
@@ -133,7 +133,7 @@ export function NetworkChip() {
     <Dropdown
       align="right"
       button={(open, toggle) => (
-        <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-10 items-center gap-2 border border-line bg-surface px-3 text-[13px] font-medium hover:border-lineStrong">
+        <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-11 items-center gap-2 border border-line bg-surface px-3 text-[13px] font-medium hover:border-lineStrong">
           <ChainIcon chainId={n.chainId} />
           {n.name}
         </button>
@@ -232,7 +232,7 @@ export function PermitChip({ header = false }: { header?: boolean }) {
   if (header) {
     const title = active ? `Permit active, ${Math.max(0, s.permitDays - 1)} days left` : s.permit === 'expired' ? 'Permit expired, renew permit' : 'No permit, create permit'
     return <button type="button" title={title} aria-label={title} onClick={event => event.metaKey || event.ctrlKey ? nav('permits') : act.renew()} className="relative flex size-11 items-center justify-center border border-line bg-surface text-ink2">
-      <Icon name="permit-key" size={18} /><span aria-hidden className={`absolute right-1 top-1 size-2 ${active ? 'bg-live' : s.permit === 'expired' ? 'bg-warn' : 'border border-ink3'}`} />
+      <Icon name="permit-key" size={18} /><span aria-hidden className={`absolute left-1 top-1 size-2 ${active ? 'bg-live' : s.permit === 'expired' ? 'bg-warn' : 'border border-ink3'}`} />
     </button>
   }
   return (
@@ -285,7 +285,7 @@ function TabBar({ route }: { route: Route }) {
 }
 
 /* ---------- page layout ---------- */
-type PageProps = { children: ReactNode; bottom?: ReactNode; narrow?: boolean; card?: boolean }
+type PageProps = { children: ReactNode; bottom?: ReactNode; narrow?: boolean; card?: boolean; desktopClassName?: string }
 
 function MobileActionBar({ children }: { children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null)
@@ -306,7 +306,7 @@ function MobileActionBar({ children }: { children: ReactNode }) {
 }
 
 /** Mobile: scroll area + pinned bottom bar (CTA → 12 → helper → 16 → tabs). Desktop: content column, optional centred 536 card. */
-export function Page({ children, bottom, narrow, card }: PageProps) {
+export function Page({ children, bottom, narrow, card, desktopClassName = '' }: PageProps) {
   const { mobile } = useStore()
   if (mobile)
     return (
@@ -318,7 +318,7 @@ export function Page({ children, bottom, narrow, card }: PageProps) {
       </div>
     )
   return (
-    <div className="px-8 pb-10 pt-1">
+    <div className={`px-8 pb-10 pt-1 ${desktopClassName}`}>
       <div className={narrow ? 'mx-auto' : 'max-w-[1184px]'} style={narrow ? { width: 536 } : undefined}>
         {card ? (
           <div className="border border-line bg-surface p-6">

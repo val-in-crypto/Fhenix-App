@@ -148,7 +148,7 @@ export default function Send() {
     setAmount(balance.toFixed(8).replace(/\.?0+$/, '') || '0')
   }
   const cta = (label: string, onClick: () => void, disabled = false) => (
-    <Button size={mobile ? 52 : 48} full={mobile || !reviewing} arrow={!disabled} disabled={disabled} onClick={onClick} className="flex-1 !text-[15px]">
+    <Button size={mobile ? 52 : 48} full={mobile || !reviewing} arrow={!disabled} disabled={disabled} onClick={onClick} className={`${reviewing && !mobile ? 'flex-1' : 'shrink-0'} !text-[15px]`}>
       {label}
     </Button>
   )
@@ -163,7 +163,7 @@ export default function Send() {
           },
           pending || s.signing || !hasAmount || over || lookalike,
         )}
-        <Button size={48} variant="secondary" className="flex-1" disabled={pending || s.signing} onClick={() => setReview(false)}>{copy.back}</Button>
+        <Button size={48} variant="secondary" className={mobile ? 'shrink-0' : 'flex-1'} disabled={pending || s.signing} onClick={() => setReview(false)}>{copy.back}</Button>
       </div>
     </div>
   )
@@ -177,7 +177,7 @@ export default function Send() {
 
   return (
     <>
-    <Page bottom={mobile && (
+    <Page desktopClassName="!pr-10 !pt-4" bottom={mobile && (
       <div className="flex flex-col gap-2">
         {actions}
         {note && <p className={`text-center text-[13px] leading-5 ${secondary}`}>{separate(note)}</p>}
@@ -214,6 +214,7 @@ export default function Send() {
                   <BalanceSwitch value={mode} onChange={setMode} />
                 </div>
                 <AmountBox
+                  layout={mobile ? 'default' : 'send'}
                   label={copy.youSend}
                   balance={<>{copy.balance} {confidential ? <Masked value={balance} hidden={isMasked(s)} /> : fmtPublic(balance)}</>}
                   maxLabel={confidential && s.permit !== 'active' ? 'Create permit first' : undefined}

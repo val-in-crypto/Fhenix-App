@@ -147,12 +147,12 @@ export function RecipientField({ field, mobile, warnings }: { field: ReturnType<
               onKeyDown={event => { if (event.key === 'Enter') field.validate() }}
               className={`h-full min-w-0 flex-1 bg-transparent px-4 outline-none placeholder:text-ink3 ${invalid ? 'mono' : ''} ${mobile ? 'text-[15px]' : 'text-[16px]'}`}
             />
-            {draft ? <button type="button" aria-label={copy.clear} onClick={field.clear} className="field-segment shrink-0 text-ink2"><Icon name="close" size={18} /></button> : <button type="button" className="field-segment shrink-0 text-[14px] font-medium" onClick={() => void paste()}><Icon name="copy" size={16} />{copy.paste}</button>}
+            {draft ? <button type="button" aria-label={copy.clear} onClick={field.clear} className="field-segment shrink-0 text-ink2"><Icon name="close" size={18} /></button> : <button type="button" className="field-segment shrink-0 text-[14px] font-medium" onClick={() => void paste()}><Icon name="paste" size={20} />{copy.paste}</button>}
           </Field>
           <AnimatePresence initial={false}>
             {invalid && <motion.p id="send-to-error" role="alert" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: t(150) }} className="text-[15px] leading-5 text-danger">{copy.invalid}</motion.p>}
           </AnimatePresence>
-          {!invalid && <p id="send-to-helper" className="text-[14px] leading-5 text-ink3">{copy.helper}</p>}
+          {!invalid && <p id="send-to-helper" className={`${mobile ? 'text-[14px] leading-5' : 'text-[13px] leading-[18px]'} text-ink3`}>{copy.helper}</p>}
         </>
       )}
     </section>
