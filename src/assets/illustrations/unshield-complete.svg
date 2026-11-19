@@ -1,0 +1,97 @@
+<svg width="560" height="456" viewBox="0 0 560 456" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+<g id="Fhenix App">
+<path d="M-5692 -22744C-5692 -22745.1 -5691.1 -22746 -5690 -22746H13247C13248.1 -22746 13249 -22745.1 13249 -22744V3984C13249 3985.11 13248.1 3986 13247 3986H-5690C-5691.1 3986 -5692 3985.11 -5692 3984V-22744Z" fill="var(--illustration-unshield-complete-color-14)"/>
+<path d="M-5690 -22746V-22745H13247V-22746V-22747H-5690V-22746ZM13249 -22744H13248V3984H13249H13250V-22744H13249ZM13247 3986V3985H-5690V3986V3987H13247V3986ZM-5692 3984H-5691V-22744H-5692H-5693V3984H-5692ZM-5690 3986V3985C-5690.55 3985 -5691 3984.55 -5691 3984H-5692H-5693C-5693 3985.66 -5691.66 3987 -5690 3987V3986ZM13249 3984H13248C13248 3984.55 13247.6 3985 13247 3985V3986V3987C13248.7 3987 13250 3985.66 13250 3984H13249ZM13247 -22746V-22745C13247.6 -22745 13248 -22744.6 13248 -22744H13249H13250C13250 -22745.7 13248.7 -22747 13247 -22747V-22746ZM-5690 -22746V-22747C-5691.66 -22747 -5693 -22745.7 -5693 -22744H-5692H-5691C-5691 -22744.6 -5690.55 -22745 -5690 -22745V-22746Z" fill="var(--illustration-unshield-complete-color-13)" fill-opacity="0.1"/>
+<g id="Illustration / Unshield complete">
+<g id="Ambient sparkles">
+<path id="amb-1" d="M84 83L85.9 90L93 92L85.9 93.9L84 101L82 93.9L75 92L82 90L84 83Z" fill="var(--illustration-unshield-complete-color-2)"/>
+<path id="amb-2" opacity="0.7" d="M476 63L477.5 68.4L483 70L477.5 71.5L476 77L474.4 71.5L469 70L474.4 68.4L476 63Z" fill="var(--illustration-unshield-complete-color-3)"/>
+<path id="amb-3" d="M500 240L502.2 247.8L510 250L502.2 252.2L500 260L497.8 252.2L490 250L497.8 247.8L500 240Z" fill="var(--illustration-unshield-complete-color-2)"/>
+<path id="amb-4" opacity="0.5" d="M64 262L65.3 266.6L70 268L65.3 269.3L64 274L62.6 269.3L58 268L62.6 266.6L64 262Z" fill="var(--illustration-unshield-complete-color-3)"/>
+<path id="amb-5" d="M150 35L151.1 38.9L155 40L151.1 41.1L150 45L148.9 41.1L145 40L148.9 38.9L150 35Z" fill="var(--illustration-unshield-complete-color-7)"/>
+<path id="amb-6" opacity="0.8" d="M420 155L421.1 158.9L425 160L421.1 161.1L420 165L418.9 161.1L415 160L418.9 158.9L420 155Z" fill="var(--illustration-unshield-complete-color-2)"/>
+</g>
+<g id="Hatched shadow">
+<path id="shadow-fill" d="M294 220L498.3 338L294 456L89.5996 338L294 220Z" fill="var(--illustration-unshield-complete-color-9)" fill-opacity="0.7"/>
+<path id="hatch-1" opacity="0.5" d="M300.9 224L96.5 342" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-2" opacity="0.5" d="M308.7 228.5L104.3 346.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-3" opacity="0.5" d="M316.5 233L112.1 351" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-4" opacity="0.5" d="M324.299 237.5L119.899 355.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-5" opacity="0.5" d="M332.099 242L127.699 360" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-6" opacity="0.5" d="M339.9 246.5L135.5 364.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-7" opacity="0.5" d="M347.6 251L143.3 369" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-8" opacity="0.5" d="M355.4 255.5L151.1 373.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-9" opacity="0.5" d="M363.199 260L158.899 378" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-10" opacity="0.5" d="M371 264.5L166.6 382.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-11" opacity="0.5" d="M378.799 269L174.399 387" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-12" opacity="0.5" d="M386.599 273.5L182.199 391.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-13" opacity="0.5" d="M394.4 278L190 396" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-14" opacity="0.5" d="M402.2 282.5L197.8 400.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-15" opacity="0.5" d="M410 287L205.6 405" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-16" opacity="0.5" d="M417.799 291.5L213.399 409.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-17" opacity="0.5" d="M425.599 296L221.199 414" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-18" opacity="0.5" d="M433.4 300.5L229 418.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-19" opacity="0.5" d="M441.2 305L236.8 423" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-20" opacity="0.5" d="M449 309.5L244.6 427.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-21" opacity="0.5" d="M456.799 314L252.399 432" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-22" opacity="0.5" d="M464.599 318.5L260.199 436.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-23" opacity="0.5" d="M472.4 323L268 441" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-24" opacity="0.5" d="M480.2 327.5L275.8 445.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-25" opacity="0.5" d="M487.9 332L283.6 450" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+<path id="hatch-26" opacity="0.5" d="M495.699 336.5L291.399 454.5" stroke="var(--illustration-unshield-complete-color-2)" stroke-linejoin="round"/>
+</g>
+<g id="Guides">
+<path id="ground-outline" d="M280 208L477.4 322L280 436L82.5 322L280 208Z" stroke="var(--illustration-unshield-complete-color-6)" stroke-linejoin="round" stroke-dasharray="2 4"/>
+</g>
+<g id="Plate / Base">
+<path id="side-left" d="M106.7 300L280 400V416L106.7 316V300Z" fill="var(--illustration-unshield-complete-color-10)" stroke="var(--illustration-unshield-complete-color-3)" stroke-linejoin="round"/>
+<path id="side-right" d="M280 400L453.2 300V316L280 416V400Z" fill="var(--illustration-unshield-complete-color-8)" stroke="var(--illustration-unshield-complete-color-3)" stroke-linejoin="round"/>
+<path id="top" d="M280 200L453.2 300L280 400L106.7 300L280 200Z" fill="var(--illustration-unshield-complete-color-14)" stroke="var(--illustration-unshield-complete-color-3)" stroke-linejoin="round"/>
+</g>
+<g id="Plate / Shielded">
+<path id="side-left_2" d="M134.5 262L280 346V360L134.5 276V262Z" fill="var(--illustration-unshield-complete-color-9)" stroke="var(--illustration-unshield-complete-color-3)" stroke-linejoin="round"/>
+<path id="side-right_2" d="M280 346L425.4 262V276L280 360V346Z" fill="var(--illustration-unshield-complete-color-7)" stroke="var(--illustration-unshield-complete-color-3)" stroke-linejoin="round"/>
+<path id="top_2" d="M280 178L425.4 262L280 346L134.5 262L280 178Z" fill="var(--illustration-unshield-complete-color-11)" stroke="var(--illustration-unshield-complete-color-3)" stroke-linejoin="round"/>
+</g>
+<g id="Plate / Encrypted" opacity="0.35">
+<path id="side-left_3" d="M150.1 180L280 255V267L150.1 192V180Z" fill="var(--illustration-unshield-complete-color-7)" stroke="var(--illustration-unshield-complete-color-3)" stroke-linejoin="round"/>
+<path id="side-right_3" d="M280 255L409.9 180V192L280 267V255Z" fill="var(--illustration-unshield-complete-color-2)" stroke="var(--illustration-unshield-complete-color-3)" stroke-linejoin="round"/>
+<path id="top_3" d="M280 105L409.9 180L280 255L150.1 180L280 105Z" fill="var(--illustration-unshield-complete-color-9)" stroke="var(--illustration-unshield-complete-color-3)" stroke-linejoin="round"/>
+<g id="Encrypted glyph">
+<path id="bracket-l" d="M200.1 166.1L204.8 168.8L202.7 170L200.1 168.5L182.2 178.8L184.8 180.3L182.7 181.6L178 178.8L200.1 166.1Z" fill="var(--illustration-unshield-complete-color-3)"/>
+<path id="dot-1" d="M201.4 176.9L206.1 179.6L201.4 182.3L196.6 179.6L201.4 176.9Z" fill="var(--illustration-unshield-complete-color-1)"/>
+<path id="dot-2" d="M208.5 181L213.2 183.7L208.5 186.4L203.8 183.7L208.5 181Z" fill="var(--illustration-unshield-complete-color-1)"/>
+<path id="dot-3" d="M215.7 185.1L220.4 187.8L215.7 190.6L210.9 187.8L215.7 185.1Z" fill="var(--illustration-unshield-complete-color-1)"/>
+<path id="dot-4" d="M222.8 189.199L227.5 191.999L222.8 194.699L218.1 191.999L222.8 189.199Z" fill="var(--illustration-unshield-complete-color-1)"/>
+<path id="dot-5" d="M229.9 193.299L234.7 196.099L229.9 198.799L225.2 196.099L229.9 193.299Z" fill="var(--illustration-unshield-complete-color-1)"/>
+<path id="dot-6" d="M237.1 197.5L241.8 200.2L237.1 202.9L232.4 200.2L237.1 197.5Z" fill="var(--illustration-unshield-complete-color-1)"/>
+<path id="dot-7" d="M244.2 201.6L249 204.3L244.2 207.1L239.5 204.3L244.2 201.6Z" fill="var(--illustration-unshield-complete-color-1)"/>
+<path id="bracket-r" d="M267.6 205.1L262.9 202.4L260.8 203.6L263.4 205.1L245.5 215.4L242.9 213.9L240.8 215.1L245.5 217.8L267.6 205.1Z" fill="var(--illustration-unshield-complete-color-3)"/>
+</g>
+</g>
+<g id="Coin drop">
+<g id="Trail">
+<path id="trail-1" d="M292 122V94" stroke="var(--illustration-unshield-complete-color-6)" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 3"/>
+<path id="trail-2" d="M280 134V94" stroke="var(--illustration-unshield-complete-color-6)" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 3"/>
+<path id="trail-3" d="M268 118V94" stroke="var(--illustration-unshield-complete-color-6)" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="2 3"/>
+</g>
+<g id="Coin / USDC">
+<path id="edge" d="M260 69.5C260 72.55 262.107 75.4751 265.858 77.6317C269.609 79.7884 274.696 81 280 81C285.304 81 290.391 79.7884 294.142 77.6317C297.893 75.4751 300 72.55 300 69.5V75.5C300 78.55 297.893 81.4751 294.142 83.6317C290.391 85.7884 285.304 87 280 87C274.696 87 269.609 85.7884 265.858 83.6317C262.107 81.4751 260 78.55 260 75.5V69.5Z" fill="var(--illustration-unshield-complete-color-4)" stroke="var(--illustration-unshield-complete-color-3)" stroke-linejoin="round"/>
+<path id="face" d="M280 81C291.046 81 300 75.8513 300 69.5C300 63.1487 291.046 58 280 58C268.954 58 260 63.1487 260 69.5C260 75.8513 268.954 81 280 81Z" fill="var(--illustration-unshield-complete-color-5)" stroke="var(--illustration-unshield-complete-color-3)"/>
+<path id="mark" d="M280 75.7992C286.075 75.7992 291 72.9786 291 69.4992C291 66.0198 286.075 63.1992 280 63.1992C273.925 63.1992 269 66.0198 269 69.4992C269 72.9786 273.925 75.7992 280 75.7992Z" stroke="var(--illustration-unshield-complete-color-14)" stroke-width="1.4"/>
+</g>
+</g>
+<g id="Confetti">
+<path id="p-01" d="M171.301 234.9L180.001 239.9L171.301 244.9L162.601 239.9L171.301 234.9Z" fill="var(--illustration-unshield-complete-color-2)"/>
+<path id="p-03" d="M166.7 181.4L168.1 186.1L172.7 187.4L168.1 188.7L166.7 193.4L165.4 188.7L160.7 187.4L165.4 186.1L166.7 181.4Z" fill="var(--illustration-unshield-complete-color-2)"/>
+<path id="p-05" d="M181.2 141.4L188.2 145.4L181.2 149.4L174.3 145.4L181.2 141.4Z" fill="var(--illustration-unshield-complete-color-7)"/>
+<path id="p-07" d="M227.701 75.9004L233.701 79.4004L227.701 82.9004L221.601 79.4004L227.701 75.9004Z" fill="var(--illustration-unshield-complete-color-2)"/>
+<path id="p-09" d="M307.4 100.301L313.5 103.801L307.4 107.301L301.3 103.801L307.4 100.301Z" fill="var(--illustration-unshield-complete-color-3)"/>
+<path id="p-11" d="M371.1 94.5L379.7 99.5L371.1 104.5L362.4 99.5L371.1 94.5Z" fill="var(--illustration-unshield-complete-color-2)"/>
+<path id="p-13" d="M383.8 146.4L385.1 151.1L389.8 152.4L385.1 153.7L383.8 158.4L382.5 153.7L377.8 152.4L382.5 151.1L383.8 146.4Z" fill="var(--illustration-unshield-complete-color-2)"/>
+<path id="p-15" d="M423.3 208.9L430.2 212.9L423.3 216.9L416.4 212.9L423.3 208.9Z" fill="var(--illustration-unshield-complete-color-3)"/>
+</g>
+</g>
+</g>
+</svg>

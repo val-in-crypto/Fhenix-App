@@ -155,3 +155,61 @@
 [data-theme="dark"] .success-illustration [fill="white"] { fill: var(--illo-top); }
 [data-theme="dark"] .success-illustration [id="Confetti"] [fill="#0AD9DC"],
 [data-theme="dark"] .success-illustration [id^="amb-"][fill="#0AD9DC"] { fill: var(--illo-sparkle); }
+
+/* Success illustrations exported from Figma. */
+:root { --illustration-sent-color-1: #007A7E; }
+[data-theme="dark"] { --illustration-sent-color-1: #2EE3E5; }
+:root { --illustration-sent-color-2: #061520; }
+[data-theme="dark"] { --illustration-sent-color-2: #183E53; }
+:root { --illustration-sent-color-3: #0AD9DC; }
+[data-theme="dark"] { --illustration-sent-color-3: #0AD9DC; }
+:root { --illustration-sent-color-4: #0B1F2A; }
+[data-theme="dark"] { --illustration-sent-color-4: #EAEFF1; }
+:root { --illustration-sent-color-5: #13293A; }
+[data-theme="dark"] { --illustration-sent-color-5: #0D2C3D; }
+:root { --illustration-sent-color-6: #8C99A3; }
+[data-theme="dark"] { --illustration-sent-color-6: #5C7A8E; }
+:root { --illustration-sent-color-7: #9BE7E8; }
+[data-theme="dark"] { --illustration-sent-color-7: #06393F; }
+:root { --illustration-sent-color-8: #DCE1E5; }
+[data-theme="dark"] { --illustration-sent-color-8: #183E53; }
+:root { --illustration-sent-color-9: #E2F8F9; }
+[data-theme="dark"] { --illustration-sent-color-9: #003246; }
+:root { --illustration-sent-color-10: #E9ECEF; }
+[data-theme="dark"] { --illustration-sent-color-10: #12303F; }
+:root { --illustration-sent-color-11: #F3FCFC; }
+[data-theme="dark"] { --illustration-sent-color-11: #0A4148; }
+:root { --illustration-sent-color-12: #F5F5F5; }
+[data-theme="dark"] { --illustration-sent-color-12: #F5F5F5; }
+:root { --illustration-sent-color-13: black; }
+[data-theme="dark"] { --illustration-sent-color-13: black; }
+:root { --illustration-sent-color-14: white; }
+[data-theme="dark"] { --illustration-sent-color-14: #072433; }
+:root { --illustration-unshield-complete-color-1: #007A7E; }
+[data-theme="dark"] { --illustration-unshield-complete-color-1: #2EE3E5; }
+:root { --illustration-unshield-complete-color-2: #0AD9DC; }
+[data-theme="dark"] { --illustration-unshield-complete-color-2: #0AD9DC; }
+:root { --illustration-unshield-complete-color-3: #0B1F2A; }
+[data-theme="dark"] { --illustration-unshield-complete-color-3: #EAEFF1; }
+:root { --illustration-unshield-complete-color-4: #1F5FA8; }
+[data-theme="dark"] { --illustration-unshield-complete-color-4: #1F5FA8; }
+:root { --illustration-unshield-complete-color-5: #2775CA; }
+[data-theme="dark"] { --illustration-unshield-complete-color-5: #2775CA; }
+:root { --illustration-unshield-complete-color-6: #8C99A3; }
+[data-theme="dark"] { --illustration-unshield-complete-color-6: #5C7A8E; }
+:root { --illustration-unshield-complete-color-7: #9BE7E8; }
+[data-theme="dark"] { --illustration-unshield-complete-color-7: #06393F; }
+:root { --illustration-unshield-complete-color-8: #DCE1E5; }
+[data-theme="dark"] { --illustration-unshield-complete-color-8: #183E53; }
+:root { --illustration-unshield-complete-color-9: #E2F8F9; }
+[data-theme="dark"] { --illustration-unshield-complete-color-9: #003246; }
+:root { --illustration-unshield-complete-color-10: #E9ECEF; }
+[data-theme="dark"] { --illustration-unshield-complete-color-10: #12303F; }
+:root { --illustration-unshield-complete-color-11: #F3FCFC; }
+[data-theme="dark"] { --illustration-unshield-complete-color-11: #0A4148; }
+:root { --illustration-unshield-complete-color-12: #F5F5F5; }
+[data-theme="dark"] { --illustration-unshield-complete-color-12: #F5F5F5; }
+:root { --illustration-unshield-complete-color-13: black; }
+[data-theme="dark"] { --illustration-unshield-complete-color-13: black; }
+:root { --illustration-unshield-complete-color-14: white; }
+[data-theme="dark"] { --illustration-unshield-complete-color-14: #072433; }

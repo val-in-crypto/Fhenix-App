@@ -60,3 +60,10 @@ svg [font-family='Geist Mono'] { font-family: 'Geist Mono', monospace; }
 .field-wrapper.confidential-box:focus-within:not([aria-disabled="true"]) { border-color: var(--color-accent); }
 .field-wrapper.confidential-box[aria-invalid="true"] { border-color: var(--color-danger); }
 .field-segment { align-self: stretch; border: 0; border-left: 1px solid var(--color-line); padding: 0 16px; display: flex; align-items: center; gap: 8px; }
+
+@keyframes packet-delivery { from { transform: translate(-80px, 64px); opacity: 0; } to { transform: translate(0, 0); opacity: 1; } }
+@keyframes coin-rise { from { transform: translateY(32px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.success-art-sent [id="Packet"] { animation: packet-delivery .9s ease-out both; }
+.success-art-unshield [id="Coin / USDC"] { animation: coin-rise .6s ease-out both; }
+.reduce-motion .success-art *, .reduce-motion .success-art *::before { animation: none !important; }
+@media (prefers-reduced-motion: reduce) { .success-art * { animation: none !important; } }

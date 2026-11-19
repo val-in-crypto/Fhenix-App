@@ -9,6 +9,8 @@ import { data, isMasked, nav, prices, useStore, type Sym } from '../state/store'
 import AmountBox from '../ui/AmountBox'
 import Button from '../ui/Button'
 import ChainIcon from '../ui/ChainIcon'
+import SuccessModal from '../ui/SuccessModal'
+import SuccessIllustration from '../illus/SuccessIllustration'
 import Icon from '../ui/Icon'
 import SegmentedSwitch from '../ui/SegmentedSwitch'
 import Masked from '../ui/Masked'
@@ -28,7 +30,7 @@ function SendRows({ rows, highlightAmount }: { rows: [string, ReactNode][]; high
   return (
     <dl className="divide-y divide-line border-y border-line">
       {rows.map(([label, value]) => (
-        <div key={label} className={`grid grid-cols-[minmax(64px,1fr)_minmax(0,3fr)] items-start gap-2 py-3 sm:gap-4 ${label === copy.to ? 'max-[359px]:grid-cols-1' : ''} ${highlightAmount && label === 'Amount' ? 'confidential-box bg-accentSoft px-3' : ''}`}>
+        <div key={label} className={`grid grid-cols-[minmax(64px,1fr)_minmax(0,3fr)] items-start gap-2 py-3 sm:gap-4 ${label === copy.to ? 'max-[1023px]:grid-cols-1' : ''} ${highlightAmount && label === 'Amount' ? 'confidential-box bg-accentSoft px-3' : ''}`}>
           <dt className={`pt-0.5 text-[13px] leading-5 ${secondary}`}>{label}</dt>
           <dd className="min-w-0 break-words text-[15px] leading-5">{value}</dd>
         </div>
@@ -63,6 +65,7 @@ export default function Send() {
   const { reduced, speed } = useMotion()
   const field = useRecipientField()
   const [amount, setAmount] = useState('')
+  const [result, setResult] = useState<{ recipient: Recipient; amount: string; confidential: boolean; sym: Sym; networkIdx: number }>()
   const [mode, setMode] = useState<BalanceMode>(() => query().get('mode') === 'public' ? 'pub' : 'priv')
   const [review, setReview] = useState(false)
   const [permitRequested, setPermitRequested] = useState(false)
@@ -85,7 +88,7 @@ export default function Send() {
   const numericAmount = Number(value) || 0
   const activeMode = sent || pending ? s.sendBalance : mode
   const confidential = activeMode === 'priv'
-  const sym: Sym = sent || pending ? s.sendAsset : query().get('asset') === 'ETH' ? 'ETH' : 'USDC'
+  const sym: Sym = sent || pending ? s.sendAsset : (query().get('token') ?? query().get('asset')) === 'ETH' ? 'ETH' : 'USDC'
   const unit = confidential ? `f${sym}` : sym
   const balance = s.balances[sym][activeMode]
   const hasAmount = numericAmount > 0
@@ -108,6 +111,12 @@ export default function Send() {
   const networkDisplay = <span className="flex items-center gap-2"><ChainIcon chainId={network.chainId} />{network.name}</span>
 
   useEffect(() => {
+    if (s.sendStep !== 3) return
+    setResult({ recipient: storedRecipient(), amount: s.amt.send, confidential: s.sendBalance === 'priv', sym: s.sendAsset, networkIdx: s.sendNetworkIdx ?? s.networkIdx })
+    reset()
+  }, [s.sendStep])
+
+  useEffect(() => {
     if (reduced) {
       animation.set({ opacity: 1, y: 0 })
       return
@@ -128,42 +137,27 @@ export default function Send() {
     setMode('priv')
     field.clear()
     act.sendReset()
+    history.replaceState(null, '', sym === 'ETH' ? '#/send?token=ETH' : '#/send')
   }
   const updateAmount = (next: string) => {
     if (/^\d*(?:\.\d{0,8})?$/.test(next)) setAmount(next)
   }
   const max = () => {
-    if (confidential && s.permit !== 'active') return setPermitRequested(true)
+    if (confidential && s.permit !== 'active') return act.renew()
     setAmount(balance.toFixed(8).replace(/\.?0+$/, '') || '0')
   }
-  const permitPrompt = confidential && permitRequested && s.permit !== 'active' && (
-    <div className="flex flex-wrap items-center justify-between gap-2 bg-surface2 p-3">
-      <p className={`text-[15px] ${secondary}`}>{copy.permitNeeded}</p>
-      <Button size={44} variant="secondary" disabled={s.signing} busy={s.signing} onClick={() => { void act.signPermit(s.permitDays) }}>
-        {data.copy.permit[6]}
-      </Button>
-    </div>
-  )
-
   const cta = (label: string, onClick: () => void, disabled = false) => (
     <Button size={mobile ? 52 : 48} full={mobile || !reviewing} arrow={!disabled} disabled={disabled} onClick={onClick} className="flex-1 !text-[15px]">
       {label}
     </Button>
   )
-  const sentActions = (
-    <div className={`flex gap-2 ${mobile ? 'flex-col' : ''}`}>
-      <Button size={mobile ? 52 : 48} arrow className="flex-1 !text-[15px]" onClick={() => { reset(); nav('dashboard') }}>{copy.dashboard}</Button>
-      <Button size={mobile ? 52 : 48} variant="secondary" className="flex-1 !text-[15px]" onClick={reset}>{copy.again}</Button>
-    </div>
-  )
   const reviewActions = recipient && (
     <div className="flex flex-col gap-2">
-      {permitPrompt}
       <div className={`flex gap-2 ${mobile ? 'flex-col' : ''}`}>
         {cta(
           s.sendStep === 1 ? copy.encrypting : s.sendStep === 2 ? copy.confirming : s.sendStep === 4 ? copy.sending : copy.confirm,
           () => {
-            if (confidential && s.permit !== 'active') return setPermitRequested(true)
+            if (confidential && s.permit !== 'active') return act.renew()
             void act.sendOpen(recipient, value, activeMode, sym)
           },
           pending || s.signing || !hasAmount || over || lookalike,
@@ -177,10 +171,11 @@ export default function Send() {
     () => setReview(true),
     !recipient || !hasAmount || over || lookalike,
   )
-  const actions = sent ? sentActions : reviewing ? reviewActions : formAction
+  const actions = reviewing ? reviewActions : formAction
   const note = reviewing ? copy.walletNote : !sent ? `${send.fee} network fee\u001f${confidential ? 'amount stays confidential' : 'amount visible on-chain'}` : null
 
   return (
+    <>
     <Page bottom={mobile && (
       <div className="flex flex-col gap-2">
         {actions}
@@ -189,24 +184,7 @@ export default function Send() {
     )}>
       <div ref={content} className={`mx-auto flex w-full max-w-[560px] flex-col gap-6 ${mobile ? '' : 'border border-line bg-surface p-8'}`}>
         <motion.div animate={animation} className="flex flex-col gap-6">
-          {sent && recipient ? (
-            <>
-              <div className="flex flex-col gap-4">
-                <span className="flex size-14 items-center justify-center bg-accent text-onAccent"><Icon name="check" size={28} /></span>
-                <h1 className={`font-semibold leading-tight ${mobile ? 'text-[26px]' : 'text-[32px]'}`}>{confidential ? copy.sent : 'Sent'}</h1>
-                <p className={`text-[15px] leading-6 ${secondary}`}>{recipientName} will see {formatted} {unit} in their {confidential ? 'confidential' : 'public'} balance.</p>
-              </div>
-              <div className="bg-surface2 px-4">
-                <SendRows rows={[
-                  [copy.to, <RecipientSummary recipient={recipient} mobile={mobile} />],
-                  ['Amount', <span className="mono">{formatted} {unit}</span>],
-                  [copy.from, `${balanceLabel(activeMode)} balance`],
-                  [copy.network, networkDisplay],
-                  [copy.transaction, <a href={EXPLORER_URL} target="_blank" rel="noopener" className="mono inline-flex items-center gap-1 text-accentInk hover:underline">{send.tx} <Icon name="arrow-up-right" size={14} /></a>],
-                ]} />
-              </div>
-            </>
-          ) : reviewing && recipient ? (
+          {reviewing && recipient ? (
             <>
               <div className="flex flex-col gap-2">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -246,8 +224,7 @@ export default function Send() {
                   confidential={confidential}
                   visibility={confidential ? undefined : 'Visible on-chain'}
                 />
-                {permitPrompt}
-                {over && (!confidential || s.permit === 'active') ? (
+                          {over && (!confidential || s.permit === 'active') ? (
                   <p role="alert" className="text-[15px] text-danger">You have {confidential ? fmtPrivate(isMasked(s) ? undefined : balance) : fmtPublic(balance)} {unit}.</p>
                 ) : recipient && hasAmount && <p className={`text-[15px] leading-5 ${secondary}`}>{recipientName} receives {formatted} {unit}. {confidential ? `Only you and ${recipientName} can read the amount.` : 'The amount will be visible on-chain.'}</p>}
               </section>
@@ -257,5 +234,18 @@ export default function Send() {
         </motion.div>
       </div>
     </Page>
+    <SuccessModal open={Boolean(result)} onClose={() => setResult(undefined)} illustration={<SuccessIllustration kind="sent" />} eyebrow="Send complete"
+      title={result?.confidential ? 'Sent confidentially' : 'Sent'} body={result && `${result.recipient.name ?? shortAddress(result.recipient.address)} will see ${displayAmount(result.amount, result.confidential)} ${result.confidential ? 'f' : ''}${result.sym} in their ${result.confidential ? 'confidential' : 'public'} balance.`}
+      secondaryLabel="Send another" onSecondary={() => setResult(undefined)}>
+      {result && <div className="bg-surface2 px-4"><SendRows rows={[
+        ['To', <RecipientSummary recipient={result.recipient} mobile={mobile} />],
+        ['Amount', <span className={`mono ${result.confidential ? 'text-accentInk' : ''}`}>{displayAmount(result.amount, result.confidential)} {result.confidential ? 'f' : ''}{result.sym}</span>],
+        ['From', result.confidential ? 'Confidential balance' : 'Public balance'],
+        ['Network', <span className="flex items-center gap-2"><ChainIcon chainId={data.networks[result.networkIdx].chainId} />{data.networks[result.networkIdx].name}</span>],
+        ['Transaction', <a href={EXPLORER_URL} target="_blank" rel="noopener noreferrer" className="mono inline-flex items-center gap-1 text-accentInk">{send.tx}<Icon name="arrow-up-right" size={14} /></a>],
+      ]} /></div>}
+    </SuccessModal>
+    </>
+
   )
 }

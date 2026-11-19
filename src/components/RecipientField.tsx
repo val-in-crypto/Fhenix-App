@@ -83,12 +83,10 @@ export function useRecipientField() {
 }
 
 export function FullAddress({ address, mobile }: { address: string; mobile: boolean }) {
-  const groups = address.slice(2).match(/.{1,4}/g) ?? []
   return (
-    <div className={`mono min-w-0 break-words leading-5 text-ink ${mobile ? 'text-[14px]' : 'text-[15px]'}`}>
-      <span className="block">0x{groups.slice(0, 5).join(' ')}</span>
-      <span className="block">{groups.slice(5).join(' ')}</span>
-    </div>
+    <span className={`mono block whitespace-nowrap font-normal leading-5 ${mobile ? 'text-[12px]' : 'text-[13px]'}`} aria-label={address}>
+      <span className="text-ink">{address.slice(0, 6)}</span><span className="text-ink3">{address.slice(6, -4)}</span><span className="text-ink">{address.slice(-4)}</span>
+    </span>
   )
 }
 
