@@ -2,7 +2,7 @@ import { Sep, separate } from '../ui/Sep'
 import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useMotion } from '../lib/motion'
-import { ActionRow, Page, PermitChip } from '../shell/AppShell'
+import { ActionRow, Page } from '../shell/AppShell'
 import { fmtPrivate, fmtUsd } from '../lib/format'
 import { copy, data, isMasked, nav, usd, useStore } from '../state/store'
 import ActivityList from '../ui/ActivityList'
@@ -170,7 +170,6 @@ export default function Dashboard() {
         <section data-tour="hero" data-hero-gradient={HERO_GRADIENT} className={`${card} overview-hero ${pad}`}>
           <div className="flex flex-wrap items-center gap-3">
             <span className="eyebrow text-ink3">Net worth</span>
-            {mobile && s.connected && <PermitChip />}
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <Masked value={total} hidden={masked && !empty} bare prefix="$" className={`font-semibold tracking-[-0.03em] ${mobile ? 'text-[38px] leading-[44px]' : 'text-[44px] leading-[48px]'}`} />

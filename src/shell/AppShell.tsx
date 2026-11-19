@@ -102,9 +102,9 @@ export function WalletChip() {
       align="right"
       button={(open, toggle) => (
         <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-11 items-center gap-2 border border-line bg-surface pl-2 pr-2.5 hover:border-lineStrong">
-          <span className="round h-6 w-6" style={{ background: 'var(--wallet-identicon)' }} />
+          <span className={`round h-6 w-6 ${mobile ? 'max-[389px]:hidden' : ''}`} style={{ background: 'var(--wallet-identicon)' }} />
           <span className="mono text-[12px] font-medium">{data.account.short}</span>
-          <Icon name="copy" size={14} className="text-ink3" />
+          {!mobile && <Icon name="copy" size={14} className="text-ink3" />}
           <Icon name="chevron-down" className="text-ink3" />
         </button>
       )}
@@ -242,7 +242,7 @@ function TopBar({ route }: { route: Route }) {
   if (mobile) return (
     <header className="z-20 flex shrink-0 items-center justify-between gap-2 px-5" style={{ height: tokens.size.topBarMobile }}>
       {mobileTitles[route] ? <h1 className="text-[19px] font-semibold">{mobileTitles[route]}</h1> : <Logo height={22} />}
-      {s.connected ? <WalletChip /> : connect}
+      {s.connected ? <div role="group" aria-label="Wallet controls" className="flex shrink-0 items-center gap-2"><PermitChip header /><WalletChip /></div> : connect}
     </header>
   )
   return (
