@@ -60,6 +60,10 @@
    "private": 0.1338
   }
  ],
+ "zeroBalanceAssets": [
+  { "symbol": "WBTC", "name": "Wrapped Bitcoin", "wrapped": "fWBTC" },
+  { "symbol": "USDT", "name": "Tether USD", "wrapped": "fUSDT" }
+ ],
  "summary": {
   "publicUsd": 1890.4,
   "privateUsd": 1428.35,

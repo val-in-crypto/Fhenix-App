@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { useMotion } from '../lib/motion'
 import { ActionRow, Page, PermitChip } from '../shell/AppShell'
 import { fmtPrivate, fmtUsd } from '../lib/format'
-import { copy, data, isMasked, nav, usd, useStore, type Sym } from '../state/store'
+import { copy, data, isMasked, nav, usd, useStore } from '../state/store'
 import ActivityList from '../ui/ActivityList'
 import Button from '../ui/Button'
 import Chip from '../ui/Chip'
@@ -14,10 +14,11 @@ import RatioBar from '../ui/RatioBar'
 import TokenRow from '../ui/TokenRow'
 
 import { HERO_GRADIENT } from '../config/flags'
+import { portfolioBalance, portfolioSymbols } from '../config/assets'
 
 const card = 'border border-line bg-surface'
 const HISTORY_KEY = 'fhenix.history'
-const SYMS: Sym[] = ['USDC', 'ETH']
+const SYMS = portfolioSymbols
 
 /* ---------- desktop chart ---------- */
 const RANGES = ['1W', '1M', '3M', '1Y'] as const
@@ -126,7 +127,7 @@ export default function Dashboard() {
   const total = u.pub + u.priv
   const net = data.networks[s.networkIdx]
   const empty = total === 0
-  const zeros = SYMS.filter(sym => s.balances[sym].pub === 0 && s.balances[sym].priv === 0)
+  const zeros = SYMS.filter(sym => { const balance = portfolioBalance(s.balances, sym); return balance.pub === 0 && balance.priv === 0 })
   const displayed = empty || showZero ? SYMS : SYMS.filter(sym => !zeros.includes(sym))
   const pad = mobile ? 'p-5' : 'p-6'
   const { t } = useMotion()
@@ -232,7 +233,7 @@ export default function Dashboard() {
               {mobile && <div className="eyebrow mt-3 flex flex-wrap gap-4 text-ink3"><span className="flex items-center gap-2"><span className="size-2 bg-accent" />Confidential</span><span className="flex items-center gap-2"><span className="size-2 bg-lineStrong" />Public</span></div>}
               <div className="mt-1">
                 {displayed.map(sym => (
-                  <TokenRow zero={!empty && zeros.includes(sym)} key={sym} sym={sym} pub={s.balances[sym].pub} priv={s.balances[sym].priv} hidden={masked} mobile={mobile} onClick={() => act.openSheet('token', sym)} />
+                  <TokenRow zero={zeros.includes(sym)} key={sym} sym={sym} pub={portfolioBalance(s.balances, sym).pub} priv={portfolioBalance(s.balances, sym).priv} hidden={masked} mobile={mobile} onClick={() => act.openSheet('token', sym)} />
                 ))}
               </div>
               {!empty && zeros.length > 0 && <button type="button" aria-expanded={showZero} onClick={() => setShowZero(!showZero)} className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 border-t border-line text-[13px] text-ink3">{showZero ? 'Hide tokens with 0 balance' : `Show tokens with 0 balance (${zeros.length})`}<Icon name="chevron-down" size={14} className={showZero ? 'rotate-180' : ''} /></button>}

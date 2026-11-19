@@ -17,7 +17,7 @@ export default function RatioBar({ priv, pub, hidden, compact, detail }: { priv:
   const pct = total ? priv / total * 100 : 0
   if (detail) return <div>
     <div className="mono mb-2 flex justify-between gap-3 text-[12px] uppercase">
-      <span className="text-accentInk">{hidden ? '' : `${pct.toFixed(0)}% `}Confidential</span><span className="text-ink3">{hidden ? '' : `${(100 - pct).toFixed(0)}% `}Public</span>
+      <span className="text-accentInk">{hidden ? '' : `${pct.toFixed(0)}% `}Confidential</span><span className="text-ink3">{hidden ? '' : `${total ? (100 - pct).toFixed(0) : '0'}% `}Public</span>
     </div>
     <RatioTrack confidential={priv} publicValue={pub} hidden={hidden} />
   </div>
