@@ -10,7 +10,7 @@ export const decOf = (sym: string) => (sym === 'ETH' ? 4 : 2)
 /** Square token tile (Figma); shielded variant carries a small navy lock badge. */
 export function Coin({ sym, size = 32, shielded }: { sym: string; size?: number; shielded?: boolean }) {
   return (
-    <span className="relative inline-flex shrink-0 items-center justify-center font-semibold text-white" style={{ width: size, height: size, background: meta[sym]?.icon ?? 'var(--color-on-accent)', fontSize: Math.max(11, size * 0.42) }}>
+    <span className="relative inline-flex shrink-0 items-center justify-center font-semibold text-white" style={{ width: size, height: size, background: sym === 'USDC' ? 'var(--brand-usdc)' : sym === 'ETH' ? 'var(--brand-eth)' : 'var(--color-on-accent)', fontSize: Math.max(11, size * 0.42) }}>
       {sym === 'ETH' ? 'Ξ' : '$'}
       {shielded && (
         <span className="absolute -bottom-0.5 -right-0.5 flex items-center justify-center bg-navy text-accent" style={{ width: size * 0.42, height: size * 0.42 }}>

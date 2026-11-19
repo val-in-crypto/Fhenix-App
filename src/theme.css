@@ -6,6 +6,13 @@
   --color-stage: #F5F6F7;
   --color-line: #DDE4E8;
   --color-line-strong: #C9D3D9;
+  --color-separator: #9DB2C0;
+  --color-swatch-off: #C9D3D9;
+  --color-ring-focus: rgb(10 217 220 / .18);
+  --color-ring-error: rgb(194 40 29 / .18);
+  --brand-usdc: #2775CA;
+  --brand-eth: #627EEA;
+  --brand-metamask: #F6851B;
   --color-ink: #001623;
   --color-ink-2: #34495A;
   --color-ink-3: #5B6F7D;
@@ -13,7 +20,7 @@
   --color-on-accent: #001623;
   --color-accent-ink: #007A7E;
   --color-accent-soft: #E2F8F9;
-  --color-confidential-border: transparent;
+  --color-confidential-border: #E2F8F9;
   --color-cyan-mid: #9BE7E8;
   --color-navy: #001623;
   --color-navy-line: #001623;
@@ -64,6 +71,9 @@
   --color-stage: #072433;
   --color-line: #23394E;
   --color-line-strong: #3A5A70;
+  --color-separator: #5C7A8E;
+  --color-swatch-off: #2F4A5E;
+  --color-ring-error: rgb(239 124 114 / .18);
   --color-ink: #F2F7F9;
   --color-ink-2: #C9D6DE;
   --color-ink-3: #9DB2C0;
