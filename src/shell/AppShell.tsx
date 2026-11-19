@@ -1,3 +1,4 @@
+import { separate } from '../ui/Sep'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import logoRaw from '../assets/logo-fhenix-app.svg?raw'
@@ -12,7 +13,7 @@ import Icon from '../ui/Icon'
 
 const NAV: { route: Route; label: string; icon: string; badge?: string; also?: Route[] }[] = [
   { route: 'dashboard', label: 'Dashboard', icon: 'wallet', also: ['welcome'] },
-  { route: 'shield', label: 'Shield', icon: 'shield', also: ['unshield', 'success'] },
+  { route: 'shield', label: 'Shield', icon: 'shield', also: ['unshield'] },
   { route: 'send', label: 'Send', icon: 'send' },
   { route: 'apps', label: 'Apps', icon: 'apps-grid', badge: String(data.apps.filter(app => app.tag === 'Live').length) },
   { route: 'permits', label: 'Permits', icon: 'permit-key' },
@@ -163,8 +164,8 @@ export function ActionRow({ stretch }: { stretch?: boolean }) {
 }
 
 /* ---------- desktop ---------- */
-export const EXPLORER_URL = 'https://explorer.fhenix.io/status'
-export const DOCS_URL = 'https://docs.fhenix.io/cofhe'
+export { EXPLORER_URL, DOCS_URL } from '../config/links'
+import { EXPLORER_URL, DOCS_URL } from '../config/links'
 
 const sideRow = 'relative flex h-10 w-full shrink-0 items-center gap-3 px-4 text-left text-[14px]'
 const divider = <div aria-hidden className="shrink-0 py-3"><div className="h-px bg-line" /></div>
@@ -224,18 +225,24 @@ function Sidebar({ route }: { route: Route }) {
   )
 }
 
-export function PermitChip() {
+export function PermitChip({ header = false }: { header?: boolean }) {
   const { s, act } = useStore()
   const active = s.permit === 'active'
   const label = active ? `Permit\u001f${Math.max(0, s.permitDays - 1)} days` : s.permit === 'expired' ? 'Permit expired\u001fRenew' : 'No permit\u001fCreate'
+  if (header) {
+    const title = active ? `Permit active, ${Math.max(0, s.permitDays - 1)} days left` : s.permit === 'expired' ? 'Permit expired, renew permit' : 'No permit, create permit'
+    return <button type="button" title={title} aria-label={title} onClick={event => event.metaKey || event.ctrlKey ? nav('permits') : act.renew()} className="relative flex size-11 items-center justify-center border border-line bg-surface text-ink2">
+      <Icon name="permit-key" size={18} /><span aria-hidden className={`absolute right-1 top-1 size-2 ${active ? 'bg-live' : s.permit === 'expired' ? 'bg-warn' : 'border border-ink3'}`} />
+    </button>
+  }
   return (
     <button type="button" onClick={event => event.metaKey || event.ctrlKey ? nav('permits') : act.renew()} className="flex h-10 items-center gap-2 border border-line bg-surface px-3 text-[13px] font-medium hover:border-lineStrong">
-      <span aria-hidden className={`round size-2 ${active ? 'bg-live' : 'border border-ink3'}`} />{label}
+      <span aria-hidden className={`round size-2 ${active ? 'bg-live' : 'border border-ink3'}`} />{separate(label)}
     </button>
   )
 }
 
-const mobileTitles: Partial<Record<Route, string>> = { shield: 'Shield', unshield: 'Shield', send: 'Send', apps: 'Apps', permits: 'Permits', success: 'Shield' }
+const mobileTitles: Partial<Record<Route, string>> = { shield: 'Shield', unshield: 'Shield', send: 'Send', apps: 'Apps', permits: 'Permits' }
 
 function TopBar({ route }: { route: Route }) {
   const { s, act, mobile } = useStore()
@@ -248,7 +255,7 @@ function TopBar({ route }: { route: Route }) {
   )
   return (
     <header className="z-20 flex h-[108px] shrink-0 items-center justify-end gap-2 px-8">
-      {s.connected ? <><PermitChip /><NetworkChip /><WalletChip /></> : connect}
+      {s.connected ? <><PermitChip header /><NetworkChip /><WalletChip /></> : connect}
     </header>
   )
 }
@@ -303,8 +310,8 @@ export function Page({ children, bottom, narrow, card }: PageProps) {
   const { mobile } = useStore()
   if (mobile)
     return (
-      <div className="flex min-h-0 flex-1 flex-col">
-        <div className="no-scrollbar min-h-0 flex-1 overflow-y-auto overscroll-contain px-5 pb-6 pt-2" data-scroll>
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+        <div className="no-scrollbar min-h-0 min-w-0 w-full flex-1 overflow-y-auto overscroll-contain px-5 pb-6 pt-2" data-scroll>
           {children}
         </div>
         {bottom && <MobileActionBar>{bottom}</MobileActionBar>}
@@ -335,7 +342,7 @@ export default function AppShell({ route, children }: { route: Route; children: 
     return (
       <div className={`mobile-shell app-wash grid h-full bg-bg ${route === 'welcome' ? 'grid-rows-[auto_minmax(0,1fr)]' : 'grid-rows-[auto_minmax(0,1fr)_auto]'}`}>
         <TopBar route={route} />
-        <main className="flex min-h-0 flex-1 flex-col">{children}</main>
+        <main className="flex min-h-0 min-w-0 flex-1 flex-col">{children}</main>
         {route !== 'welcome' && <TabBar route={route} />}
       </div>
     )

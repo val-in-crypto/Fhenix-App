@@ -29,13 +29,20 @@ type Props = { items: Activity[]; hidden: boolean }
 export default function ActivityList({ items, hidden }: Props) {
   const { t } = useMotion()
   const [filter, setFilter] = useState<Filter>('All')
+  const [hideValues, setHideValues] = useState(() => {
+    try { return sessionStorage.getItem('fhenix.activity.hideValues') === 'true' } catch { return false }
+  })
+  const toggleValues = () => {
+    try { sessionStorage.setItem('fhenix.activity.hideValues', String(!hideValues)) } catch { /* session only */ }
+    setHideValues(!hideValues)
+  }
   const [limit, setLimit] = useState(20)
   const matched = items.filter(item => match(item, filter))
   const list = matched.slice(0, limit)
 
   return (
     <div className="mt-4">
-      {items.length > 0 && <FilterChips value={filter} onChange={value => { setFilter(value); setLimit(20) }} />}
+      {items.length > 0 && <div className="flex flex-wrap items-center justify-between gap-2"><FilterChips value={filter} onChange={value => { setFilter(value); setLimit(20) }} /><button type="button" className="min-h-11 text-[13px] font-medium text-accentInk" onClick={toggleValues}>{hideValues ? 'Show values' : 'Hide values'}</button></div>}
       {items.length === 0 ? (
         <div className="py-8 text-center">
           <div className="text-[15px] font-medium">No activity yet</div>
@@ -68,7 +75,7 @@ export default function ActivityList({ items, hidden }: Props) {
                     ) : a.priv ? (
                       <>
                         {a.priv.sign}
-                        <Masked value={a.priv.value} hidden={hidden || a.kind.startsWith('transfer')} /> {a.priv.unit}
+                        {hidden || hideValues ? <span>[•••]</span> : <Masked value={a.priv.value} hidden={false} dec={a.priv.unit.includes('ETH') ? 4 : 2} />} {a.priv.unit}
                       </>
                     ) : (
                       a.amount

@@ -1,5 +1,6 @@
 import { Sep, separate } from '../ui/Sep'
 import { useState } from 'react'
+import { PERMIT_DOCS_URL } from '../config/links'
 import { Page } from '../shell/AppShell'
 import { data, useStore } from '../state/store'
 import Button from '../ui/Button'
@@ -53,6 +54,7 @@ export default function Permits() {
         <div className="mt-4 border border-line bg-surface px-5 py-8 text-center">
           <div className="text-[15px] font-medium">No permits yet</div>
           <div className="mt-1 text-[13px] leading-[18px] text-ink3">Create one to decrypt your confidential balances on this device.</div>
+          <a href={PERMIT_DOCS_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-11 items-center text-[13px] text-accentInk">What is a permit? Read the docs ↗</a>
         </div>
       ) : (
         <ul className="mt-4 border border-line bg-surface px-4">

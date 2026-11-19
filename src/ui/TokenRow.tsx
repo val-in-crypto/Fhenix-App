@@ -1,3 +1,5 @@
+import { TOKEN_ROW_RATIO_BAR } from '../config/flags'
+import { RatioTrack } from './RatioBar'
 import { Sep, separate } from './Sep'
 import { fmtPublic, fmtUsd } from '../lib/format'
 import { data, prices, type Sym } from '../state/store'
@@ -22,15 +24,15 @@ export function Coin({ sym, size = 32, shielded }: { sym: string; size?: number;
   )
 }
 
-type Props = { sym: Sym; pub: number; priv: number; hidden: boolean; mobile: boolean; onClick: () => void }
+type Props = { zero?: boolean; sym: Sym; pub: number; priv: number; hidden: boolean; mobile: boolean; onClick: () => void }
 
 /** Unified row: PUBLIC 1,250.00 / PRIVATE [1,000.00]. Row → token detail. */
-export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick }: Props) {
+export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick, zero }: Props) {
   const a = meta[sym]
   const dec = decOf(sym)
   if (mobile)
     return (
-      <button type="button" onClick={onClick} className="flex w-full items-center gap-3 py-3 text-left">
+      <button type="button" onClick={onClick} style={{ opacity: zero ? .64 : 1 }} className="flex w-full items-center gap-3 py-3 text-left">
         <Coin sym={sym} />
         <span className="min-w-0 flex-1">
           <span className="block text-[15px] font-medium leading-5">{sym}</span>
@@ -42,11 +44,12 @@ export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick }: Pr
           <span className="flex items-center justify-end gap-2"><span className="size-2 shrink-0 bg-accent" /><Masked value={priv} hidden={hidden} dec={dec} /></span>
           <span className="flex items-center justify-end gap-2"><span className="size-2 shrink-0 bg-lineStrong" />{fmtPublic(pub, dec)}</span>
 
+          {TOKEN_ROW_RATIO_BAR && <span className="block w-full pt-2"><RatioTrack confidential={priv} publicValue={pub} hidden={hidden} small /><span className="mono mt-1 block text-[12px]">{hidden ? '[•••]' : <>{Math.round(priv / (pub + priv || 1) * 100)}%<Sep />{Math.round(pub / (pub + priv || 1) * 100)}%</>}</span></span>}
         </span>
       </button>
     )
   return (
-    <button type="button" onClick={onClick} className="grid w-full grid-cols-[1fr_180px_180px_24px] items-center gap-4 px-2 py-3 text-left hover:bg-surface2">
+    <button type="button" onClick={onClick} style={{ opacity: zero ? .64 : 1 }} className="grid w-full grid-cols-[1fr_180px_180px_24px] items-center gap-4 px-2 py-3 text-left hover:bg-surface2">
       <span className="flex items-center gap-3">
         <Coin sym={sym} />
         <span>
@@ -65,6 +68,7 @@ export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick }: Pr
         <span className="block text-[13px] leading-[18px] text-ink3">{fmtUsd(pub * prices[sym])}</span>
       </span>
       <Icon name="chevron-down" className="-rotate-90 text-ink3" />
+      {TOKEN_ROW_RATIO_BAR && <span className="col-span-4 block w-full"><RatioTrack confidential={priv} publicValue={pub} hidden={hidden} small /><span className="mono mt-1 block text-right text-[12px]">{hidden ? '[•••]' : <>{Math.round(priv / (pub + priv || 1) * 100)}%<Sep />{Math.round(pub / (pub + priv || 1) * 100)}%</>}</span></span>}
     </button>
   )
 }

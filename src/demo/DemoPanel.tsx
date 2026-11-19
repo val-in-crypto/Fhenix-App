@@ -95,7 +95,7 @@ export default function DemoPanel() {
     ['Shield — form', {}, 'shield'],
     ['Shield — step 1 approve', { shieldStep: 1 }, 'shield'],
     ['Shield — step 2 confirm in wallet', { shieldStep: 2, busy: true }, 'shield', act.shieldConfirm],
-    ['Shield — everything is confidential now', { firstShieldDone: true, balances: bal(-500, 500) }, 'success'],
+    ['Shield — everything is confidential now', { success: { kind: 'shield', amount: 500, asset: 'USDC', networkIdx: 0 }, amt: { shield: '', unshield: '', send: '' }, firstShieldDone: true, balances: bal(-500, 500) }, 'shield'],
     ['Unshield — form', {}, 'unshield'],
     ['Unshield — decrypting', unsh(2), 'unshield', act.runDecrypt],
     ['Unshield — claim ready', unsh(3), 'unshield'],

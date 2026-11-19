@@ -1,59 +1,31 @@
-import { animate, motion } from 'framer-motion'
-import { useEffect, useRef, useState } from 'react'
-import { MASK, fmtUsd, fmtPrivate } from '../lib/format'
-import { easeOut, useMotion } from '../lib/motion'
+import { MASK, fmtPrivate, fmtUsd } from '../lib/format'
 
-export function useCountUp(value: number, ms = 450) {
-  const { t } = useMotion()
-  const [v, setV] = useState(value)
-  const from = useRef(value)
-  useEffect(() => {
-    const c = animate(from.current, value, { duration: t(ms), ease: 'easeOut', onUpdate: x => setV(x) })
-    from.current = value
-    return () => c.stop()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value])
-  return v
-}
-
-/** Encrypted vs public split. Hidden ⇒ neutral track, no private digits, no %. */
-export default function RatioBar({ priv, pub, hidden, compact }: { priv: number; pub: number; hidden: boolean; compact?: boolean }) {
-  const { t } = useMotion()
-  const total = priv + pub
-  const pct = total > 0 ? (priv / total) * 100 : 0
-  const cPriv = useCountUp(priv)
-  const cPub = useCountUp(pub)
-  const cPct = useCountUp(pct)
-  const num = compact ? 'text-[15px] leading-5' : 'text-[19px] leading-6'
-  const grow = { duration: t(280), ease: easeOut }
+export function RatioTrack({ confidential, publicValue, hidden, small = false }: { confidential: number; publicValue: number; hidden: boolean; small?: boolean }) {
+  const total = confidential + publicValue
+  const pct = total ? confidential / total * 100 : 0
   return (
-    <div>
-      <div className="flex items-end justify-between gap-3">
-        <div className="min-w-0">
-          <div className="eyebrow text-accentInk" style={compact ? { fontSize: 11 } : undefined}>Confidential</div>
-          <div className="mt-2 flex items-baseline gap-2">
-            <span className={`${num} font-semibold tabular-nums`}>{hidden ? MASK : fmtPrivate(cPriv)}</span>
-            {!hidden && <span className="mono text-[12px] text-ink3">{cPct.toFixed(1)}%</span>}
-          </div>
-        </div>
-        <div className="min-w-0 text-right">
-          <div className="eyebrow text-ink3" style={compact ? { fontSize: 11 } : undefined}>Public</div>
-          <div className="mt-2 flex items-baseline justify-end gap-2">
-            {!hidden && <span className="mono text-[12px] text-ink3">{(total > 0 ? 100 - cPct : 0).toFixed(1)}%</span>}
-            <span className={`${num} font-semibold tabular-nums`}>{fmtUsd(cPub)}</span>
-          </div>
-        </div>
-      </div>
-      <div className="mt-2 flex h-2 w-full gap-0.5 bg-transparent" role="img" aria-label={hidden ? 'Balance split hidden' : `${pct.toFixed(1)}% confidential`}>
-        {hidden || total === 0 ? (
-          <div className="h-full w-full bg-line" />
-        ) : (
-          <>
-            <motion.div className="hatch h-full bg-accent" style={{ width: `${pct}%`, originX: 0 }} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={grow} />
-            <motion.div className="h-full bg-line" style={{ width: `${100 - pct}%`, originX: 0 }} initial={{ scaleX: 0 }} animate={{ scaleX: 1 }} transition={grow} />
-          </>
-        )}
-      </div>
+    <div className={`flex w-full gap-1 ${small ? 'h-[6px]' : 'h-[10px]'}`} role="img" aria-label={hidden ? 'Balance split hidden' : `${pct.toFixed(0)}% confidential`}>
+      {hidden || !total ? <span className="h-full w-full bg-line" /> : <>
+        <span className="hatch h-full bg-accent" style={{ width: `${pct}%` }} /><span className="h-full bg-line" style={{ width: `${100 - pct}%` }} />
+      </>}
     </div>
   )
+}
+
+export default function RatioBar({ priv, pub, hidden, compact, detail }: { priv: number; pub: number; hidden: boolean; compact?: boolean; detail?: boolean }) {
+  const total = priv + pub
+  const pct = total ? priv / total * 100 : 0
+  if (detail) return <div>
+    <div className="mono mb-2 flex justify-between gap-3 text-[12px] uppercase">
+      <span className="text-accentInk">{hidden ? '' : `${pct.toFixed(0)}% `}Confidential</span><span className="text-ink3">{hidden ? '' : `${(100 - pct).toFixed(0)}% `}Public</span>
+    </div>
+    <RatioTrack confidential={priv} publicValue={pub} hidden={hidden} />
+  </div>
+  return <div>
+    <div className="mb-2 flex items-end justify-between gap-3">
+      <div className="min-w-0"><div className="eyebrow text-accentInk">Confidential</div><div className="mt-2 flex flex-wrap items-baseline gap-2"><span className={`${compact ? 'text-[15px]' : 'text-[19px]'} font-semibold`}>{hidden ? MASK : fmtPrivate(priv)}</span>{!hidden && <span className="mono text-[12px] text-ink3">{pct.toFixed(1)}%</span>}</div></div>
+      <div className="min-w-0 text-right"><div className="eyebrow text-ink3">Public</div><div className="mt-2 flex flex-wrap items-baseline justify-end gap-2">{!hidden && <span className="mono text-[12px] text-ink3">{total ? (100 - pct).toFixed(1) : '0.0'}%</span>}<span className={`${compact ? 'text-[15px]' : 'text-[19px]'} font-semibold`}>{fmtUsd(pub)}</span></div></div>
+    </div>
+    <RatioTrack confidential={priv} publicValue={pub} hidden={hidden} />
+  </div>
 }

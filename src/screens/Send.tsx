@@ -12,6 +12,7 @@ import ChainIcon from '../ui/ChainIcon'
 import SuccessModal from '../ui/SuccessModal'
 import SuccessIllustration from '../illus/SuccessIllustration'
 import Icon from '../ui/Icon'
+import { TOKEN_NETWORKS, TX_HASHES } from '../config/tokens'
 import SegmentedSwitch from '../ui/SegmentedSwitch'
 import Masked from '../ui/Masked'
 
@@ -167,7 +168,7 @@ export default function Send() {
     </div>
   )
   const formAction = cta(
-    field.invalid || lookalike ? copy.enterValid : !recipient ? copy.enterRecipient : !hasAmount ? copy.enterAmount : over ? `Not enough ${unit}` : copy.review,
+    field.invalid || lookalike ? copy.enterValid : !recipient ? copy.enterRecipient : !hasAmount ? copy.enterAmount : over ? 'Insufficient balance' : copy.review,
     () => setReview(true),
     !recipient || !hasAmount || over || lookalike,
   )
@@ -221,12 +222,14 @@ export default function Send() {
                   onChange={updateAmount}
                   token={unit}
                   usd={fmtUsd(numericAmount * prices[sym])}
+                  invalid={over && (!confidential || s.permit === 'active')}
                   confidential={confidential}
                   visibility={confidential ? undefined : 'Visible on-chain'}
                 />
                           {over && (!confidential || s.permit === 'active') ? (
-                  <p role="alert" className="text-[15px] text-danger">You have {confidential ? fmtPrivate(isMasked(s) ? undefined : balance) : fmtPublic(balance)} {unit}.</p>
+                  <p role="alert" className="text-[15px] text-danger">Amount exceeds your {confidential ? 'confidential' : 'public'} balance of {confidential ? fmtPrivate(isMasked(s) ? undefined : balance) : fmtPublic(balance)} {unit}.</p>
                 ) : recipient && hasAmount && <p className={`text-[15px] leading-5 ${secondary}`}>{recipientName} receives {formatted} {unit}. {confidential ? `Only you and ${recipientName} can read the amount.` : 'The amount will be visible on-chain.'}</p>}
+                {confidential && over && s.permit === 'active' && s.balances[sym].pub >= numericAmount - balance && <button type="button" className="min-h-11 text-left text-[14px] font-medium text-accentInk" onClick={() => { act.selectFlowAsset(sym); location.hash = `#/shield?token=${sym}&amount=${(Math.ceil((numericAmount - balance) * 1e6) / 1e6).toFixed(6)}` }}>You have {fmtPublic(s.balances[sym].pub)} {sym} public. Shield it first →</button>}
               </section>
             </>
           )}
@@ -242,7 +245,7 @@ export default function Send() {
         ['Amount', <span className={`mono ${result.confidential ? 'text-accentInk' : ''}`}>{displayAmount(result.amount, result.confidential)} {result.confidential ? 'f' : ''}{result.sym}</span>],
         ['From', result.confidential ? 'Confidential balance' : 'Public balance'],
         ['Network', <span className="flex items-center gap-2"><ChainIcon chainId={data.networks[result.networkIdx].chainId} />{data.networks[result.networkIdx].name}</span>],
-        ['Transaction', <a href={EXPLORER_URL} target="_blank" rel="noopener noreferrer" className="mono inline-flex items-center gap-1 text-accentInk">{send.tx}<Icon name="arrow-up-right" size={14} /></a>],
+        ['Transaction', <a href={(TOKEN_NETWORKS[data.networks[result.networkIdx].chainId]?.explorer ?? EXPLORER_URL) + '/tx/' + TX_HASHES.send} target="_blank" rel="noopener noreferrer" className="mono inline-flex items-center gap-1 text-accentInk">{send.tx}<Icon name="arrow-up-right" size={14} /></a>],
       ]} /></div>}
     </SuccessModal>
     </>

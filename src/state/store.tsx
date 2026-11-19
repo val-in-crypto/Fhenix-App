@@ -8,8 +8,8 @@ export const copy = data.copy
 export const prices: Record<Sym, number> = data.prices
 
 /* ---------- hash router ---------- */
-export type Route = 'welcome' | 'dashboard' | 'shield' | 'unshield' | 'send' | 'apps' | 'permits' | 'success'
-export const ROUTES: Route[] = ['welcome', 'dashboard', 'shield', 'unshield', 'send', 'apps', 'permits', 'success']
+export type Route = 'welcome' | 'dashboard' | 'shield' | 'unshield' | 'send' | 'apps' | 'permits'
+export const ROUTES: Route[] = ['welcome', 'dashboard', 'shield', 'unshield', 'send', 'apps', 'permits']
 const parse = (): Route => {
   const [path, query] = location.hash.replace(/^#\/?/, '').split('?')
   if (path === 'activity' || location.pathname === '/activity') return 'dashboard'
@@ -65,6 +65,8 @@ export interface State {
   unshieldStep: number
   /** 0 form\u001f1 encrypt\u001f2 confirm\u001f3 sent\u001f4 sending */
   sendStep: number
+  success: { kind: 'shield' | 'unshield'; amount: number; asset: Sym; networkIdx: number } | null
+  allowances: Record<string, number>
   busy: boolean
   amt: { shield: string; unshield: string; send: string }
   sendTo: string
@@ -107,6 +109,8 @@ export const fresh = (): State => ({
   unshieldStep: 0,
   sendStep: 0,
   busy: false,
+  success: null,
+  allowances: {},
   amt: { shield: '500.00', unshield: '500.00', send: data.send.amount },
   sendTo: data.send.to.address,
   sendRecipientName: data.send.to.ens,
@@ -140,7 +144,7 @@ export const TOUR_ROUTES: Route[] = ['dashboard', 'dashboard', 'shield', 'dashbo
 
 /* ---------- persistence ---------- */
 const KEY = 'fhx-proto'
-const TRANSIENT: (keyof State)[] = ['toasts', 'sheet', 'busy', 'connecting', 'signing']
+const TRANSIENT: (keyof State)[] = ['success', 'toasts', 'sheet', 'busy', 'connecting', 'signing']
 function load(): State {
   let s = fresh()
   try {
@@ -150,7 +154,7 @@ function load(): State {
     /* ignore */
   }
   // in-flight mock transactions don't survive a reload
-  if (s.shieldStep === 2) s.shieldStep = 1
+  if (s.shieldStep > 0) s.shieldStep = 0
   if (s.unshieldStep === 1) s.unshieldStep = 0
   if (s.unshieldStep === 2 || s.unshieldStep === 4) s.unshieldStep = 3
   if (location.pathname === '/activity' || /^#\/?activity$/.test(location.hash)) s.activityOpen = true
@@ -282,39 +286,44 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
         set({ shieldStep: 1 })
       },
       shieldApprove: async () => {
+        if (ref.current.busy || needPermit()) return
         const e = epoch.current
-        set({ busy: true })
+        const sym = ref.current.flowAsset
+        const amount = num(ref.current.amt.shield)
+        const key = `${data.networks[ref.current.networkIdx].chainId}:${sym}`
+        if (amount <= 0 || amount > ref.current.balances[sym].pub) return
+        set({ busy: true, shieldStep: 1 })
         await wait(D.approve)
         if (stale(e)) return
-        if (failed()) return set({ busy: false })
-        set({ shieldStep: 2 })
-        await A.shieldConfirm()
+        if (failed()) return set({ busy: false, shieldStep: 0 })
+        set(state => ({ busy: false, shieldStep: 2, allowances: { ...state.allowances, [key]: amount } }))
       },
       shieldConfirm: async () => {
+        if (ref.current.tour.status === 'active' && ref.current.tour.step === 2) return A.tourShield(false)
+        if (ref.current.busy || needPermit()) return
         const e = epoch.current
-        const amt = num(ref.current.amt.shield)
+        const amount = num(ref.current.amt.shield)
         const sym = ref.current.flowAsset
-        if (amt <= 0 || amt > ref.current.balances[sym].pub) return set({ busy: false, shieldStep: 0 })
+        const networkIdx = ref.current.networkIdx
+        const allowance = ref.current.allowances[`${data.networks[networkIdx].chainId}:${sym}`] ?? 0
+        if (sym !== 'ETH' && allowance < amount) return A.shieldApprove()
+        if (amount <= 0 || amount > ref.current.balances[sym].pub) return set({ busy: false, shieldStep: 0 })
         const id = uid()
-        set({ busy: true, shieldStep: 2 })
-        addAct({ id, kind: 'shield', label: `Shield ${sym} → f${sym}`, priv: { sign: '+', value: amt, unit: `f${sym}` }, when: 'Just now', hash: '0x9f2c…a83e', status: 'pending' })
-        await wait(D.shield)
+        set({ busy: true, shieldStep: 3 })
+        addAct({ id, kind: 'shield', label: `Shield ${sym} → f${sym}`, priv: { sign: '+', value: amount, unit: `f${sym}` }, when: 'Just now', hash: '0x9f2c…a83e', status: 'pending' })
+        await wait(D.shield / 2)
         if (stale(e)) return
-        if (failed()) return set(s => ({ busy: false, shieldStep: 0, activity: s.activity.filter(a => a.id !== id) }))
-        set(s => ({
-          busy: false,
-          shieldStep: 0,
-          lastShield: amt,
-          lastShieldAsset: sym,
-          balances: mv(s.balances, sym, -amt, amt),
-          activity: upd(s.activity, id, { status: 'confirmed', when: 'Today\u001fjust now\u001f0x9f2c…a83e' }),
+        set({ shieldStep: 4 })
+        await wait(D.shield / 2)
+        if (stale(e)) return
+        if (failed()) return set(state => ({ busy: false, shieldStep: 0, activity: state.activity.filter(item => item.id !== id) }))
+        set(state => ({
+          busy: false, shieldStep: 0, lastShield: amount, lastShieldAsset: sym, firstShieldDone: true,
+          amt: { ...state.amt, shield: '' },
+          success: { kind: 'shield', amount, asset: sym, networkIdx },
+          balances: mv(state.balances, sym, -amount, amount),
+          activity: upd(state.activity, id, { status: 'confirmed', when: 'Today\u001fjust now\u001f0x9f2c…a83e' }),
         }))
-        const s = ref.current
-        if (s.tour.status === 'active' && s.tour.step === 2) return A.tourNext()
-        if (!s.firstShieldDone) {
-          set({ firstShieldDone: true })
-          nav('success')
-        } else toast({ kind: 'success', title: `Shielded ${trimAmt(amt)} ${sym}`, body: `f${sym} is now confidential`, action: { label: 'View', route: 'dashboard' } })
       },
 
       /* unshield */
@@ -342,20 +351,23 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
         set(s => ({ unshieldStep: 3, activity: p ? upd(s.activity, p.id, { when: 'Just now\u001fready to claim' }) : s.activity }))
       },
       claim: async () => {
+        if (ref.current.busy || ref.current.unshieldStep !== 3 || !ref.current.pendingUnshield) return
         const e = epoch.current
+        const claim = ref.current.pendingUnshield
+        const asset = claim.asset ?? 'USDC'
+        const networkIdx = ref.current.networkIdx
         set({ busy: true, unshieldStep: 4 })
         await wait(D.claim)
         if (stale(e)) return
         if (failed()) return set({ busy: false, unshieldStep: 3 })
-        const p = ref.current.pendingUnshield ?? { id: '', amount: num(ref.current.amt.unshield), asset: ref.current.flowAsset }
-        set(s => ({
-          busy: false,
-          unshieldStep: 5,
-          lastShield: s.lastShield,
-          balances: mv(s.balances, p.asset ?? 'USDC', p.amount, 0),
-          activity: upd(s.activity, p.id, { status: 'confirmed', kind: 'unshield-claim', when: 'Today\u001fclaimed' }),
+        const inFlow = parse() === 'unshield'
+        set(state => ({
+          busy: false, unshieldStep: 0, pendingUnshield: null, amt: { ...state.amt, unshield: '' },
+          success: inFlow ? { kind: 'unshield', amount: claim.amount, asset, networkIdx } : null,
+          balances: mv(state.balances, asset, claim.amount, 0),
+          activity: upd(state.activity, claim.id, { status: 'confirmed', kind: 'unshield-claim', when: 'Today\u001fclaimed' }),
         }))
-        toast({ kind: 'success', title: `Unshielded ${fmtPublic(p.amount)} ${p.asset ?? 'USDC'}`, body: 'Back in your public wallet balance', action: { label: 'View', route: 'dashboard' } })
+        if (!inFlow) toast({ kind: 'success', title: `Unshielded ${fmtPublic(claim.amount)} ${asset}`, body: 'Back in your public wallet balance' })
       },
       unshieldReset: () => set({ unshieldStep: 0, pendingUnshield: null }),
 
@@ -420,15 +432,14 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
       },
       tourNext: () => A.tourGo(Math.min(3, ref.current.tour.step + 1)),
       tourEnd: (status: 'idle' | 'done' = 'done') => set(s => ({ tour: { status, step: 0 }, amt: { ...s.amt, shield: '500.00' } })),
-      /** step 3: real = mock transaction that moves balances, otherwise only the stepper animates */
-      tourShield: async (real: boolean) => {
+      /** Tutorial practice never signs, changes balances, or adds activity. */
+      tourShield: async (_real: boolean) => {
+        if (ref.current.busy) return
         const e = epoch.current
-        if (real && needPermit()) return
         set({ shieldStep: 1, busy: true })
-        await wait(real ? D.approve : 900)
+        await wait(900)
         if (stale(e)) return
-        if (real) return A.shieldConfirm()
-        set({ shieldStep: 2 })
+        set({ shieldStep: 3 })
         await wait(1100)
         if (stale(e)) return
         set({ shieldStep: 0, busy: false })

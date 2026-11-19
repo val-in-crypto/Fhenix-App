@@ -60,7 +60,7 @@
   --app-wash: none;
   --hero-wash: none;
   --welcome-wash: none;
-  --ratio-fill: repeating-linear-gradient(125deg, rgb(255 255 255 / .4) 0 1.5px, transparent 1.5px 5px);
+  --ratio-fill: repeating-linear-gradient(-60deg, var(--color-accent-ink) 0 1px, transparent 1px 5px);
 }
 
 [data-theme="dark"] {
@@ -112,7 +112,7 @@
   --app-wash: linear-gradient(to bottom, transparent 55%, rgb(24 62 83 / .45));
   --hero-wash: radial-gradient(50% 100% at 100% 0%, rgb(10 217 220 / .26), transparent), radial-gradient(at 0% 100%, rgb(59 185 247 / .05), transparent);
   --welcome-wash: radial-gradient(ellipse at center, rgb(10 217 220 / .18), transparent 74%);
-  --ratio-fill: linear-gradient(90deg, var(--color-accent), var(--gradient-sky));
+  --ratio-fill: repeating-linear-gradient(-60deg, var(--color-accent-ink) 0 1px, transparent 1px 5px);
 }
 
 [data-theme="dark"] [data-hero-gradient="B"] {

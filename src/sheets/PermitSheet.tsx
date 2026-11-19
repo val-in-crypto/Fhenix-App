@@ -1,3 +1,4 @@
+import { PERMIT_DOCS_URL } from '../config/links'
 import { useEffect, useState } from 'react'
 import { copy, data, useStore } from '../state/store'
 import Button from '../ui/Button'
@@ -43,6 +44,7 @@ export default function PermitSheet() {
             </li>
           ))}
         </ul>
+        <a href={PERMIT_DOCS_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-11 items-center text-[13px] text-accentInk">What is a permit? Read the docs ↗</a>
       </div>
       <label className="flex h-[52px] items-center justify-between bg-surface2 px-4 text-[14px]">
         <span className="text-ink2">{c[5]}</span>

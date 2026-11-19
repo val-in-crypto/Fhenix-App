@@ -20,6 +20,8 @@ export default function SuccessModal({ open, onClose, illustration, eyebrow, tit
     if (!open) return
     headline.current?.focus({ preventScroll: true })
     const key = (event: KeyboardEvent) => {
+      const dialogs = document.querySelectorAll('[role="dialog"]')
+      if (dialogs[dialogs.length - 1] !== panel.current) return
       if (event.key === 'Escape') { event.stopPropagation(); close.current() }
       if (event.key !== 'Tab') return
       const targets = Array.from(panel.current?.querySelectorAll<HTMLElement>('button:not([disabled]),a[href],[tabindex="0"]') ?? [])

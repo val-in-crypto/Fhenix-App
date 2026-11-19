@@ -1,181 +1,125 @@
-import { Sep, separate } from '../ui/Sep'
-import type { ReactNode } from 'react'
+import { useEffect, useState } from 'react'
 import { fmtPrivate, fmtPublic, fmtUsd, num, trimAmt } from '../lib/format'
+import { useMotion } from '../lib/motion'
 import { Page } from '../shell/AppShell'
-import { copy, isMasked, nav, prices, useStore } from '../state/store'
-import AmountBox, { ReceiveBox } from '../ui/AmountBox'
+import { data, isMasked, nav, prices, useStore, type Sym } from '../state/store'
+import { TOKEN_NETWORKS, TX_HASHES } from '../config/tokens'
+import SwapForm from '../ui/SwapForm'
+import SegmentedSwitch from '../ui/SegmentedSwitch'
+import Steps from '../ui/Steps'
 import Button from '../ui/Button'
 import Icon from '../ui/Icon'
 import Masked from '../ui/Masked'
-import Stepper from '../ui/Stepper'
-import SwapForm from '../ui/SwapForm'
-import SegmentedSwitch from '../ui/SegmentedSwitch'
-import { decOf } from '../ui/TokenRow'
+import SuccessModal from '../ui/SuccessModal'
+import SuccessIllustration from '../illus/SuccessIllustration'
+import PrivateNow from '../illus/PrivateNow'
+import { separate } from '../ui/Sep'
 
-/** Result card shared by "Claimed" and "Sent privately". */
-export function DoneCard({ title, body, rows, primary, secondary }: { title: string; body: ReactNode; rows: [string, ReactNode][]; primary: ReactNode; secondary: ReactNode }) {
-  return (
-    <div>
-      <span className="flex h-12 w-12 items-center justify-center bg-accent text-onAccent">
-        <Icon name="check" size={22} />
-      </span>
-      <h1 className="mt-5 text-[26px] font-medium leading-8 tracking-[-0.015em]">{title}</h1>
-      <p className="mt-2 text-[14px] leading-5 text-ink2">{body}</p>
-      <dl className="mt-4 flex flex-col gap-2 bg-surface2 p-4">
-        {rows.map(([k, v]) => (
-          <div key={k} className="flex items-center justify-between gap-3 text-[13px] leading-[18px]">
-            <dt className="text-ink3">{k}</dt>
-            <dd className="text-right font-medium">{v}</dd>
-          </div>
-        ))}
-      </dl>
-      <div className="mt-4 flex gap-2">
-        {primary}
-        {secondary}
-      </div>
-    </div>
-  )
-}
-
-const Helper = ({ children, mobile }: { children: ReactNode; mobile: boolean }) => (
-  <p className="mt-3 flex items-center justify-center gap-1.5 text-center text-[13px] leading-[18px] text-ink3">
-    {mobile && <Icon name="info" />}
-    {separate(children)}
-  </p>
-)
-
-/** Shield + unshield on one screen; the toggle and the swap button switch modes. */
 export default function ShieldFlow({ mode }: { mode: 'shield' | 'unshield' }) {
   const { s, act, mobile } = useStore()
+  const { reduced } = useMotion()
+  const [revealed, setRevealed] = useState(false)
   const shield = mode === 'shield'
-  const sym = shield ? s.flowAsset : s.pendingUnshield?.asset ?? s.flowAsset
-  const wrapped = `f${sym}`
-  const b = s.balances[sym]
-  const dec = decOf(sym)
-  const masked = isMasked(s)
+  const practice = s.tour.status === 'active' && s.tour.step === 2
+  const sym = practice ? 'USDC' : s.pendingUnshield?.asset ?? s.flowAsset
+  const b = practice ? { pub: 1250, priv: 0 } : s.balances[sym]
+  const wrapped = 'f' + sym
+  const dec = sym === 'ETH' ? 4 : 2
   const key = shield ? 'shield' : 'unshield'
   const raw = s.amt[key]
-  const amt = num(raw)
-  const sStep = s.shieldStep
-  const u = s.unshieldStep
-  const locked = shield ? sStep > 0 : u > 0
-  const inFlight = s.busy || (shield ? sStep === 2 : u === 1 || u === 2 || u === 4)
-  const valid = amt > 0 && (locked || amt <= (shield ? b.pub : b.priv))
-  const setAmt = (v: string) => act.set({ amt: { ...s.amt, [key]: v } })
+  const amount = num(raw)
+  const busy = s.busy || !shield && s.unshieldStep === 2
+  const locked = s.busy || !shield && s.unshieldStep > 0
+  const available = shield ? b.pub : b.priv
+  const over = amount > available
+  const minimum = 0.000001
+  const valid = amount >= minimum && !over
+  const allowed = practice ? s.shieldStep > 1 : sym === 'ETH' || (s.allowances[`${data.networks[s.networkIdx].chainId}:${sym}`] ?? 0) >= amount && amount > 0
+  const masked = isMasked(s)
+  const result = s.success
+  const close = () => { setRevealed(false); act.set({ success: null }) }
+
+  useEffect(() => {
+    const applyQuery = () => {
+      const query = new URLSearchParams(location.hash.split('?')[1])
+      const token = query.get('token') ?? query.get('asset')
+      if (token === 'ETH' || token === 'USDC') act.selectFlowAsset(token)
+      const preset = query.get('amount')
+      if (preset && /^\d+(\.\d{1,6})?$/.test(preset)) act.set(state => ({ amt: { ...state.amt, [query.get('mode') === 'unshield' ? 'unshield' : 'shield']: preset } }))
+    }
+    applyQuery()
+    window.addEventListener('hashchange', applyQuery)
+    return () => window.removeEventListener('hashchange', applyQuery)
+  }, [act])
+
+  const swap = () => {
+    if (busy || !shield && s.pendingUnshield) return
+    act.set(state => ({ amt: { ...state.amt, [shield ? 'unshield' : 'shield']: raw } }))
+    nav(shield ? 'unshield' : 'shield')
+  }
+  const setAmount = (value: string) => {
+    if (/^\d*(\.\d{0,6})?$/.test(value)) act.set(state => ({ amt: { ...state.amt, [key]: value }, shieldStep: 0 }))
+  }
   const max = () => {
-    if (!shield && s.permit !== 'active') return act.openSheet('permit')
-    setAmt(String(shield ? b.pub : b.priv))
-  }
-  const swap = () => !inFlight && nav(shield ? 'unshield' : 'shield')
-  const size = mobile ? 52 : 48
-
-  if (!shield && u === 5) {
-    const done = s.pendingUnshield?.amount ?? amt
-    return (
-      <Page narrow card>
-        <DoneCard
-          title={`Unshielded ${fmtPublic(done, dec)} ${sym}`}
-          body={`The ${sym} is back in your public wallet balance.`}
-          rows={[
-            ['Claimed', `${fmtPublic(done, dec)} ${sym}`],
-            ['Confidential balance', <span className="mono text-accentInk"><Masked value={b.priv} hidden={masked} dec={dec} /> {wrapped}</span>],
-            ['Transaction', <span className="mono inline-flex items-center gap-1">0x5d10…c7e2 <Icon name="arrow-up-right" /></span>],
-          ]}
-          primary={
-            <Button size={48} arrow className="flex-1" onClick={() => (act.unshieldReset(), nav('dashboard'))}>
-              Go to dashboard
-            </Button>
-          }
-          secondary={
-            <Button variant="secondary" size={48} className="flex-1" onClick={() => (act.unshieldReset(), act.set({ activityOpen: true }), nav('dashboard'))}>
-              View activity
-            </Button>
-          }
-        />
-      </Page>
-    )
+    if (!shield && s.permit !== 'active') return act.renew()
+    const maximum = sym === 'ETH' && shield ? Math.max(0, available - .0001) : available
+    setAmount((Math.floor(maximum * 1e6) / 1e6).toFixed(6).replace(/\.?0+$/, '') || '0')
   }
 
-  let cta: ReactNode
-  let helper: string
-  if (shield) {
-    const over = amt > b.pub && !locked
-    cta =
-      sStep === 0 ? (
-        <Button size={size} full arrow disabled={!valid} onClick={act.shieldStart}>
-          {over ? `Not enough ${sym}` : `Shield ${trimAmt(amt)} ${sym}`}
-        </Button>
-      ) : sStep === 1 ? (
-        <Button size={size} full arrow busy={s.busy} disabled={s.busy} onClick={act.shieldApprove}>
-          {s.busy ? 'Approving…' : `Approve ${sym}`}
-        </Button>
-      ) : (
-        <Button size={size} full arrow disabled>
-          Confirm in wallet…
-        </Button>
-      )
-    helper = sStep === 0 ? (mobile ? '≈ $0.12 fee\u001f~30 sec' : copy.shieldNote) : sStep === 1 ? (mobile ? 'Step 1 of 2\u001fone-time approval' : `Step 1 of 2\u001fa one-time approval lets Fhenix App shield your ${sym}`) : 'Step 2 of 2\u001fconfirm in wallet'
-  } else {
-    const over = amt > b.priv && !locked
-    const f = fmtPublic(s.pendingUnshield?.amount ?? amt, dec)
-    cta =
-      u <= 1 ? (
-        <Button size={size} full arrow busy={u === 1} disabled={!valid || u === 1} onClick={act.unshieldRequest}>
-          {u === 1 ? 'Requesting…' : over ? `Not enough ${wrapped}` : `Unshield ${f} ${wrapped}`}
-        </Button>
-      ) : (
-        <Button size={size} full arrow busy={u === 4} disabled={u !== 3} onClick={act.claim}>
-          {u === 4 ? 'Claiming…' : `Claim ${f} ${sym}`}
-        </Button>
-      )
-    helper = u <= 1 ? (mobile ? copy.unshieldNotes[0] : 'Step 1 of 3\u001fyou claim the USDC after CoFHE decrypts it') : u === 2 ? copy.unshieldNotes[1] : mobile ? copy.unshieldNotes[2] : `Decrypted. Claim to move ${f} ${sym} to your wallet.`
+  let label = !amount ? 'Enter an amount' : amount < minimum ? 'Amount too small' : over ? `Not enough ${shield ? sym : wrapped}` : ''
+  let action: () => void | Promise<void> = shield ? allowed ? act.shieldConfirm : act.shieldApprove : act.unshieldRequest
+  let disabled = !valid
+  if (practice && !busy && valid) { label = `Shield ${trimAmt(amount)} ${sym}`; action = () => act.tourShield(false) }
+  else if (shield && valid) label = allowed ? `Shield ${trimAmt(amount)} ${sym}` : `Approve ${sym}`
+  else if (!shield && valid) label = `Unshield ${fmtPublic(amount, dec)} ${wrapped}`
+  if (!practice && s.permit !== 'active' && valid) { label = 'Create permit first'; action = act.renew }
+  if (!shield && s.unshieldStep >= 2) {
+    label = s.unshieldStep === 2 ? 'Decrypting…' : s.unshieldStep === 4 ? 'Claiming…' : `Claim ${fmtPublic(s.pendingUnshield?.amount ?? amount, dec)} ${sym}`
+    action = act.claim
+    disabled = s.unshieldStep !== 3
   }
+  if (s.busy) label = reduced ? 'Waiting…' : shield ? s.shieldStep === 1 ? 'Approving…' : s.shieldStep === 4 ? 'Shielding…' : 'Confirm in wallet…' : s.unshieldStep === 4 ? 'Claiming…' : 'Requesting…'
+  if (busy) { disabled = true; if (reduced) label = 'Waiting…' }
+  const resultAmount = result ? fmtPublic(result.amount, result.asset === 'ETH' ? 4 : 2) : ''
+  const explorer = result && TOKEN_NETWORKS[data.networks[result.networkIdx].chainId]?.explorer
+  const hash = result?.kind === 'shield' ? TX_HASHES.shield : TX_HASHES.unshield
 
   return (
-    <Page
-      narrow
-      card
-      bottom={
-        <>
-          {cta}
-          <Helper mobile={mobile}>{separate(helper)}</Helper>
-        </>
-      }
-    >
-      <div data-tour="shield-form">
-        <SegmentedSwitch width="fill" label="Mode" value={mode} onChange={value => { if (value !== mode) swap() }} disabled={inFlight} options={[{ value: 'shield', label: 'Shield' }, { value: 'unshield', label: 'Unshield' }]} />
-
-        {shield && sStep > 0 && (
+    <>
+      <Page narrow card bottom={<>
+        <Button full size={mobile ? 52 : 48} busy={busy && !reduced} disabled={disabled} arrow={!disabled} onClick={action}>{label}</Button>
+        <p className="mt-3 text-center text-[13px] leading-[18px] text-ink3">{separate(shield ? '≈ $0.12 fee\u001f~30 sec\u001fAmount is visible on-chain. Your balance is not.' : s.unshieldStep === 2 ? 'Claim unlocks after decryption\u001f~30 sec' : 'Step 1 of 3\u001fthen decrypt and claim')}</p>
+      </>}>
+        <div data-tour="shield-form">
+          <SegmentedSwitch width="fill" label="Mode" value={mode} onChange={value => { if (value !== mode) swap() }} disabled={busy || Boolean(s.pendingUnshield)} options={[{ value: 'shield', label: 'Shield' }, { value: 'unshield', label: 'Unshield' }]} />
           <div className="mt-5">
-            <Stepper variant="line" steps={[{ label: `Approve ${sym}` }, { label: 'Shield' }]} active={sStep - 1} />
+            <SwapForm flipped={!shield} onSwap={swap} disabled={busy || Boolean(s.pendingUnshield)}
+              from={{ label: shield ? 'You shield' : 'You unshield', balance: shield ? <>Balance {fmtPublic(b.pub, dec)}</> : <>Balance <Masked value={b.priv} hidden={masked} dec={dec} /></>,
+                onMax: locked ? undefined : max, value: raw, onChange: locked ? undefined : setAmount, token: shield ? sym : wrapped, usd: fmtUsd(amount * prices[sym]), confidential: !shield, disabled: locked, invalid: over }}
+              to={{ amount: shield ? fmtPrivate(masked ? undefined : amount, dec) : fmtPublic(amount, dec), unit: shield ? wrapped : sym, confidential: shield }} />
           </div>
-        )}
-
-        <div className="mt-5">
-          <SwapForm flipped={!shield} onSwap={swap} disabled={inFlight}
-            from={{
-              label: shield ? 'You shield' : 'You unshield',
-              balance: shield ? <>Balance {fmtPublic(b.pub, dec)}</> : <>Balance <Masked value={b.priv} hidden={masked} dec={dec} pulse={u === 2} /></>,
-              onMax: locked ? undefined : max, value: raw, onChange: locked ? undefined : setAmt, token: shield ? sym : wrapped,
-              usd: fmtUsd(amt * prices[sym]), confidential: !shield, disabled: locked,
-            }}
-            to={{ amount: shield ? fmtPrivate(masked ? undefined : amt, dec) : fmtPublic(amt, dec), unit: shield ? wrapped : sym, confidential: shield }}
-          />
+          <Steps labels={shield ? [allowed ? 'Approved' : 'Approve', 'Shield', 'Done'] : ['Unshield', 'Decrypt', 'Claim']} active={shield ? allowed || s.shieldStep >= 2 ? 1 : 0 : s.unshieldStep < 2 ? 0 : s.unshieldStep === 2 ? 1 : 2} pending={busy} />
         </div>
-
-        {!shield && (
-          <div className="mt-6">
-            <Stepper
-              steps={[
-                { label: 'Unshield', sub: u >= 2 ? 'Request sent' : 'Request' },
-                { label: 'Decrypt', sub: u === 2 ? 'CoFHE decrypting\u001f~30 sec' : u > 2 ? 'Decrypted' : '~30 sec' },
-                { label: 'Claim', sub: u >= 3 ? 'Ready to claim' : 'To your wallet' },
-              ]}
-              active={u <= 1 ? 0 : u === 2 ? 1 : 2}
-            />
+      </Page>
+      <SuccessModal open={Boolean(result)} onClose={close} illustration={result?.kind === 'shield' ? <PrivateNow scale={mobile ? 216 / 560 : 320 / 560} /> : <SuccessIllustration kind="unshield" />}
+        eyebrow={result?.kind === 'shield' ? 'Shield complete' : 'Unshield complete'}
+        title={result?.kind === 'shield' ? 'Everything is confidential now' : `Unshielded ${resultAmount} ${result?.asset ?? sym}`}
+        body={result?.kind === 'shield' ? `${resultAmount} ${result.asset} is now f${result.asset}. Your balance is sealed, and only you can read it.` : `The ${result?.asset ?? sym} is back in your public wallet balance.`}
+        secondaryLabel={result?.kind === 'shield' ? 'Shield more' : 'View activity'}
+        onSecondary={() => { const kind = result?.kind; close(); if (kind === 'unshield') { act.set({ activityOpen: true }); location.hash = '#activity' } }}
+        transaction={!mobile && result?.kind === 'shield' && explorer ? <a href={explorer + '/tx/' + hash} target="_blank" rel="noopener noreferrer">Transaction 0x9f2c…a83e ↗</a> : undefined}>
+        {result?.kind === 'shield' ? <div>
+          <div className="flex items-center justify-between gap-3 border border-line bg-surface2 p-4">
+            <div className="min-w-0"><p className="text-[13px] text-ink3">Confidential balance</p><Masked value={result.amount} hidden={!revealed || s.permit !== 'active'} dec={result.asset === 'ETH' ? 4 : 2} className="mono mt-1 text-[22px] text-accentInk" /> <span className="text-accentInk">f{result.asset}</span></div>
+            <Button size={44} variant="secondary" onClick={() => s.permit !== 'active' ? act.renew() : setRevealed(!revealed)}>{revealed ? 'Hide' : 'Reveal'}</Button>
           </div>
-        )}
-      </div>
-    </Page>
+          <p className="mt-2 text-center text-[13px] text-ink3">Reveal shows {revealed ? fmtPrivate(result.amount) : '[*******]'} f{result.asset} to you only, with your permit.</p>
+        </div> : result && <dl className="divide-y divide-line bg-surface2 px-4 text-[14px]">
+          <div className="flex justify-between gap-3 py-3"><dt className="text-ink3">Claimed</dt><dd>{resultAmount} {result.asset}</dd></div>
+          <div className="flex justify-between gap-3 py-3"><dt className="text-ink3">Confidential balance</dt><dd><Masked value={s.balances[result.asset].priv} hidden={masked} dec={dec} /> f{result.asset}</dd></div>
+          <div className="flex justify-between gap-3 py-3"><dt className="text-ink3">Transaction</dt><dd>{explorer ? <a href={explorer + '/tx/' + hash} target="_blank" rel="noopener noreferrer" className="text-accentInk">0x5d10…c7e2 ↗</a> : '0x5d10…c7e2'}</dd></div>
+        </dl>}
+      </SuccessModal>
+    </>
   )
 }

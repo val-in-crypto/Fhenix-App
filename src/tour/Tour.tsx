@@ -131,7 +131,7 @@ export default function Tour() {
         <Button size={44} disabled={s.signing} onClick={() => act.openSheet('permit')} className="!px-4 !text-[14px]">
           Create permit
         </Button>
-        <Button size={44} variant="secondary" busy={s.signing} disabled={s.signing} onClick={() => act.signPermit(s.permitDays)} className="!px-4 !text-[14px]">
+        <Button size={44} variant="secondary" busy={s.signing} disabled={s.signing} onClick={() => act.openSheet('permit')} className="!px-4 !text-[14px]">
           Show me
         </Button>
         {skip}
@@ -139,7 +139,7 @@ export default function Tour() {
     )
   ) : step === 2 ? (
     <>
-      <Button size={44} disabled={s.busy} onClick={() => act.tourShield(true)} className="!px-4 !text-[14px]">
+      <Button size={44} disabled={s.busy} onClick={() => act.tourShield(false)} className="!px-4 !text-[14px]">
         Shield 10 USDC
       </Button>
       <Button size={44} variant="secondary" busy={s.busy} disabled={s.busy} onClick={() => act.tourShield(false)} className="!px-4 !text-[14px]">
@@ -192,6 +192,7 @@ export default function Tour() {
                 <PrivateNow scale={0.42} />
               </div>
             )}
+            {step === 2 && <div className="mono mb-3 inline-flex border border-warn px-2 py-1 text-[12px] text-warn">PRACTICE<Sep />no real funds</div>}
             <div className="eyebrow text-accentInk">Step {step + 1} of 4</div>
             <h2 className="mt-2 text-[19px] font-medium leading-6 tracking-[-0.01em]">{title}</h2>
             <p className="mt-2 text-[14px] leading-5 text-ink2">{body}</p>

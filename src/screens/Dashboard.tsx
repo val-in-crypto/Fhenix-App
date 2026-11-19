@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useMotion } from '../lib/motion'
 import { ActionRow, Page, PermitChip } from '../shell/AppShell'
+import { fmtPrivate, fmtUsd } from '../lib/format'
 import { copy, data, isMasked, nav, usd, useStore, type Sym } from '../state/store'
 import ActivityList from '../ui/ActivityList'
 import Button from '../ui/Button'
@@ -12,8 +13,9 @@ import Masked from '../ui/Masked'
 import RatioBar from '../ui/RatioBar'
 import TokenRow from '../ui/TokenRow'
 
+import { HERO_GRADIENT } from '../config/flags'
+
 const card = 'border border-line bg-surface'
-const HERO_GRADIENT: 'A' | 'B' = 'A'
 const HISTORY_KEY = 'fhenix.history'
 const SYMS: Sym[] = ['USDC', 'ETH']
 
@@ -26,6 +28,7 @@ const LABELS: Record<string, string[]> = {
   '1Y': ['Nov 2025', 'Feb', 'May', 'Aug', 'Nov 2026'],
 }
 function Chart({ masked }: { masked: boolean }) {
+  const [hover, setHover] = useState<number | null>(null)
   const [range, setRange] = useState<(typeof RANGES)[number]>('1M')
   const { top, priv, events } = useMemo(() => {
     const n = 48
@@ -43,6 +46,12 @@ function Chart({ masked }: { masked: boolean }) {
     }
     return { top, priv, events: ev.map((e, k) => ({ x: e, y: levels[k + 1] })) }
   }, [range])
+  const tooltip = hover === null ? null : {
+    total: top[hover][1] * 4500,
+    confidential: priv[hover][1] * 4500,
+    pct: priv[hover][1] / top[hover][1] * 100,
+    date: new Date(Date.UTC(2026, 10, 16) - (48 - hover) * ({ '1W': 7, '1M': 30, '3M': 92, '1Y': 365 }[range]) / 48 * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }),
+  }
   const X = (x: number) => x * 1000
   const Y = (v: number) => 180 - v * 190
   const line = (p: [number, number][]) => p.map(([x, v], i) => `${i ? 'L' : 'M'}${X(x).toFixed(1)} ${Y(v).toFixed(1)}`).join(' ')
@@ -70,7 +79,19 @@ function Chart({ masked }: { masked: boolean }) {
           ))}
         </div>
       </div>
-      <div className="relative mt-4 h-[168px]">
+      <div className="relative mt-4 h-[168px]" tabIndex={0} role="group" aria-label="Balance history chart. Use arrow keys to explore."
+        onPointerMove={event => { const box = event.currentTarget.getBoundingClientRect(); setHover(Math.max(0, Math.min(48, Math.round((event.clientX - box.left) / box.width * 48)))) }}
+        onPointerLeave={() => setHover(null)}
+        onFocus={() => setHover(24)}
+        onBlur={() => setHover(null)}
+        onKeyDown={event => { if (['ArrowLeft', 'ArrowRight', 'Home', 'End', 'Escape'].includes(event.key)) { event.preventDefault(); setHover(event.key === 'Escape' ? null : event.key === 'Home' ? 0 : event.key === 'End' ? 48 : Math.max(0, Math.min(48, (hover ?? 24) + (event.key === 'ArrowRight' ? 1 : -1)))) } }}>
+        {tooltip && hover !== null && <><div aria-hidden className="pointer-events-none absolute inset-y-0 w-px bg-ink3" style={{ left: `${hover / 48 * 100}%` }} /><div role="tooltip" className="pointer-events-none absolute top-0 z-10 w-[232px] border border-line bg-surface p-3 text-[12px] shadow-lg" style={{ left: `clamp(0px, calc(${hover / 48 * 100}% - 116px), calc(100% - 232px))` }}>
+          <p className="mb-2 font-medium text-ink3">{tooltip.date}</p><dl className="flex flex-col gap-1">
+            <div className="flex justify-between gap-2"><dt>Total</dt><dd className="mono">{masked ? '[*******]' : fmtUsd(tooltip.total)}</dd></div>
+            <div className="flex justify-between gap-2"><dt>Public</dt><dd className="mono">{fmtUsd(tooltip.total - tooltip.confidential)}{!masked && ` (${(100 - tooltip.pct).toFixed(0)}%)`}</dd></div>
+            <div className="flex justify-between gap-2"><dt>Confidential</dt><dd className="mono text-accentInk">{masked ? '[*******]' : fmtPrivate(tooltip.confidential) + ` (${tooltip.pct.toFixed(0)}%)`}</dd></div>
+          </dl>
+        </div></>}
         <svg viewBox="0 0 1000 180" preserveAspectRatio="none" className="h-full w-full" role="img" aria-label="Area chart of public and confidential balance over time">
           <path d={area(top)} fill="var(--color-line)" opacity=".5" />
           <path d={line(top)} stroke="var(--chart-stroke)" strokeWidth="1" fill="none" vectorEffect="non-scaling-stroke" />
@@ -97,48 +118,16 @@ function Chart({ masked }: { masked: boolean }) {
   )
 }
 
-/* ---------- empty state ---------- */
-function FundCard({ mobile }: { mobile: boolean }) {
-  const { s, act } = useStore()
-  const net = data.networks[s.networkIdx].name
-  const tiles = [
-    { t: 'Receive from another wallet', d: <span className="mono text-[12px]">{data.account.short}</span>, a: 'Copy address', on: act.copyAddress },
-    { t: 'Bridge from another network', d: 'From Ethereum or another L2', a: 'Open bridge ↗' },
-    { t: 'Get test tokens', d: 'Testnet faucet\u001fUSDC and ETH', a: 'Open faucet ↗' },
-  ]
-  return (
-    <section className={`${card} ${mobile ? 'p-5' : 'p-6'}`}>
-      <div className="flex gap-3">
-        <span className="flex h-10 w-10 shrink-0 items-center justify-center bg-accentSoft text-accentInk">
-          <Icon name="wallet" />
-        </span>
-        <div>
-          <h2 className="text-[19px] font-medium leading-6 tracking-[-0.01em]">Fund your account</h2>
-          <p className="mt-1 text-[13px] leading-[18px] text-ink2">Add USDC or ETH on {net} (your wallet's network) to start. Public balances show up here first, then you can shield them.</p>
-        </div>
-      </div>
-      <div className={`mt-4 grid gap-2 ${mobile ? '' : 'grid-cols-3'}`}>
-        {tiles.map(x => (
-          <div key={x.t} className="bg-surface2 p-4">
-            <div className="text-[14px] font-medium">{x.t}</div>
-            <div className="mt-1 text-[13px] leading-[18px] text-ink3">{x.d}</div>
-            <button type="button" onClick={x.on} className="mt-1 py-1 text-[13px] font-medium text-accentInk hover:underline">
-              {x.a}
-            </button>
-          </div>
-        ))}
-      </div>
-    </section>
-  )
-}
-
 export default function Dashboard() {
   const { s, act, mobile } = useStore()
+  const [showZero, setShowZero] = useState(false)
   const masked = isMasked(s)
   const u = usd(s.balances)
   const total = u.pub + u.priv
   const net = data.networks[s.networkIdx]
-  const empty = total === 0 && s.activity.length === 0
+  const empty = total === 0
+  const zeros = SYMS.filter(sym => s.balances[sym].pub === 0 && s.balances[sym].priv === 0)
+  const displayed = empty || showZero ? SYMS : SYMS.filter(sym => !zeros.includes(sym))
   const pad = mobile ? 'p-5' : 'p-6'
   const { t } = useMotion()
   const [history, setHistory] = useState(() => {
@@ -195,7 +184,7 @@ export default function Dashboard() {
           {!empty && (
             <div className="mt-6 border-t border-line pt-2">
               <button type="button" aria-expanded={history} aria-controls="balance-history" onClick={toggleHistory} className="mx-auto flex min-h-10 items-center gap-2 px-3 text-[14px] font-medium text-accentInk">
-                {history ? 'Hide history' : 'Show history'} <Icon name="chevron-down" size={14} className={history ? 'rotate-180' : ''} />
+                {history ? 'Show less' : 'Show more'} <Icon name="chevron-down" size={14} className={history ? 'rotate-180' : ''} />
               </button>
               <div id="balance-history" hidden={!history}>
                 {history && <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: t(160) }}><Chart masked={masked} /></motion.div>}
@@ -204,7 +193,6 @@ export default function Dashboard() {
           )}
         </section>
 
-        {empty && <FundCard mobile={mobile} />}
 
         <section className={`${card} ${pad}`}>
           <div className="flex items-center justify-between gap-3">
@@ -242,16 +230,11 @@ export default function Dashboard() {
               )}
               {mobile && <div className="eyebrow mt-3 flex flex-wrap gap-4 text-ink3"><span className="flex items-center gap-2"><span className="size-2 bg-accent" />Confidential</span><span className="flex items-center gap-2"><span className="size-2 bg-lineStrong" />Public</span></div>}
               <div className="mt-1">
-                {SYMS.map(sym => (
-                  <TokenRow key={sym} sym={sym} pub={s.balances[sym].pub} priv={s.balances[sym].priv} hidden={masked} mobile={mobile} onClick={() => act.openSheet('token', sym)} />
+                {displayed.map(sym => (
+                  <TokenRow zero={!empty && zeros.includes(sym)} key={sym} sym={sym} pub={s.balances[sym].pub} priv={s.balances[sym].priv} hidden={masked} mobile={mobile} onClick={() => act.openSheet('token', sym)} />
                 ))}
               </div>
-              {!mobile && (
-                <div className="mt-3 flex items-center justify-between gap-3">
-                  <Chip tone="neutral" className="eyebrow !py-1 !text-[11px]">Sample values</Chip>
-                  <span className="text-[13px] text-ink3">Select an asset to see both balances and shield or unshield it.</span>
-                </div>
-              )}
+              {!empty && zeros.length > 0 && <button type="button" aria-expanded={showZero} onClick={() => setShowZero(!showZero)} className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 border-t border-line text-[13px] text-ink3">{showZero ? 'Hide tokens with 0 balance' : `Show tokens with 0 balance (${zeros.length})`}<Icon name="chevron-down" size={14} className={showZero ? 'rotate-180' : ''} /></button>}
             </>
           )}
           </div>

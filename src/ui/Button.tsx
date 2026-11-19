@@ -17,7 +17,7 @@ type Props = Omit<HTMLMotionProps<'button'>, 'children'> & {
 }
 
 export default function Button({ variant = 'primary', size = 48, icon, arrow, full, busy, className = '', children, disabled, style, ...rest }: Props) {
-  const { t } = useMotion()
+  const { t, reduced } = useMotion()
   const big = size >= 52
   const base = 'inline-flex select-none items-center justify-center gap-2 whitespace-nowrap px-5 '
   const look =
@@ -37,8 +37,8 @@ export default function Button({ variant = 'primary', size = 48, icon, arrow, fu
       style={{ height: size, ...style }}
       {...rest}
     >
-      {busy ? <Icon name="spinner" size={18} /> : icon ? <Icon name={icon} size={20} className={variant === 'secondary' ? 'text-ink2' : ''} /> : null}
-      {separate(children)}
+      {busy && !reduced ? <Icon name="spinner" size={18} /> : icon ? <Icon name={icon} size={20} className={variant === 'secondary' ? 'text-ink2' : ''} /> : null}
+      {separate(busy && reduced ? 'Waiting…' : children)}
       {arrow && !busy && !disabled && <Icon name="pixel-arrow" size={big ? 12 : 10} />}
     </motion.button>
   )

@@ -5,7 +5,6 @@ import { useMotion } from './lib/motion'
 import Apps from './screens/Apps'
 import Dashboard from './screens/Dashboard'
 import Permits from './screens/Permits'
-import PrivateNowScreen from './screens/PrivateNowScreen'
 import Send from './screens/Send'
 import ShieldFlow from './screens/ShieldFlow'
 import TokenDetail from './screens/TokenDetail'
@@ -31,14 +30,12 @@ const screen = (r: Route) => {
       return <Apps />
     case 'permits':
       return <Permits />
-    case 'success':
-      return <PrivateNowScreen />
     default:
       return <Welcome />
   }
 }
 
-/** hash router: #/welcome #/dashboard #/shield #/unshield #/send #/apps #/permits #/success */
+/** hash router: #/welcome #/dashboard #/shield #/unshield #/send #/apps #/permits */
 export default function App() {
   const { s, mobile } = useStore()
   const route = useRoute()
@@ -96,7 +93,7 @@ export default function App() {
     <div className={`h-full ${reduced ? 'reduce-motion' : ''} ${framed ? 'flex items-center justify-center overflow-auto bg-lineStrong' : ''}`}>
       <div id="app-root" className="relative overflow-hidden bg-bg" style={framed ? { width: 390, height: 844, flexShrink: 0, boxShadow: '0 24px 80px rgb(var(--shadow-ink) / .35)' } : { height: 'var(--app-height, 100dvh)' }}>
         <AppShell route={route}>
-          <motion.div key={viewKey} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: t(180) }} className={mobile ? 'flex min-h-0 flex-1 flex-col' : route === 'welcome' ? 'h-full' : ''}>
+          <motion.div key={viewKey} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: t(180) }} className={mobile ? 'flex min-h-0 min-w-0 flex-1 flex-col' : route === 'welcome' ? 'h-full' : ''}>
             {screen(route)}
           </motion.div>
         </AppShell>
