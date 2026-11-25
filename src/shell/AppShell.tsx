@@ -1,7 +1,9 @@
 import { separate } from '../ui/Sep'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useEffect, useRef, useState, type ReactNode } from 'react'
-import logoRaw from '../assets/logo-fhenix-app.svg?raw'
+import BrandLogo from '../ui/BrandLogo'
+import Sidebar from './Sidebar'
+import { useTheme } from '../lib/theme'
 import tokens from '../assets/tokens.json'
 import { useMotion } from '../lib/motion'
 import { data, nav, useStore, type Route } from '../state/store'
@@ -24,9 +26,7 @@ function useGo() {
   return (r: Route) => (s.connected ? nav(r) : act.startConnect(false))
 }
 
-export const Logo = ({ height = 25 }: { height?: number }) => (
-  <span aria-label="Fhenix App" role="img" className="fhenix-logo inline-flex [&>svg]:h-full [&>svg]:w-auto" style={{ height }} dangerouslySetInnerHTML={{ __html: logoRaw }} />
-)
+export const Logo = (_props: { height?: number }) => <BrandLogo />
 
 /* ---------- dropdown ---------- */
 function Dropdown({ button, children, align = 'left' }: { button: (open: boolean, toggle: () => void) => ReactNode; children: (close: () => void) => ReactNode; align?: 'left' | 'right' }) {
@@ -166,74 +166,6 @@ export function ActionRow({ stretch }: { stretch?: boolean }) {
 export { EXPLORER_URL, DOCS_URL } from '../config/links'
 import { EXPLORER_URL, DOCS_URL } from '../config/links'
 
-const sideRow = 'relative flex h-10 w-full shrink-0 items-center gap-3 px-4 text-left text-body'
-const divider = <div aria-hidden className="shrink-0 py-3"><div className="h-px bg-line" /></div>
-
-function Sidebar({ route }: { route: Route }) {
-  const go = useGo()
-  const row = (n: (typeof NAV)[number]) => {
-    const active = isActive(n, route) && route !== 'welcome'
-    return (
-      <button key={n.route} type="button" aria-current={active ? 'page' : undefined} onClick={() => go(n.route)} className={`${sideRow} ${active ? 'bg-surface font-medium text-ink' : 'text-ink2 hover:bg-surface/60'}`}>
-        {active && <span className="absolute inset-y-2 left-0 w-0.5 bg-accent" />}
-        <Icon name={n.icon} size={18} />
-        <span className="flex-1">{n.label}</span>
-        {n.badge && <span className="bg-surface2 px-2 py-0.5 text-caption text-ink2">{n.badge}</span>}
-      </button>
-    )
-  }
-  const soon = (label: string, icon: string) => (
-    <button type="button" disabled aria-disabled="true" title="Coming soon" className={`${sideRow} text-ink2`}>
-      <Icon name={icon} size={18} /><span className="flex-1">{label}</span>
-      <span className="bg-surface2 px-2 py-0.5 text-caption text-ink3">Soon</span>
-    </button>
-  )
-  const external = (label: string, url: string, icon: string) => (
-    <a href={url} target="_blank" rel="noopener" className={`${sideRow} text-ink2 hover:bg-surface/60`}>
-      <Icon name={icon} size={18} /><span className="flex-1">{label}</span><Icon name="arrow-up-right" size={14} />
-    </a>
-  )
-  return (
-    <aside className="no-scrollbar flex h-full shrink-0 flex-col overflow-y-auto px-4 pb-5 pt-6" style={{ width: tokens.size.sidebar }}>
-      <button type="button" className="mb-6 shrink-0 self-start px-2" onClick={() => go('dashboard')} aria-label="Fhenix App home"><Logo /></button>
-      <nav className="flex flex-col gap-1" aria-label="Main">
-        {NAV.slice(0, 3).map(row)}
-        {soon('Trading', 'trading-candles')}
-        {divider}
-        <div className="eyebrow text-ink3">Ecosystem</div>
-        {row(NAV[3])}
-        {soon('fUSD', 'fusd')}
-        {soon('TGE', 'tge')}
-        {external('Fhenix Explorer', EXPLORER_URL, 'explorer')}
-      </nav>
-      <div className="min-h-6 flex-1" />
-      <div className="flex shrink-0 flex-col gap-1">
-        {row(NAV[4])}
-        {divider}
-        {external('Docs', DOCS_URL, 'book')}
-        <ThemeSwitch />
-      </div>
-    </aside>
-  )
-}
-
-export function PermitChip({ header = false }: { header?: boolean }) {
-  const { s, act } = useStore()
-  const active = s.permit === 'active'
-  const label = active ? `Permit\u001f${Math.max(0, s.permitDays - 1)} days` : s.permit === 'expired' ? 'Permit expired\u001fRenew' : 'No permit\u001fCreate'
-  if (header) {
-    const title = active ? `Permit active, ${Math.max(0, s.permitDays - 1)} days left` : s.permit === 'expired' ? 'Permit expired, renew permit' : 'No permit, create permit'
-    return <button type="button" title={title} aria-label={title} onClick={event => event.metaKey || event.ctrlKey ? nav('permits') : act.renew()} className="relative flex size-11 items-center justify-center border border-line bg-surface text-ink2">
-      <Icon name="permit-key" size={18} /><span aria-hidden className={`absolute left-1 top-1 size-2 ${active ? 'bg-live' : s.permit === 'expired' ? 'bg-warn' : 'border border-ink3'}`} />
-    </button>
-  }
-  return (
-    <button type="button" onClick={event => event.metaKey || event.ctrlKey ? nav('permits') : act.renew()} className="flex h-10 items-center gap-2 border border-line bg-surface px-3 text-body font-medium hover:border-lineStrong">
-      <span aria-hidden className={`round size-2 ${active ? 'bg-live' : 'border border-ink3'}`} />{separate(label)}
-    </button>
-  )
-}
-
 const mobileTitles: Partial<Record<Route, string>> = { shield: 'Shield', unshield: 'Shield', send: 'Send', apps: 'Apps', permits: 'Permits' }
 
 function TopBar({ route }: { route: Route }) {
@@ -247,7 +179,7 @@ function TopBar({ route }: { route: Route }) {
   )
   return (
     <header className="z-20 flex h-[108px] shrink-0 items-center justify-end gap-2 px-8">
-      {s.connected ? <><PermitChip header /><NetworkChip /><WalletChip /></> : connect}
+      {s.connected ? <><NetworkChip /><WalletChip /></> : connect}
     </header>
   )
 }
@@ -300,6 +232,8 @@ function MobileActionBar({ children }: { children: ReactNode }) {
 /** Mobile: scroll area + pinned bottom bar (CTA → 12 → helper → 16 → tabs). Desktop: content column, optional centred 536 card. */
 export function Page({ children, bottom, narrow, card, desktopClassName = '' }: PageProps) {
   const { mobile } = useStore()
+  const theme = useTheme()
+  const go = useGo()
   if (mobile)
     return (
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
@@ -330,6 +264,8 @@ export function Page({ children, bottom, narrow, card, desktopClassName = '' }: 
 
 export default function AppShell({ route, children }: { route: Route; children: ReactNode }) {
   const { mobile } = useStore()
+  const theme = useTheme()
+  const go = useGo()
   if (mobile)
     return (
       <div className={`mobile-shell app-wash grid h-full bg-bg ${route === 'welcome' ? 'grid-rows-[auto_minmax(0,1fr)]' : 'grid-rows-[auto_minmax(0,1fr)_auto]'}`}>
@@ -340,7 +276,7 @@ export default function AppShell({ route, children }: { route: Route; children: 
     )
   return (
     <div className="app-wash flex h-full bg-bg">
-      <Sidebar route={route} />
+      <Sidebar route={route} darkMode={theme === 'dark' ? 'on' : 'off'} onNavigate={go} />
       <div className="flex min-w-0 flex-1 flex-col">
         <TopBar route={route} />
         <main className={`min-h-0 flex-1 ${route === 'welcome' ? 'overflow-hidden' : 'overflow-y-auto'}`} data-scroll>

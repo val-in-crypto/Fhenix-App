@@ -1,5 +1,7 @@
 :root {
   --font-sans: 'Geist Sans', system-ui, sans-serif;
+  --brand-bracket: #BCBEBF;
+  --sidebar-shadow: rgb(0 0 0 / .08);
   --font-mono: 'Geist Mono', ui-monospace, monospace;
   --text-value: 40px; --line-value: 48px; --tracking-value: -.02em;
   --text-title: 22px; --line-title: 28px; --tracking-title: -.01em;

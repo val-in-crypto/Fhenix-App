@@ -71,3 +71,8 @@ svg [font-family='Geist Mono'] { font-family: 'Geist Mono', monospace; }
 
 @keyframes step-sweep { from { transform: translateX(-100%); } to { transform: translateX(400%); } }
 .step-sweep { animation: step-sweep 1.2s linear infinite; }
+.r5-sidebar { box-shadow: inset -1px 0 0 var(--color-line), 0 2px 4px var(--sidebar-shadow); }
+.r5-nav { display:flex; flex:none; align-items:center; gap:12px; height:40px; width:100%; padding-right:12px; font-size:var(--text-body); line-height:var(--line-body); font-weight:400; text-align:left; }
+.r5-brand [fill="#001623"] { fill:var(--color-ink); }
+.r5-brand [fill="#0AD9DC"] { fill:var(--color-accent); }
+.r5-brand [fill="#BCBEBF"] { fill:var(--brand-bracket); }
