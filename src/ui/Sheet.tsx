@@ -5,12 +5,12 @@ import { M, easeOut, useMotion } from '../lib/motion'
 import { useStore } from '../state/store'
 import Icon from './Icon'
 
-type Props = { open: boolean; onClose: () => void; label: string; width?: number; children: ReactNode }
+type Props = { open: boolean; onClose: () => void; label: string; width?: number; compact?:boolean; children: ReactNode }
 
 const FOCUSABLE = 'button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])'
 
 /** Mobile bottom sheet (grabber, drag to close) ⇄ desktop centred dialog. Same API for connect, permit, token detail, send review. */
-export default function Sheet({ open, onClose, label, width = tokens.size.dialogWidth.default, children }: Props) {
+export default function Sheet({ open, onClose, label, width = tokens.size.dialogWidth.default, compact=false, children }: Props) {
   const { mobile } = useStore()
   const { t } = useMotion()
   const panel = useRef<HTMLDivElement>(null)
@@ -95,7 +95,7 @@ export default function Sheet({ open, onClose, label, width = tokens.size.dialog
               aria-label={label}
               tabIndex={-1}
               className="no-scrollbar relative flex max-h-full flex-col gap-6 overflow-y-auto bg-surface p-8 shadow-[0_24px_64px_rgb(var(--shadow-ink)_/_.18)] outline-none"
-              style={{ width }}
+              style={{ width, padding: compact?24:32, gap: compact?16:24 }}
               initial={{ opacity: 0, scale: 0.98, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.98, y: 8 }}

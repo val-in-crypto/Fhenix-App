@@ -15,7 +15,7 @@ export default function TokenPicker({ open, onClose, selected, confidential, onS
   useEffect(()=>{if(open)setSearch('')},[open])
   const contracts = TOKEN_NETWORKS[dataChain(s.networkIdx)]?.contracts
   const filtered = portfolioAssets.filter(a=>`${a.symbol} ${a.name} ${contracts?.[a.symbol as Sym]?.public ?? ''} ${contracts?.[a.symbol as Sym]?.confidential ?? ''}`.toLowerCase().includes(search.trim().toLowerCase()))
-  return <Sheet open={open} onClose={onClose} label="Select token" width={480}>
+  return <Sheet open={open} onClose={onClose} label="Select token" width={480} compact>
     <div className="flex items-center justify-between"><div><h2 className="text-heading">Select token</h2><p className="mt-1 text-caption text-ink3">{confidential ? 'Unshield from your confidential balance' : 'Shield from your public wallet balance'}</p></div><SheetClose onClick={onClose} /></div>
     <Field className="flex h-10 items-center gap-2 bg-surface2 px-3"><Icon name="search" size={16}/><input autoFocus aria-label="Search tokens" placeholder="Search name or paste address" value={search} onChange={e=>setSearch(e.target.value)} className="min-w-0 flex-1 text-body" /></Field>
     <div><div className="flex justify-between border-y border-line py-2 text-caption text-ink3"><span>Token</span><span>{confidential ? 'Confidential' : 'Public'} balance</span></div>

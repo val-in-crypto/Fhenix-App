@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useMotion } from '../lib/motion'
 import { ActionRow, Page } from '../shell/AppShell'
-import { fmtPrivate, fmtUsd } from '../lib/format'
+import { fmtPrivate, fmtPublic, fmtUsd } from '../lib/format'
 import { copy, data, isMasked, nav, usd, useStore } from '../state/store'
 import ActivityList from '../ui/ActivityList'
 import Button from '../ui/Button'
@@ -12,9 +12,10 @@ import Icon from '../ui/Icon'
 import Masked from '../ui/Masked'
 import RatioBar from '../ui/RatioBar'
 import TokenRow from '../ui/TokenRow'
+import PendingClaims from '../ui/PendingClaims'
 
 import { HERO_GRADIENT } from '../config/flags'
-import { portfolioBalance, portfolioSymbols } from '../config/assets'
+import { portfolioBalance, portfolioPrice, portfolioSymbols } from '../config/assets'
 
 const card = 'dashboard-card border border-line bg-surface'
 const HISTORY_KEY = 'fhenix.history'
@@ -25,7 +26,8 @@ export default function Dashboard() {
   const [showZero, setShowZero] = useState(false)
   const masked = isMasked(s)
   const u = usd(s.balances)
-  const total = u.pub + u.priv
+  const claimable = s.pendingUnshield ? s.pendingUnshield.amount * portfolioPrice(s.pendingUnshield.asset??'USDC') : 0
+  const total = u.pub + u.priv + claimable
   const net = data.networks[s.networkIdx]
   const empty = total === 0
   const zeros = SYMS.filter(sym => { const balance = portfolioBalance(s.balances, sym); return balance.pub === 0 && balance.priv === 0 })
@@ -50,7 +52,7 @@ export default function Dashboard() {
   return (
     <Page>
       <div className="flex flex-col gap-6">
-        {s.pendingUnshield && s.unshieldStep >= 3 && <div className="flex items-center justify-between gap-3 border border-line bg-accentSoft p-4 text-body"><span>1 unshield ready to claim</span><Button size={44} disabled={s.busy} onClick={act.claim}>{s.busy ? 'Claiming…' : 'Claim'}</Button></div>}
+        {s.pendingUnshield && s.unshieldStep === 3 && <div className="flex items-center justify-between gap-3 border border-line bg-accentSoft p-4 text-body"><span>{fmtPublic(s.pendingUnshield.amount)} {s.pendingUnshield.asset??'USDC'} is ready to claim</span><Button size={44} onClick={()=>nav('unshield')}>Claim</Button></div>}
         {s.permit !== 'active' && !empty && (
           <div data-tour="permit-banner" className={`flex items-center gap-3 ${s.permit === 'expired' ? 'bg-dangerSoft' : 'border border-line bg-surface'} ${mobile ? 'p-3 pl-4' : 'px-5 py-3'}`} role="status">
             <Icon name="permit-key" className={s.permit === 'expired' ? 'text-danger' : 'text-accentInk'} />
@@ -71,7 +73,7 @@ export default function Dashboard() {
           </div>
           {mobile ? <div className="mt-4"><Button full size={52} arrow className="overview-shield" onClick={() => nav('shield')}>Shield</Button></div> : <p className="mt-2 text-body text-ink3">{separate(empty ? `No balances yet\u001f${net.name}` : `2 assets\u001f${net.name}${net.unsupported ? '' : ' Sepolia'}`)}</p>}
           <div className={mobile ? 'mt-4' : 'mt-6'}>
-            <RatioBar priv={u.priv} pub={u.pub} hidden={masked && !empty} compact={mobile} />
+            <RatioBar claimable={claimable} priv={u.priv} pub={u.pub} hidden={masked && !empty} compact={mobile} />
           </div>
         </section>
 
@@ -107,7 +109,7 @@ export default function Dashboard() {
               {mobile && <div className="eyebrow mt-3 flex flex-wrap gap-4 text-ink3"><span className="flex items-center gap-2"><span className="size-2 bg-accent" />Confidential</span><span className="flex items-center gap-2"><span className="size-2 bg-lineStrong" />Public</span></div>}
               <div className="mt-1">
                 {displayed.map(sym => (
-                  <TokenRow zero={zeros.includes(sym)} key={sym} sym={sym} pub={portfolioBalance(s.balances, sym).pub} priv={portfolioBalance(s.balances, sym).priv} hidden={masked} mobile={mobile} onClick={() => act.openSheet('token', sym)} />
+                  <TokenRow claimable={s.unshieldStep===3&&s.pendingUnshield&&(s.pendingUnshield.asset??'USDC')===sym?s.pendingUnshield.amount:undefined} zero={zeros.includes(sym)} key={sym} sym={sym} pub={portfolioBalance(s.balances, sym).pub} priv={portfolioBalance(s.balances, sym).priv} hidden={masked} mobile={mobile} onClick={() => act.openSheet('token', sym)} />
                 ))}
               </div>
               {!empty && zeros.length > 0 && <button type="button" aria-expanded={showZero} onClick={() => setShowZero(!showZero)} className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 border-t border-line text-body text-ink3">{showZero ? 'Hide tokens with 0 balance' : `Show tokens with 0 balance (${zeros.length})`}<Icon name="chevron-down" size={14} className={showZero ? 'rotate-180' : ''} /></button>}

@@ -241,3 +241,25 @@
 @media (max-width:767px) { .mobile-shell .dashboard-card { background:transparent; border:0; border-bottom:1px solid var(--color-line); box-shadow:none; }.dashboard-card.overview-hero { background:transparent; }.overview-shield {box-shadow:0 8px 24px var(--shield-mobile-shadow);} :root:not([data-theme="dark"]) .overview-shield {background:var(--color-accent);border-color:var(--color-accent);} }
 @media (prefers-reduced-motion:reduce) { .pending-dots > span {animation:none;opacity:1;} }
 .reduce-motion .pending-dots > span { animation:none;opacity:1; }
+
+:root{
+  --illo-edge:#0b1f2a;        --illo-edge-accent:#0b1f2a;
+  --illo-top:#f3fcfc;         --illo-tint:#e2f8f9;   --illo-mid:#9be7e8;  --illo-mid-spark:#9be7e8;
+  --illo-side-l:#e9ecef;      --illo-side-r:#dce1e5; --illo-paper:#ffffff; --illo-white:#ffffff;
+  --illo-accent:#0ad9dc;      --illo-accent-ink:#007a7e;
+  --illo-puck:#061520;        --illo-puck-face:#13293a;
+  --illo-usdc-rim:#1f5fa8;    --illo-usdc-face:#2775ca;
+  --illo-trail:#8c99a3;
+}
+[data-theme="dark"]{            /* = Figma mode "Dark · App" */
+  --illo-edge:#eaeff1;        --illo-edge-accent:#0ad9dc;
+  --illo-top:#0a4148;         --illo-tint:#003246;   --illo-mid:#06393f;  --illo-mid-spark:#2ee3e5;
+  --illo-side-l:#12303f;      --illo-side-r:#183e53; --illo-paper:#072433; --illo-white:#ffffff;
+  --illo-accent:#0ad9dc;      --illo-accent-ink:#2ee3e5;
+  --illo-puck:#183e53;        --illo-puck-face:#0d2c3d;
+  --illo-usdc-rim:#1f5fa8;    --illo-usdc-face:#2775ca;
+  --illo-trail:#5c7a8e;
+}
+
+
+.claim-art { width:100%; height:100%; overflow:visible; }.claim-art > svg {display:block;width:100%;height:auto;overflow:visible;}

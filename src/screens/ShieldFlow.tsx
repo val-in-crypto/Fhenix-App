@@ -7,6 +7,8 @@ import { TOKEN_NETWORKS, TX_HASHES } from '../config/tokens'
 import SwapForm from '../ui/SwapForm'
 import SegmentedSwitch from '../ui/SegmentedSwitch'
 import Steps from '../ui/Steps'
+import PendingClaims from '../ui/PendingClaims'
+import ClaimReady from '../illus/ClaimReady'
 import Button from '../ui/Button'
 import Icon from '../ui/Icon'
 import Masked from '../ui/Masked'
@@ -88,9 +90,10 @@ export default function ShieldFlow({ mode }: { mode: 'shield' | 'unshield' }) {
     <>
       <Page narrow card bottom={<>
         <Button full size={mobile ? 52 : 48} busy={busy} disabled={disabled} arrow={!disabled} onClick={action}>{label}</Button>
-        <p className="mt-3 text-center text-body  text-ink3">{separate(shield ? '≈ $0.12 fee\u001f~30 sec\u001fAmount is visible on-chain. Your balance is not.' : s.unshieldStep === 2 ? 'Claim unlocks after decryption\u001f~30 sec' : 'Step 1 of 3\u001fthen decrypt and claim')}</p>
+        <p className="mt-3 text-center text-body  text-ink3">{separate(shield ? '≈ $0.12 fee\u001f~30 sec\u001fAmount is visible on-chain. Your balance is not.' : s.unshieldStep === 2 ? 'Claim unlocks after decryption\u001f~30 sec' : s.unshieldStep>=3 ? 'Move USDC to your wallet' : 'Step 1 of 3\u001fthen decrypt and claim')}</p>
       </>}>
         <div data-tour="shield-form">
+          {!shield&&s.pendingUnshield&&<div className="mb-5"><PendingClaims/></div>}
           <SegmentedSwitch width="fill" label="Mode" value={mode} onChange={value => { if (value !== mode) swap() }} disabled={busy || Boolean(s.pendingUnshield)} options={[{ value: 'shield', label: 'Shield' }, { value: 'unshield', label: 'Unshield' }]} />
           <div className="mt-5">
             <SwapForm flipped={!shield} onSwap={swap} disabled={busy || Boolean(s.pendingUnshield)}
@@ -101,7 +104,7 @@ export default function ShieldFlow({ mode }: { mode: 'shield' | 'unshield' }) {
           <Steps labels={shield ? [allowed ? 'Approved' : 'Approve', 'Shield', 'Done'] : ['Unshield', 'Decrypt', 'Claim']} active={shield ? allowed || s.shieldStep >= 2 ? 1 : 0 : s.unshieldStep < 2 ? 0 : s.unshieldStep === 2 ? 1 : 2} pending={busy} />
         </div>
       </Page>
-      <SuccessModal open={Boolean(result)} onClose={close} illustration={result?.kind === 'shield' ? <PrivateNow scale={mobile ? 216 / 560 : 320 / 560} /> : <SuccessIllustration kind="unshield" />}
+      <SuccessModal open={Boolean(result)} onClose={close} illustration={result?.kind === 'shield' ? <PrivateNow scale={mobile ? 216 / 560 : 320 / 560} /> : <ClaimReady />}
         eyebrow={result?.kind === 'shield' ? 'Shielding complete' : 'Unshield complete'}
         title={result?.kind === 'shield' ? `Your ${result.asset} is now confidential` : `${resultAmount} ${result?.asset ?? sym} is back in your wallet`}
         body={result?.kind === 'shield' ? `${resultAmount} ${result.asset} has been shielded as f${result.asset}. Your balance is private and visible only to you.` : `Your ${result?.asset ?? sym} is now available in your public wallet balance.`}

@@ -15,6 +15,7 @@ import PermitSheet from './sheets/PermitSheet'
 import { nav, useRoute, useStore, type Route } from './state/store'
 import Tour from './tour/Tour'
 import Toasts from './ui/Toasts'
+import ClaimReminder from './ui/ClaimReminder'
 
 const screen = (r: Route) => {
   switch (r) {
@@ -101,7 +102,7 @@ export default function App() {
         <ConnectSheet />
         <PermitSheet />
         <TokenDetail />
-        <Toasts />
+        <ClaimReminder /><Toasts />
         <DemoPanel />
       </div>
     </div>

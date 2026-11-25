@@ -23,10 +23,10 @@ export function Coin({ sym, size = 32, shielded }: { sym: string; size?: number;
   )
 }
 
-type Props = { zero?: boolean; sym: PortfolioSym; pub: number; priv: number; hidden: boolean; mobile: boolean; onClick: () => void }
+type Props = { claimable?:number; zero?: boolean; sym: PortfolioSym; pub: number; priv: number; hidden: boolean; mobile: boolean; onClick: () => void }
 
 /** Unified row: PUBLIC 1,250.00 / PRIVATE [1,000.00]. Row → token detail. */
-export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick, zero }: Props) {
+export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick, zero, claimable }: Props) {
   const a = meta[sym]
   const dec = decOf(sym)
   if (mobile)
@@ -34,7 +34,7 @@ export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick, zero
       <button type="button" onClick={onClick} className="flex w-full items-center gap-3 py-3 text-left">
         <Coin sym={sym} />
         <span className="min-w-0 flex-1">
-          <span className="block text-body font-medium ">{sym}</span>
+          <span className="block text-body font-medium ">{sym}</span>{claimable!==undefined&&<span className="block text-caption text-accentInk">Claimable {fmtPublic(claimable,dec)}</span>}
           <span className="block text-caption  text-ink3">
             {sym}<Sep />{a.wrapped}
           </span>
@@ -52,7 +52,7 @@ export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick, zero
     <button type="button" onClick={onClick} className="token-grid min-h-16 w-full items-center py-3 text-left hover:bg-surface2">
       <span className="flex min-w-0 items-center gap-4">
         <Coin sym={sym} size={36} />
-        <span className="min-w-0"><span className="block text-label">{sym}</span><span className="block text-caption text-ink3">{a.name}</span></span>
+        <span className="min-w-0"><span className="block text-label">{sym}</span>{claimable!==undefined&&<span className="block text-caption text-accentInk">Claimable {fmtPublic(claimable,dec)}</span>}<span className="block text-caption text-ink3">{a.name}</span></span>
       </span>
       <span className={`text-label ${zero ? 'opacity-[.64]' : ''}`}><Masked value={priv} hidden={hidden && !zero} dec={dec} /></span>
       <span className={`text-label tabular-nums ${zero ? 'opacity-[.64]' : ''}`}>{fmtPublic(pub, dec)}</span>

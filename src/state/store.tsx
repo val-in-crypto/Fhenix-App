@@ -17,8 +17,19 @@ const parse = (): Route => {
   return (ROUTES as string[]).includes(path) ? (path as Route) : 'welcome'
 }
 
+let currentNavigationGuard: ((route:Route)=>boolean)|null=null
 export const nav = (route: Route) => {
+  if(!bypassClaimGuard&&currentNavigationGuard&&!currentNavigationGuard(route))return
   if (parse() !== route || !location.hash) location.hash = route === 'unshield' ? '#/shield?mode=unshield' : '#/' + route
+}
+let bypassClaimGuard=false
+export const navWithoutGuard=(route:Route)=>{if(parse()!==route)bypassClaimGuard=true;nav(route)}
+export const installNavigationGuard=(guard:(route:Route)=>boolean)=>{
+  currentNavigationGuard=guard
+  let accepted=location.hash
+  const handler=()=>{if(bypassClaimGuard){bypassClaimGuard=false;accepted=location.hash;return}if(location.hash===accepted)return;if(!guard(parse())){history.replaceState(null,'',accepted);queueMicrotask(()=>dispatchEvent(new HashChangeEvent('hashchange')))}else accepted=location.hash}
+  addEventListener('hashchange',handler,true)
+  return()=>{currentNavigationGuard=null;removeEventListener('hashchange',handler,true)}
 }
 const subHash = (cb: () => void) => {
   addEventListener('hashchange', cb)
@@ -77,7 +88,7 @@ export interface State {
   flowAsset: Sym
   lastShieldAsset: Sym
   lastShield: number
-  pendingUnshield: { id: string; amount: number; asset?: Sym } | null
+  pendingUnshield: { id: string; amount: number; asset?: Sym; networkIdx?: number } | null
   firstShieldDone: boolean
   tour: { status: 'idle' | 'active' | 'paused' | 'done'; step: number }
   tourPending: boolean
@@ -329,7 +340,7 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
 
       /* unshield */
       unshieldRequest: async () => {
-        if (needPermit()) return
+        if (needPermit() || ref.current.pendingUnshield) return
         const e = epoch.current
         const amt = num(ref.current.amt.unshield)
         const sym = ref.current.flowAsset
@@ -339,7 +350,7 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
         if (stale(e)) return
         if (failed() || amt > ref.current.balances[sym].priv) return set({ busy: false, unshieldStep: 0 })
         const id = uid()
-        set(s => ({ busy: false, unshieldStep: 2, pendingUnshield: { id, amount: amt, asset: sym }, balances: mv(s.balances, sym, 0, -amt) }))
+        set(s => ({ busy: false, unshieldStep: 2, pendingUnshield: { id, amount: amt, asset: sym, networkIdx: s.networkIdx }, balances: mv(s.balances, sym, 0, -amt) }))
         addAct({ id, kind: 'unshield', label: `Unshield f${sym} → ${sym}`, amount: `+${fmtPublic(amt)} ${sym}`, when: 'Just now\u001fdecrypting', status: 'pending' })
         toast({ kind: 'info', title: 'Unshield requested', body: 'Claim it from Activity on your Dashboard' })
         await A.runDecrypt()
@@ -356,21 +367,23 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
         const e = epoch.current
         const claim = ref.current.pendingUnshield
         const asset = claim.asset ?? 'USDC'
-        const networkIdx = ref.current.networkIdx
-        set({ busy: true, unshieldStep: 4 })
+        const networkIdx = claim.networkIdx ?? ref.current.networkIdx
+        if(networkIdx!==ref.current.networkIdx){toast({kind:'info',title:'Switch to the claim network first'});return}
+        navWithoutGuard('unshield')
+        set({ busy: true, unshieldStep: 4, sheet: null })
         await wait(D.claim)
         if (stale(e)) return
         if (failed()) return set({ busy: false, unshieldStep: 3 })
         const inFlow = parse() === 'unshield'
         set(state => ({
           busy: false, unshieldStep: 0, pendingUnshield: null, amt: { ...state.amt, unshield: '' },
-          success: inFlow ? { kind: 'unshield', amount: claim.amount, asset, networkIdx } : null,
+          success: { kind: 'unshield', amount: claim.amount, asset, networkIdx },
           balances: mv(state.balances, asset, claim.amount, 0),
           activity: upd(state.activity, claim.id, { status: 'confirmed', kind: 'unshield-claim', when: 'Today\u001fclaimed' }),
         }))
         if (!inFlow) toast({ kind: 'success', title: `Unshielded ${fmtPublic(claim.amount)} ${asset}`, body: 'Back in your public wallet balance' })
       },
-      unshieldReset: () => set({ unshieldStep: 0, pendingUnshield: null }),
+      unshieldReset: () => { if(!ref.current.pendingUnshield)set({ unshieldStep: 0 }) },
 
       /* send */
       sendOpen: async (

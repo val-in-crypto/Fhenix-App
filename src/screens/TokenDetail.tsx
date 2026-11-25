@@ -9,6 +9,8 @@ import Sheet, { SheetClose } from '../ui/Sheet'
 import { Coin, assetMeta, decOf } from '../ui/TokenRow'
 import RatioBar from '../ui/RatioBar'
 import Icon from '../ui/Icon'
+import PendingClaims from '../ui/PendingClaims'
+import AppLogo from '../ui/AppLogo'
 import { Sep } from '../ui/Sep'
 
 export default function TokenDetail() {
@@ -51,8 +53,10 @@ export default function TokenDetail() {
         <p className={`mt-2 text-body ${confidential ? 'text-accentInk' : 'text-ink3'}`}>{confidential ? masked ? 'Create a permit to read it' : balances.priv === 0 ? 'No confidential balance' : 'Decrypted with your permit' : fmtUsd(balances.pub * price)}</p>
       </div>)}
     </div>
+    <PendingClaims asset={sym} />
     <RatioBar priv={balances.priv * price} pub={balances.pub * price} hidden={masked} detail />
     <div className="grid grid-cols-2 gap-3"><Button icon="shield" size={48} disabled={!transferable} onClick={() => go('shield')}>Shield</Button><Button variant="secondary" size={48} disabled={!transferable} onClick={() => go('send')}>Send</Button></div>
+    <section><h2 className="text-heading">Used in</h2><div className="mt-3 flex flex-wrap gap-4">{data.apps.filter(app=>app.tag==='Live').map(app=><span key={app.name} className="flex items-center gap-2 text-body"><AppLogo app={app.name}/>{app.name}</span>)}</div></section>
     <div className="border-t border-line">
       <button type="button" aria-expanded={details} aria-controls="token-contracts" onClick={() => setDetails(!details)} className="flex min-h-11 w-full items-center justify-between text-body font-medium text-ink3">Details<Icon name="chevron-down" size={14} className={details ? 'rotate-180' : ''} /></button>
       {details && <div id="token-contracts"><div className="eyebrow pb-2 text-ink3">Contracts<Sep />{network.name}</div>
