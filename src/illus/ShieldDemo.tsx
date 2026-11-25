@@ -286,10 +286,12 @@ function applyChrome(els: Els, t: number, tabs: (HTMLElement | null)[], stepRef:
     // Captions move and fade without animating paint properties.
     const cap = els[`cap${i}`]
     if (cap) {
-      cap.style.opacity = String(vis)
+      const capEnter = out(clamp01(since / .2))
+      const capExit = clamp01((since - LENS[i]) / .2)
+      cap.style.opacity = String(capEnter * (1 - capExit))
       // once invisible it glides back below the line, so re-entry starts from where it already is
       const back = clamp01((since - LENS[i] - 0.5) / 1)
-      cap.style.transform = `translateY(${8 * (1 - enter) - 8 * exit + 16 * exit * back}px)`
+      cap.style.transform = `translateY(${8 * (1 - capEnter) - 8 * capExit + 16 * capExit * back}px)`
     }
     if (since < LENS[i] && stepRef.current !== i) {
       stepRef.current = i
@@ -361,27 +363,9 @@ function Chrome({ mobile }: { mobile: boolean }) {
   )
 }
 
-/** prefers-reduced-motion: the three finished states side by side, nothing moves */
-function StaticRow({ mobile, style, className }: { mobile: boolean; style: CSSProperties; className: string }) {
-  return (
-    <div className={`shield-demo flex shrink-0 flex-col justify-center border border-line bg-stage ${mobile ? 'gap-2 p-3' : 'gap-4 p-6'} ${className}`} style={style} role="group" aria-label="How it works: public, shield, confidential">
-      <div className="grid grid-cols-3 gap-2">
-        {[1.2, 6.9, 11.2].map((at, i) => (
-          <figure key={i} className="m-0 min-w-0">
-            <svg viewBox="20 60 560 310" className="block h-auto w-full" aria-hidden>
-              <Stage at={at} tag={0} />
-            </svg>
-            <figcaption className="mt-2">
-              <div className="text-caption font-medium text-accentInk">{`0${i + 1} / 03`}</div>
-              <div className={`font-medium text-ink ${mobile ? 'text-caption ' : 'text-body '}`}>{STEPS[i].tab}</div>
-              <div className="mt-1 text-caption  text-ink2">{STEPS[i].value}</div>
-              {!mobile && <p className="mt-1 text-caption  text-ink2">{STEPS[i].text}</p>}
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-    </div>
-  )
+/** Reduced motion shows step 2 in its complete, static pose. */
+function StaticRow({mobile,style,className}:{mobile:boolean;style:CSSProperties;className:string}){
+ return <div className={`shield-demo flex shrink-0 flex-col justify-center border border-line bg-stage p-4 ${className}`} style={style} role="img" aria-label="Shielding tokens into a confidential balance, step 2 of 3"><svg viewBox="20 60 560 310" className="block h-auto w-full" aria-hidden><Stage at={6.9} tag={0}/></svg><div className="text-caption text-accentInk">02 / 03</div><div className="text-label">{STEPS[1].tab}</div><p className="mt-1 text-body text-ink2">{STEPS[1].text}</p></div>
 }
 
 export default function ShieldDemo({ mobile, className = '' }: { mobile: boolean; className?: string }) {
@@ -400,9 +384,16 @@ export default function ShieldDemo({ mobile, className = '' }: { mobile: boolean
   const step = useRef(-1)
 
   const paused = useRef(false)
+  const visible = useRef(true)
+  useEffect(()=>{
+    if(!svg.current)return
+    const observer=new IntersectionObserver(([entry])=>{visible.current=entry.isIntersecting})
+    observer.observe(svg.current)
+    return()=>observer.disconnect()
+  },[reduced,mobile])
 
   useAnimationFrame((_, delta) => {
-    if (reduced || scrub.current || paused.current) return
+    if (reduced || scrub.current || paused.current || document.hidden || !visible.current) return
     time.set((time.get() + (Math.min(delta, 500) / 1000) * speed) % LOOP)
   })
 
@@ -429,8 +420,8 @@ export default function ShieldDemo({ mobile, className = '' }: { mobile: boolean
     const from = time.get()
     const d = ((SCRUB[i] - from + LOOP * 1.5) % LOOP) - LOOP / 2
     const ctl = animate(from, from + d, {
-      duration: 0.5,
-      ease: travel,
+      duration: 0.6,
+      ease: [.45,0,.55,1],
       onUpdate: v => time.set(((v % LOOP) + LOOP) % LOOP),
       onComplete: () => (scrub.current = null),
     })
@@ -440,7 +431,7 @@ export default function ShieldDemo({ mobile, className = '' }: { mobile: boolean
   if (reduced) return <StaticRow mobile={mobile} style={style} className={className} />
 
   return (
-    <div className={`shield-demo relative shrink-0 overflow-hidden bg-stage ${className}`} style={style} role="group" aria-label="How shielding works: an animated loop in three steps">
+    <div className={`shield-demo relative shrink-0 overflow-hidden bg-stage ${className}`} style={style} onMouseEnter={()=>{paused.current=true}} onMouseLeave={()=>{paused.current=false}} role="group" aria-label="How shielding works: an animated loop in three steps">
       <svg ref={svg} viewBox={mobile ? '0 0 358 316' : '0 0 600 500'} className="block h-full w-full" fill="none" aria-hidden>
         <Chrome mobile={mobile} />
         <g transform={mobile ? 'translate(-13 -16) scale(0.64)' : undefined}>

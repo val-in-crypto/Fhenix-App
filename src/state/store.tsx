@@ -474,7 +474,7 @@ function useActions(set: (p: Patch) => void, ref: { current: State }) {
       jump: (patch: Partial<State>, route: Route, then?: () => void) => {
         epoch.current++
         set(s => ({ ...demoBase(), speed: s.speed, reduceMotion: s.reduceMotion, deviceFrame: s.deviceFrame, ...patch }))
-        nav(route)
+        navWithoutGuard(route)
         if (then) setTimeout(then, 60)
       },
     }

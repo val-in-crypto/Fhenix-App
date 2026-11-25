@@ -158,7 +158,8 @@ export default function DemoPanel() {
                 ))}
               </select>
             </label>
-            <Row label="Speed">
+            <button type="button" className="min-h-10 text-body text-accentInk" onClick={()=>document.dispatchEvent(new Event('fhenix:replay-illustrations'))}>Replay illustrations</button>
+              <Row label="Speed">
               <Seg label="Speed" value={s.speed} options={[[0.5, '0.5×'], [1, '1×'], [2, '2×']]} onChange={v => act.set({ speed: v })} />
             </Row>
             <Row label="Permit">

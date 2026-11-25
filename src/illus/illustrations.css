@@ -1,0 +1,102 @@
+/* ---------- 2. motion tokens (all from ORBIT-SPECS / Shield demo v2) ---------- */
+.illo{
+  --e-result:cubic-bezier(.22,1,.36,1);   /* iso-assemble / result */
+  --e-coin:cubic-bezier(.4,0,.2,1);       /* iso-token coin travel */
+  --e-pop:cubic-bezier(.2,.65,.25,1);     /* core pop */
+  --e-aperture:cubic-bezier(.25,.1,.25,1);/* scaffold / aperture */
+  --e-loop:cubic-bezier(.45,0,.55,1);     /* Shield demo v2 */
+  --t-float:4800ms; --t-twinkle:2400ms; --t-shimmer:3200ms;
+  display:block; width:100%; height:auto; overflow:visible;
+}
+.illo *{transform-box:fill-box; transform-origin:center}
+
+/* static end states (what reduced-motion users see; also the pose before play) */
+.illo--private-now [data-layer="coin-drop"],
+.illo--private-now [data-layer="pulse-ring"],
+.illo--private-now [data-layer="pulse-ring-2"]{opacity:0}
+
+/* ---------- 3. idle loops (state=idle) ---------- */
+.illo[data-state="idle"] .spark{animation:illo-twinkle var(--t-twinkle) var(--e-loop) infinite;animation-delay:calc(var(--i,0)*-410ms)}
+.illo[data-state="idle"] .hatch{animation:illo-shimmer var(--t-shimmer) var(--e-loop) infinite;animation-delay:calc(var(--i,0)*-120ms)}
+.illo--claim[data-state="idle"] [data-layer="coin-usdc"]{animation:illo-float var(--t-float) var(--e-loop) infinite alternate}
+.illo--claim[data-state="idle"] [data-layer="coin-fusdc"]{animation:illo-float 5600ms var(--e-loop) -1400ms infinite alternate}
+.illo--claim[data-state="idle"] [data-layer="stack-plate-encrypted"]{animation:illo-float-sm 4200ms var(--e-loop) -700ms infinite alternate}
+.illo--unshield[data-state="idle"] [data-layer="coin-drop"]{animation:illo-float var(--t-float) var(--e-loop) infinite alternate}
+.illo--unshield[data-state="idle"] [data-layer="coin-drop-trail"]{animation:illo-flicker 1600ms var(--e-loop) infinite alternate}
+.illo--sent[data-state="idle"] [data-layer="packet"]{animation:sent-loop 4800ms var(--e-coin) infinite}
+.illo--private-now[data-state="idle"] [data-layer="puck"]{animation:illo-float-sm 5200ms var(--e-loop) infinite alternate}
+.illo[data-paused] *{animation-play-state:paused!important}
+
+/* ---------- 4. one-shot sequences (state=play; JS flips to idle after --play-ms) ---------- */
+/* 4a. Claim success  (--play-ms 1700) */
+.illo--claim{--play-ms:1700}
+.illo--claim[data-state="play"] [data-layer="trail"]{animation:illo-fade 300ms ease-out both}
+.illo--claim[data-state="play"] [data-layer="stack-plate-encrypted"]{animation:claim-unseat 520ms var(--e-result) 80ms both}
+.illo--claim[data-state="play"] [data-layer="coin-fusdc"]{animation:illo-pop 360ms var(--e-pop) 300ms both}
+.illo--claim[data-state="play"] [data-layer="coin-usdc"]{animation:claim-drop 640ms var(--e-result) 420ms both}
+.illo--claim[data-state="play"] [data-layer="wallet"]{animation:claim-bump 240ms var(--e-coin) 840ms both}
+.illo--claim[data-state="play"] [data-layer="lock-shackle"]{animation:lock-click 160ms var(--e-coin) 760ms both}
+.illo--claim[data-state="play"] [data-layer="lock"]{animation:lock-press 200ms var(--e-coin) 880ms both}
+.illo--claim[data-state="play"] .spark{animation:illo-burst 360ms var(--e-pop) both;animation-delay:calc(980ms + var(--i,0)*70ms)}
+
+/* 4b. Shield success "Private now" Drop → Seal → Burst  (--play-ms 1700) */
+.illo--private-now{--play-ms:1700}
+.illo--private-now[data-state="play"] [data-layer="coin-drop"]{animation:pn-coin 560ms var(--e-coin) both}
+.illo--private-now[data-state="play"] [data-layer="puck"]{animation:pn-press 300ms var(--e-coin) 520ms both}
+.illo--private-now[data-state="play"] [data-layer="pulse-ring"]{animation:pn-ring 700ms var(--e-aperture) 560ms both}
+.illo--private-now[data-state="play"] [data-layer="pulse-ring-2"]{animation:pn-ring 700ms var(--e-aperture) 700ms both}
+.illo--private-now[data-state="play"] .confetti{animation:pn-confetti 640ms var(--e-result) both;animation-delay:calc(640ms + var(--i,0)*18ms)}
+.illo--private-now[data-state="play"] .spark{animation:illo-burst 360ms var(--e-pop) both;animation-delay:calc(1000ms + var(--i,0)*70ms)}
+
+/* 4c. Unshield complete  (--play-ms 1300) */
+.illo--unshield{--play-ms:1300}
+.illo--unshield[data-state="play"] [data-layer="coin-drop"]{animation:un-fall 640ms var(--e-result) both}
+.illo--unshield[data-state="play"] [data-layer="coin-drop-trail"]{animation:illo-fade 240ms ease-out 320ms both}
+.illo--unshield[data-state="play"] .confetti{animation:illo-burst 480ms var(--e-pop) both;animation-delay:calc(520ms + var(--i,0)*40ms)}
+.illo--unshield[data-state="play"] .spark{animation:illo-burst 360ms var(--e-pop) both;animation-delay:calc(700ms + var(--i,0)*70ms)}
+
+/* 4d. Sent  (--play-ms 1800) */
+.illo--sent{--play-ms:1800}
+.illo--sent[data-state="play"] [data-layer="sender-puck"]{animation:pn-press 300ms var(--e-coin) both}
+.illo--sent[data-state="play"] [data-layer="pulse-ring"]{animation:pn-ring 700ms var(--e-aperture) both}
+.illo--sent[data-state="play"] [data-layer="pulse-ring-2"]{animation:pn-ring 700ms var(--e-aperture) 140ms both}
+.illo--sent[data-state="play"] [data-layer="packet"]{animation:sent-travel 1000ms var(--e-coin) 200ms both}
+.illo--sent[data-state="play"] [data-layer="recipient-puck"]{animation:pn-press 300ms var(--e-coin) 1200ms both}
+.illo--sent[data-state="play"] [data-layer="recipient-confetti"]{animation:illo-burst 600ms var(--e-pop) 1200ms both}
+
+/* ---------- 5. keyframes (transform + opacity only) ---------- */
+@keyframes illo-float{from{transform:translateY(0)}to{transform:translateY(-4px)}}
+@keyframes illo-float-sm{from{transform:translateY(0)}to{transform:translateY(-3px)}}
+@keyframes illo-twinkle{0%,100%{opacity:.45;transform:scale(.82)}50%{opacity:1;transform:scale(1.12)}}
+@keyframes illo-shimmer{0%,100%{opacity:.35}50%{opacity:.85}}
+@keyframes illo-flicker{from{opacity:.45}to{opacity:1}}
+@keyframes illo-fade{from{opacity:0}to{opacity:1}}
+@keyframes illo-pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:scale(1)}}
+@keyframes illo-burst{0%{opacity:0;transform:scale(0)}60%{opacity:1;transform:scale(1.25)}100%{opacity:1;transform:scale(1)}}
+@keyframes claim-unseat{from{transform:translate(-47px,23px)}to{transform:translate(0,0)}}           /* plate slides out along the iso x-axis (2:1) */
+@keyframes claim-drop{0%{opacity:0;transform:translateY(-64px)}20%{opacity:1}70%{transform:translateY(0)}86%{transform:translateY(3px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes claim-bump{0%,100%{transform:translateY(0)}45%{transform:translateY(2px)}}
+@keyframes lock-click{from{transform:translateY(-3px)}to{transform:translateY(0)}}
+@keyframes lock-press{0%,100%{transform:scale(1)}50%{transform:scale(.9)}}
+@keyframes pn-coin{0%{opacity:0;transform:translateY(0)}12%{opacity:1}85%{opacity:1;transform:translateY(120px)}100%{opacity:0;transform:translateY(150px)}}
+@keyframes pn-press{0%,100%{transform:translateY(0)}35%{transform:translateY(3px)}70%{transform:translateY(-1px)}}
+@keyframes pn-ring{from{opacity:.9;transform:scale(.6)}to{opacity:0;transform:scale(1.6)}}
+@keyframes pn-confetti{from{opacity:0;transform:translate(calc(var(--dx,0)*1px),calc(var(--dy,0)*1px)) scale(.4)}to{opacity:1;transform:translate(0,0) scale(1)}}
+@keyframes un-fall{from{opacity:0;transform:translateY(-40px)}to{opacity:1;transform:translateY(0)}}
+/* packet waypoints are relative to its static (mid-path) position; sampled from the dashed `[data-layer="path"]` arc */
+@keyframes sent-travel{
+  0%{opacity:0;transform:translate(-102px,108px)} 8%{opacity:1}
+  20%{transform:translate(-77px,69px)} 36%{transform:translate(-51px,39px)} 48%{transform:translate(-27px,18px)}
+  60%{transform:translate(0,0)} 72%{transform:translate(29px,-14px)} 84%{transform:translate(60px,-24px)}
+  94%{opacity:1;transform:translate(116px,-32px)} 100%{opacity:0;transform:translate(150px,-32px)}}
+@keyframes sent-loop{0%{opacity:0;transform:translate(-102px,108px)}4%{opacity:1}
+  10%{transform:translate(-77px,69px)} 18%{transform:translate(-51px,39px)} 24%{transform:translate(-27px,18px)}
+  30%{transform:translate(0,0)} 36%{transform:translate(29px,-14px)} 42%{transform:translate(60px,-24px)}
+  47%{opacity:1;transform:translate(116px,-32px)} 50%,100%{opacity:0;transform:translate(150px,-32px)}}
+
+/* ---------- 6. reduced motion: no animation anywhere, static end state ---------- */
+@media (prefers-reduced-motion: reduce){
+  .illo,.illo *,.illo *::before,.illo *::after{animation:none!important;transition:none!important}
+}
+
+.animated-illustration > .illo { flex:none; }

@@ -104,7 +104,7 @@ export default function ShieldFlow({ mode }: { mode: 'shield' | 'unshield' }) {
           <Steps labels={shield ? [allowed ? 'Approved' : 'Approve', 'Shield', 'Done'] : ['Unshield', 'Decrypt', 'Claim']} active={shield ? allowed || s.shieldStep >= 2 ? 1 : 0 : s.unshieldStep < 2 ? 0 : s.unshieldStep === 2 ? 1 : 2} pending={busy} />
         </div>
       </Page>
-      <SuccessModal open={Boolean(result)} onClose={close} illustration={result?.kind === 'shield' ? <PrivateNow scale={mobile ? 216 / 560 : 320 / 560} /> : <ClaimReady />}
+      <SuccessModal open={Boolean(result)} onClose={close} illustration={result?.kind === 'shield' ? <PrivateNow scale={mobile ? 216 / 560 : 320 / 560} /> : <ClaimReady autoplay />}
         eyebrow={result?.kind === 'shield' ? 'Shielding complete' : 'Unshield complete'}
         title={result?.kind === 'shield' ? `Your ${result.asset} is now confidential` : `${resultAmount} ${result?.asset ?? sym} is back in your wallet`}
         body={result?.kind === 'shield' ? `${resultAmount} ${result.asset} has been shielded as f${result.asset}. Your balance is private and visible only to you.` : `Your ${result?.asset ?? sym} is now available in your public wallet balance.`}
