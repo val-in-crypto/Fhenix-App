@@ -1,12 +1,13 @@
 import { useRef, useState, type ReactNode } from 'react'
-import asterisk from '../assets/fhenix-asterisk.svg?raw'
-import { DOCS_URL, EXPLORER_URL } from '../config/links'
+import enterLive from '../assets/apps/enter-live.svg'
+import enterSoon from '../assets/apps/enter-soon.svg'
+import enterDocs from '../assets/apps/enter-docs.svg'
+import { useTheme } from '../lib/theme'
+import { DOCS_URL } from '../config/links'
 import { APPS_DESKTOP_CAROUSEL } from '../config/flags'
 import { Page } from '../shell/AppShell'
 import { data, useStore } from '../state/store'
 import { separate } from '../ui/Sep'
-import ThemeSwitch from '../ui/ThemeSwitch'
-import Chip from '../ui/Chip'
 import Icon from '../ui/Icon'
 import AppLogo from '../ui/AppLogo'
 import SegmentedSwitch from '../ui/SegmentedSwitch'
@@ -16,16 +17,18 @@ const descriptions: Record<string, string> = {
   Obolos: 'Protocol-level compliance for tokenized equity: accreditation, jurisdiction, transfer and cap-table rules.',
   'Confidential Trading': 'Trade confidential FHERC20 tokens. Public prices, bracketed sizes.',
   Fluton: 'Privacy middleware and SDK for existing wallets and dApps: confidential transfers and swaps.',
-  Privara: 'Confidential payments built on CoFHE.',
+  Privara: 'Stablecoin payments for merchant checkout, with confidential escrow and programmable settlement.',
 }
 
+const categories: Record<string,string> = { AlphaEngine:'Trading\u001fExecution', Obolos:'Compliance', 'Confidential Trading':'Trading', Fluton:'Infra\u001fSDK', Privara:'Payments' }
+const ActionGlyph = ({kind}:{kind:'live'|'soon'|'docs'}) => <span aria-hidden className={`inline-flex size-4 shrink-0 items-center ${kind==='soon'?'text-ink3':''}`}><span className="block bg-current" style={{width:10,height:15,mask:`url(${kind==='live'?enterLive:kind==='soon'?enterSoon:enterDocs}) center / contain no-repeat`,WebkitMask:`url(${kind==='live'?enterLive:kind==='soon'?enterSoon:enterDocs}) center / contain no-repeat`}}/></span>
+
 function BuildCard() {
-  return <div className="confidential-box flex h-[231px] flex-col gap-3 border border-[var(--color-confidential-border)] bg-accentSoft px-6 py-5">
-    <AppLogo app="CoFHE" />
-    <h2 className="text-title font-medium ">Build on CoFHE</h2>
-    <p className="line-clamp-2 text-body  text-ink2">Ship an app with confidential state and get listed in Fhenix App.</p>
-    <a href={DOCS_URL} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex min-h-11 items-center font-medium text-accentInk">Read the docs <Icon name="arrow-up-right" size={14} /></a>
-  </div>
+  return <a href={DOCS_URL} target="_blank" rel="noopener noreferrer" className="apps-build flex flex-col gap-4 border border-dashed border-line p-5 hover:border-accent">
+    <span className="flex items-center gap-3"><AppLogo app="CoFHE" variant="apps-v3"/><span><span className="block text-heading">Build on CoFHE</span><span className="mt-0.5 block text-caption text-ink3">For builders</span></span></span>
+    <span className="min-h-[60px] text-body text-ink2">Ship an app with confidential state and get listed in Fhenix App.</span>
+    <span className="mt-auto flex w-full items-center justify-between gap-2 border-t border-line pt-4 text-label text-accentInk">Read the docs<ActionGlyph kind="docs"/></span>
+  </a>
 }
 
 function CardsCarousel({ children, mobile }: { children: ReactNode[]; mobile: boolean }) {
@@ -57,18 +60,18 @@ function CardsCarousel({ children, mobile }: { children: ReactNode[]; mobile: bo
 
 export default function Apps() {
   const { act, mobile } = useStore()
+  const dark = useTheme()==='dark'
   const [filter,setFilter] = useState('all')
-  const cards = data.apps.filter(app=>filter==='all'||app.tag.toLowerCase()===filter).map(app => <button key={app.name} type="button" onClick={() => act.toast({ kind: 'info', title: app.tag === 'Live' ? app.name : 'Coming soon' })} className="flex min-h-[212px] w-full flex-col gap-4 border border-line bg-surface px-6 py-5 text-left hover:border-accent">
-    <span className="flex w-full items-start justify-between"><AppLogo app={app.name} /><Chip tone={app.tag === 'Live' ? 'live' : 'neutral'} dot={app.tag === 'Live'}>{app.tag}</Chip></span>
-    <span className="text-heading font-medium">{app.name}</span>
-    <span className="line-clamp-2 text-body  text-ink2">{descriptions[app.name]}</span>
-    <span className="mt-auto flex w-full items-center justify-between gap-2 border-t border-line pt-4 text-label">{app.tag === 'Live' ? 'Open app' : 'Notify me'}<Icon name="pixel-arrow" size={10} /></span>
+  const effectiveFilter=dark?filter:'all'
+  const cards = data.apps.filter(app=>effectiveFilter==='all'||app.tag.toLowerCase()===effectiveFilter).map(app => <button key={app.name} type="button" onClick={() => act.toast({ kind: 'info', title: app.tag === 'Live' ? app.name : 'Coming soon' })} className="apps-card flex w-full flex-col gap-4 border border-line bg-surface p-5 text-left hover:border-accent">
+    <span className="flex w-full items-center gap-3"><AppLogo app={app.name} variant="apps-v3"/><span className="min-w-0 flex-1"><span className="block text-heading">{app.name}</span><span className="mt-0.5 block text-caption text-ink3">{separate(categories[app.name])}</span></span><span className={`flex shrink-0 items-center gap-1.5 px-2 py-0.5 text-caption ${app.tag==='Live'?'bg-accentSoft text-accentInk':'bg-surface2 text-ink3'}`}><span aria-hidden className={`size-1.5 ${app.tag==='Live'?'bg-live':'bg-ink3'}`}/>{app.tag}</span></span>
+    <span className="min-h-[60px] text-body text-ink2">{descriptions[app.name]}</span>
+    <span className={`mt-auto flex w-full items-center justify-between gap-2 border-t border-line pt-4 text-label ${app.tag==='Live'?'apps-live-action':'text-ink2'}`}>{app.tag === 'Live' ? 'Open app' : 'Notify me'}<ActionGlyph kind={app.tag==='Live'?'live':'soon'}/></span>
   </button>)
   const allCards = [...cards, <BuildCard key="build" />]
   return <Page>
-    <div className="mb-6"><SegmentedSwitch label="App status" value={filter} onChange={setFilter} options={[{value:'all',label:'All'},{value:'live',label:'Live'},{value:'soon',label:'Soon'}]} /></div>
-    {!mobile && APPS_DESKTOP_CAROUSEL ? <CardsCarousel mobile={false}>{allCards}</CardsCarousel> : <div className={`grid gap-4 ${mobile?'grid-cols-1':'grid-cols-3'}`}>{allCards}</div>}
-    <p className="mt-6 flex items-start gap-2 text-body  text-ink3"><Icon name="arrow-up-right" size={14} />Live apps open their own site in a new tab. Check each app's terms before you connect.</p>
-    {mobile && <div className="mt-6 border border-line bg-surface"><ThemeSwitch /></div>}
+    {dark&&<div className="mb-6 flex flex-wrap items-end justify-between gap-4">{!mobile&&<div><h1 className="text-title">Apps</h1><p className="mt-1 text-body text-ink2">Confidential apps built on Fhenix CoFHE.</p></div>}<SegmentedSwitch label="App status" value={filter} onChange={setFilter} options={[{value:'all',label:'All 5'},{value:'live',label:'Live 2'},{value:'soon',label:'Soon 3'}]}/></div>}
+    {!mobile && APPS_DESKTOP_CAROUSEL ? <CardsCarousel mobile={false}>{allCards}</CardsCarousel> : <div className={`grid items-stretch gap-4 ${mobile?'grid-cols-1':'grid-cols-2 min-[1400px]:grid-cols-3'}`}>{allCards}</div>}
+    {dark&&<p className="mt-6 flex items-start gap-2 text-caption text-ink3"><Icon name="arrow-up-right" size={14}/>Live apps open their own site in a new tab. Check each app's terms before you connect.</p>}
   </Page>
 }

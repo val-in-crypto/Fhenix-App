@@ -263,3 +263,11 @@
 
 
 .claim-art { width:100%; height:100%; overflow:visible; }.claim-art > svg {display:block;width:100%;height:auto;overflow:visible;}
+
+/* Apps v3 uses the source frame's neutral logo tiles. */
+.app-logo[data-variant="apps-v3"] { background:var(--color-surface-2); }
+.app-logo[data-variant="apps-v3"] > span { background:var(--color-ink); }
+.apps-build { background:var(--color-accent-soft); }
+[data-theme="dark"] .apps-build { background:transparent; }
+.apps-live-action { color:var(--color-ink); }
+[data-theme="dark"] .apps-live-action { color:var(--color-accent); }

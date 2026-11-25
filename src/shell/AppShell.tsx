@@ -170,12 +170,12 @@ function TopBar({ route }: { route: Route }) {
   if (mobile) return (
     <header className="z-20 flex shrink-0 items-center justify-between gap-2 px-5" style={{ height: tokens.size.topBarMobile }}>
       {mobileTitles[route] ? <h1 className="text-title font-medium">{mobileTitles[route]}</h1> : <span className="max-[389px]:w-28 max-[389px]:[&_.r5-brand]:origin-left max-[389px]:[&_.r5-brand]:scale-[.86]"><Logo height={22} /></span>}
-      {s.connected ? <WalletChip /> : <><NetworkChip />{connect}</>}
+      {s.connected ? <WalletChip /> : connect}
     </header>
   )
   return (
     <header className="z-20 flex h-[116px] shrink-0 items-start justify-end gap-2 pb-6 pl-8 pr-10 pt-8">
-      {s.connected ? <WalletChip /> : <><NetworkChip />{connect}</>}
+      {s.connected ? <WalletChip /> : connect}
     </header>
   )
 }

@@ -38,14 +38,14 @@ export default function AnimatedIllustration({kind,autoplay=true}:{kind:keyof ty
       if(reduced){clear();svg.dataset.state='static';return}
       if(!visible||document.hidden){svg.setAttribute('data-paused','');return}
       svg.removeAttribute('data-paused')
-      if(svg.dataset.state==='static'){if(autoplay&&!played)play();else svg.dataset.state='idle'}
+      if(svg.dataset.state==='static'||svg.dataset.state==='waiting'){if(autoplay&&!played)play();else svg.dataset.state='idle'}
     }
-    svg.dataset.state='static'
+    svg.dataset.state=!reduced&&kind==='sent'?'waiting':'static'
     const observer=new IntersectionObserver(([entry])=>{visible=entry.isIntersecting;sync()},{threshold:0})
     observer.observe(svg)
     document.addEventListener('visibilitychange',sync)
     document.addEventListener('fhenix:replay-illustrations',play)
     return()=>{clear();observer.disconnect();document.removeEventListener('visibilitychange',sync);document.removeEventListener('fhenix:replay-illustrations',play)}
-  },[raw,reduced,autoplay])
+  },[raw,reduced,autoplay,kind])
   return <div ref={host} role="img" aria-label={labels[kind]} className="animated-illustration relative flex h-full w-full items-center justify-center overflow-visible" dangerouslySetInnerHTML={{__html:raw}}/>
 }

@@ -18,12 +18,12 @@
 /* ---------- 3. idle loops (state=idle) ---------- */
 .illo[data-state="idle"] .spark{animation:illo-twinkle var(--t-twinkle) var(--e-loop) infinite;animation-delay:calc(var(--i,0)*-410ms)}
 .illo[data-state="idle"] .hatch{animation:illo-shimmer var(--t-shimmer) var(--e-loop) infinite;animation-delay:calc(var(--i,0)*-120ms)}
-.illo--claim[data-state="idle"] [data-layer="coin-usdc"]{animation:illo-float var(--t-float) var(--e-loop) infinite alternate}
-.illo--claim[data-state="idle"] [data-layer="coin-fusdc"]{animation:illo-float 5600ms var(--e-loop) -1400ms infinite alternate}
-.illo--claim[data-state="idle"] [data-layer="stack-plate-encrypted"]{animation:illo-float-sm 4200ms var(--e-loop) -700ms infinite alternate}
+.illo--claim[data-state="idle"] [data-layer="coin-usdc"]{animation:claim-coin-float 4800ms var(--e-loop) infinite}
+.illo--claim[data-state="idle"] [data-layer="coin-fusdc"]{animation:claim-lock-float 5600ms var(--e-loop) infinite}
+.illo--claim[data-state="idle"] [data-layer="stack-plate-encrypted"]{animation:claim-plate-float 5200ms var(--e-loop) infinite}
 .illo--unshield[data-state="idle"] [data-layer="coin-drop"]{animation:illo-float var(--t-float) var(--e-loop) infinite alternate}
 .illo--unshield[data-state="idle"] [data-layer="coin-drop-trail"]{animation:illo-flicker 1600ms var(--e-loop) infinite alternate}
-.illo--sent[data-state="idle"] [data-layer="packet"]{animation:sent-loop 4800ms var(--e-coin) infinite}
+.illo--sent[data-state="idle"] [data-layer="packet"]{animation:sent-loop 6000ms linear infinite}
 .illo--private-now[data-state="idle"] [data-layer="puck"]{animation:illo-float-sm 5200ms var(--e-loop) infinite alternate}
 .illo[data-paused] *{animation-play-state:paused!important}
 
@@ -55,14 +55,18 @@
 .illo--unshield[data-state="play"] .confetti{animation:illo-burst 480ms var(--e-pop) both;animation-delay:calc(520ms + var(--i,0)*40ms)}
 .illo--unshield[data-state="play"] .spark{animation:illo-burst 360ms var(--e-pop) both;animation-delay:calc(700ms + var(--i,0)*70ms)}
 
-/* 4d. Sent  (--play-ms 1800) */
-.illo--sent{--play-ms:1800}
+/* 4d. Sent: one continuous flight, then a quiet pause. */
+.illo--sent{--play-ms:2600}
+.illo--sent [data-layer="pulse-ring"],
+.illo--sent [data-layer="pulse-ring-2"]{opacity:0}
+.illo--sent:not([data-state]) [data-layer="packet"],
+.illo--sent[data-state="waiting"] [data-layer="packet"]{opacity:0}
 .illo--sent[data-state="play"] [data-layer="sender-puck"]{animation:pn-press 300ms var(--e-coin) both}
 .illo--sent[data-state="play"] [data-layer="pulse-ring"]{animation:pn-ring 700ms var(--e-aperture) both}
 .illo--sent[data-state="play"] [data-layer="pulse-ring-2"]{animation:pn-ring 700ms var(--e-aperture) 140ms both}
-.illo--sent[data-state="play"] [data-layer="packet"]{animation:sent-travel 1000ms var(--e-coin) 200ms both}
-.illo--sent[data-state="play"] [data-layer="recipient-puck"]{animation:pn-press 300ms var(--e-coin) 1200ms both}
-.illo--sent[data-state="play"] [data-layer="recipient-confetti"]{animation:illo-burst 600ms var(--e-pop) 1200ms both}
+.illo--sent[data-state="play"] [data-layer="packet"]{animation:sent-travel 1800ms linear 200ms both}
+.illo--sent[data-state="play"] [data-layer="recipient-puck"]{animation:pn-press 300ms var(--e-coin) 1900ms both}
+.illo--sent[data-state="play"] [data-layer="recipient-confetti"]{animation:illo-burst 600ms var(--e-pop) 1900ms both}
 
 /* ---------- 5. keyframes (transform + opacity only) ---------- */
 @keyframes illo-float{from{transform:translateY(0)}to{transform:translateY(-4px)}}
@@ -83,16 +87,136 @@
 @keyframes pn-ring{from{opacity:.9;transform:scale(.6)}to{opacity:0;transform:scale(1.6)}}
 @keyframes pn-confetti{from{opacity:0;transform:translate(calc(var(--dx,0)*1px),calc(var(--dy,0)*1px)) scale(.4)}to{opacity:1;transform:translate(0,0) scale(1)}}
 @keyframes un-fall{from{opacity:0;transform:translateY(-40px)}to{opacity:1;transform:translateY(0)}}
-/* packet waypoints are relative to its static (mid-path) position; sampled from the dashed `[data-layer="path"]` arc */
+/* Quadratic flight follows the dashed arc. Ease is sampled once over the whole
+   journey, so individual waypoints never restart the acceleration. Only transform
+   and opacity animate; the invisible reset leaves no jump at the loop boundary. */
 @keyframes sent-travel{
-  0%{opacity:0;transform:translate(-102px,108px)} 8%{opacity:1}
-  20%{transform:translate(-77px,69px)} 36%{transform:translate(-51px,39px)} 48%{transform:translate(-27px,18px)}
-  60%{transform:translate(0,0)} 72%{transform:translate(29px,-14px)} 84%{transform:translate(60px,-24px)}
-  94%{opacity:1;transform:translate(116px,-32px)} 100%{opacity:0;transform:translate(150px,-32px)}}
-@keyframes sent-loop{0%{opacity:0;transform:translate(-102px,108px)}4%{opacity:1}
-  10%{transform:translate(-77px,69px)} 18%{transform:translate(-51px,39px)} 24%{transform:translate(-27px,18px)}
-  30%{transform:translate(0,0)} 36%{transform:translate(29px,-14px)} 42%{transform:translate(60px,-24px)}
-  47%{opacity:1;transform:translate(116px,-32px)} 50%,100%{opacity:0;transform:translate(150px,-32px)}}
+  0%{opacity:0.0000;transform:translate(-102.560px,112.460px)}
+  1.66667%{opacity:0.0355;transform:translate(-102.553px,112.447px)}
+  3.33333%{opacity:0.2099;transform:translate(-102.507px,112.356px)}
+  5%{opacity:0.5000;transform:translate(-102.386px,112.117px)}
+  6.66667%{opacity:0.7901;transform:translate(-102.158px,111.669px)}
+  8.33333%{opacity:0.9645;transform:translate(-101.794px,110.958px)}
+  10%{opacity:1.0000;transform:translate(-101.269px,109.938px)}
+  11.6667%{opacity:1.0000;transform:translate(-100.558px,108.571px)}
+  13.3333%{opacity:1.0000;transform:translate(-99.640px,106.830px)}
+  15%{opacity:1.0000;transform:translate(-98.496px,104.693px)}
+  16.6667%{opacity:1.0000;transform:translate(-97.107px,102.150px)}
+  18.3333%{opacity:1.0000;transform:translate(-95.457px,99.197px)}
+  20%{opacity:1.0000;transform:translate(-93.530px,95.839px)}
+  21.6667%{opacity:1.0000;transform:translate(-91.310px,92.088px)}
+  23.3333%{opacity:1.0000;transform:translate(-88.784px,87.963px)}
+  25%{opacity:1.0000;transform:translate(-85.940px,83.491px)}
+  26.6667%{opacity:1.0000;transform:translate(-82.765px,78.704px)}
+  28.3333%{opacity:1.0000;transform:translate(-79.250px,73.639px)}
+  30%{opacity:1.0000;transform:translate(-75.385px,68.337px)}
+  31.6667%{opacity:1.0000;transform:translate(-71.166px,62.844px)}
+  33.3333%{opacity:1.0000;transform:translate(-66.586px,57.208px)}
+  35%{opacity:1.0000;transform:translate(-61.644px,51.477px)}
+  36.6667%{opacity:1.0000;transform:translate(-56.340px,45.702px)}
+  38.3333%{opacity:1.0000;transform:translate(-50.678px,39.933px)}
+  40%{opacity:1.0000;transform:translate(-44.666px,34.218px)}
+  41.6667%{opacity:1.0000;transform:translate(-38.312px,28.603px)}
+  43.3333%{opacity:1.0000;transform:translate(-31.632px,23.134px)}
+  45%{opacity:1.0000;transform:translate(-24.643px,17.851px)}
+  46.6667%{opacity:1.0000;transform:translate(-17.367px,12.790px)}
+  48.3333%{opacity:1.0000;transform:translate(-9.830px,7.984px)}
+  50%{opacity:1.0000;transform:translate(-2.060px,3.460px)}
+  51.6667%{opacity:1.0000;transform:translate(5.909px,-0.760px)}
+  53.3333%{opacity:1.0000;transform:translate(14.039px,-4.658px)}
+  55%{opacity:1.0000;transform:translate(22.293px,-8.225px)}
+  56.6667%{opacity:1.0000;transform:translate(30.625px,-11.453px)}
+  58.3333%{opacity:1.0000;transform:translate(38.992px,-14.343px)}
+  60%{opacity:1.0000;transform:translate(47.345px,-16.899px)}
+  61.6667%{opacity:1.0000;transform:translate(55.635px,-19.130px)}
+  63.3333%{opacity:1.0000;transform:translate(63.814px,-21.050px)}
+  65%{opacity:1.0000;transform:translate(71.831px,-22.675px)}
+  66.6667%{opacity:1.0000;transform:translate(79.637px,-24.027px)}
+  68.3333%{opacity:1.0000;transform:translate(87.182px,-25.127px)}
+  70%{opacity:1.0000;transform:translate(94.422px,-26.000px)}
+  71.6667%{opacity:1.0000;transform:translate(101.313px,-26.674px)}
+  73.3333%{opacity:1.0000;transform:translate(107.813px,-27.173px)}
+  75%{opacity:1.0000;transform:translate(113.888px,-27.525px)}
+  76.6667%{opacity:1.0000;transform:translate(119.507px,-27.754px)}
+  78.3333%{opacity:1.0000;transform:translate(124.643px,-27.886px)}
+  80%{opacity:1.0000;transform:translate(129.279px,-27.943px)}
+  81.6667%{opacity:1.0000;transform:translate(133.400px,-27.946px)}
+  83.3333%{opacity:1.0000;transform:translate(137.004px,-27.911px)}
+  85%{opacity:1.0000;transform:translate(140.092px,-27.855px)}
+  86.6667%{opacity:1.0000;transform:translate(142.675px,-27.790px)}
+  88.3333%{opacity:1.0000;transform:translate(144.774px,-27.724px)}
+  90%{opacity:1.0000;transform:translate(146.417px,-27.666px)}
+  91.6667%{opacity:0.9645;transform:translate(147.642px,-27.617px)}
+  93.3333%{opacity:0.7901;transform:translate(148.494px,-27.582px)}
+  95%{opacity:0.5000;transform:translate(149.030px,-27.558px)}
+  96.6667%{opacity:0.2099;transform:translate(149.315px,-27.546px)}
+  98.3333%{opacity:0.0355;transform:translate(149.424px,-27.541px)}
+  100%{opacity:0.0000;transform:translate(149.440px,-27.540px)}
+}
+@keyframes sent-loop{
+  0%{opacity:0.0000;transform:translate(-102.560px,112.460px)}
+  0.666667%{opacity:0.0355;transform:translate(-102.553px,112.447px)}
+  1.33333%{opacity:0.2099;transform:translate(-102.507px,112.356px)}
+  2%{opacity:0.5000;transform:translate(-102.386px,112.117px)}
+  2.66667%{opacity:0.7901;transform:translate(-102.158px,111.669px)}
+  3.33333%{opacity:0.9645;transform:translate(-101.794px,110.958px)}
+  4%{opacity:1.0000;transform:translate(-101.269px,109.938px)}
+  4.66667%{opacity:1.0000;transform:translate(-100.558px,108.571px)}
+  5.33333%{opacity:1.0000;transform:translate(-99.640px,106.830px)}
+  6%{opacity:1.0000;transform:translate(-98.496px,104.693px)}
+  6.66667%{opacity:1.0000;transform:translate(-97.107px,102.150px)}
+  7.33333%{opacity:1.0000;transform:translate(-95.457px,99.197px)}
+  8%{opacity:1.0000;transform:translate(-93.530px,95.839px)}
+  8.66667%{opacity:1.0000;transform:translate(-91.310px,92.088px)}
+  9.33333%{opacity:1.0000;transform:translate(-88.784px,87.963px)}
+  10%{opacity:1.0000;transform:translate(-85.940px,83.491px)}
+  10.6667%{opacity:1.0000;transform:translate(-82.765px,78.704px)}
+  11.3333%{opacity:1.0000;transform:translate(-79.250px,73.639px)}
+  12%{opacity:1.0000;transform:translate(-75.385px,68.337px)}
+  12.6667%{opacity:1.0000;transform:translate(-71.166px,62.844px)}
+  13.3333%{opacity:1.0000;transform:translate(-66.586px,57.208px)}
+  14%{opacity:1.0000;transform:translate(-61.644px,51.477px)}
+  14.6667%{opacity:1.0000;transform:translate(-56.340px,45.702px)}
+  15.3333%{opacity:1.0000;transform:translate(-50.678px,39.933px)}
+  16%{opacity:1.0000;transform:translate(-44.666px,34.218px)}
+  16.6667%{opacity:1.0000;transform:translate(-38.312px,28.603px)}
+  17.3333%{opacity:1.0000;transform:translate(-31.632px,23.134px)}
+  18%{opacity:1.0000;transform:translate(-24.643px,17.851px)}
+  18.6667%{opacity:1.0000;transform:translate(-17.367px,12.790px)}
+  19.3333%{opacity:1.0000;transform:translate(-9.830px,7.984px)}
+  20%{opacity:1.0000;transform:translate(-2.060px,3.460px)}
+  20.6667%{opacity:1.0000;transform:translate(5.909px,-0.760px)}
+  21.3333%{opacity:1.0000;transform:translate(14.039px,-4.658px)}
+  22%{opacity:1.0000;transform:translate(22.293px,-8.225px)}
+  22.6667%{opacity:1.0000;transform:translate(30.625px,-11.453px)}
+  23.3333%{opacity:1.0000;transform:translate(38.992px,-14.343px)}
+  24%{opacity:1.0000;transform:translate(47.345px,-16.899px)}
+  24.6667%{opacity:1.0000;transform:translate(55.635px,-19.130px)}
+  25.3333%{opacity:1.0000;transform:translate(63.814px,-21.050px)}
+  26%{opacity:1.0000;transform:translate(71.831px,-22.675px)}
+  26.6667%{opacity:1.0000;transform:translate(79.637px,-24.027px)}
+  27.3333%{opacity:1.0000;transform:translate(87.182px,-25.127px)}
+  28%{opacity:1.0000;transform:translate(94.422px,-26.000px)}
+  28.6667%{opacity:1.0000;transform:translate(101.313px,-26.674px)}
+  29.3333%{opacity:1.0000;transform:translate(107.813px,-27.173px)}
+  30%{opacity:1.0000;transform:translate(113.888px,-27.525px)}
+  30.6667%{opacity:1.0000;transform:translate(119.507px,-27.754px)}
+  31.3333%{opacity:1.0000;transform:translate(124.643px,-27.886px)}
+  32%{opacity:1.0000;transform:translate(129.279px,-27.943px)}
+  32.6667%{opacity:1.0000;transform:translate(133.400px,-27.946px)}
+  33.3333%{opacity:1.0000;transform:translate(137.004px,-27.911px)}
+  34%{opacity:1.0000;transform:translate(140.092px,-27.855px)}
+  34.6667%{opacity:1.0000;transform:translate(142.675px,-27.790px)}
+  35.3333%{opacity:1.0000;transform:translate(144.774px,-27.724px)}
+  36%{opacity:1.0000;transform:translate(146.417px,-27.666px)}
+  36.6667%{opacity:0.9645;transform:translate(147.642px,-27.617px)}
+  37.3333%{opacity:0.7901;transform:translate(148.494px,-27.582px)}
+  38%{opacity:0.5000;transform:translate(149.030px,-27.558px)}
+  38.6667%{opacity:0.2099;transform:translate(149.315px,-27.546px)}
+  39.3333%{opacity:0.0355;transform:translate(149.424px,-27.541px)}
+  40%{opacity:0.0000;transform:translate(149.440px,-27.540px)}
+  100%{opacity:0;transform:translate(149.440px,-27.540px)}
+}
 
 /* ---------- 6. reduced motion: no animation anywhere, static end state ---------- */
 @media (prefers-reduced-motion: reduce){
@@ -100,3 +224,10 @@
 }
 
 .animated-illustration > .illo { flex:none; }
+
+/* Calm, seamless claim-reminder loops after the entrance sequence. */
+.illo--claim[data-state="idle"] [data-layer="wallet-card"] { animation:claim-card-float 6000ms var(--e-loop) infinite; }
+@keyframes claim-coin-float {0%,100%{transform:translate(0,0)}50%{transform:translate(-3px,-9px)}}
+@keyframes claim-lock-float {0%,100%{transform:translate(0,0)}50%{transform:translate(3px,-7px)}}
+@keyframes claim-plate-float {0%,100%{transform:translate(0,0)}50%{transform:translate(-4px,-5px)}}
+@keyframes claim-card-float {0%,100%{transform:translate(0,0)}50%{transform:translate(0,-7px)}}

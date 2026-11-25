@@ -5,13 +5,14 @@ import Icon from '../ui/Icon'
 
 export default function Welcome() {
   const { s, act, mobile } = useStore()
+  const headline = copy.hero[0].split(/\s+(?=Your eyes only\.)/).map(line => <span key={line} className="block whitespace-nowrap">{line}</span>)
   const learn = () => (s.connected ? act.tourStart() : act.startConnect(true))
   const returning = () => (s.connected ? nav('dashboard') : act.startConnect(false))
 
   if (mobile)
     return (
       <div className="welcome-content flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-5 pb-4 pt-2" data-scroll>
-        <h1 className="mx-auto max-w-[250px] shrink-0 text-center text-value font-medium  ">{copy.hero[0]}</h1>
+        <h1 className="mx-auto max-w-full shrink-0 text-center text-value font-medium  ">{headline}</h1>
         <p className="mx-auto mt-3 max-w-[320px] shrink-0 text-center text-body  text-ink2">{copy.hero[1]}</p>
         <div className="mt-4 flex shrink-0 justify-center">
           <ShieldDemo mobile className="border border-line" />
@@ -36,7 +37,7 @@ export default function Welcome() {
       <div className="grid h-full max-w-[1184px] grid-cols-[minmax(300px,1fr)_minmax(0,1.25fr)] gap-10 border border-line bg-surface px-10 py-10">
         <div className="self-center">
           <h1 className="text-value" >
-            {copy.hero[0]}
+            {headline}
           </h1>
           <p className="mt-5 max-w-[400px] text-heading  text-ink2">{copy.hero[1]}</p>
           <div className="mt-8 flex flex-wrap gap-2">
