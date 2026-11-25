@@ -12,7 +12,7 @@ export default function Welcome() {
   if (mobile)
     return (
       <div className="welcome-content flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain px-5 pb-4 pt-2" data-scroll>
-        <h1 className="mx-auto max-w-full shrink-0 text-center text-value font-medium  ">{headline}</h1>
+        <h1 className="w-full max-w-full shrink-0 text-center text-value font-medium" style={{ fontSize: 'min(var(--text-value), 8.5vw)', lineHeight: 1.12 }}>{headline}</h1>
         <p className="mx-auto mt-3 max-w-[320px] shrink-0 text-center text-body  text-ink2">{copy.hero[1]}</p>
         <div className="mt-4 flex shrink-0 justify-center">
           <ShieldDemo mobile className="border border-line" />
