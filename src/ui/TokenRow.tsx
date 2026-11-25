@@ -13,7 +13,7 @@ export const decOf = (sym: string) => (sym === 'ETH' ? 4 : 2)
 /** Square token tile (Figma); shielded variant carries a small navy lock badge. */
 export function Coin({ sym, size = 32, shielded }: { sym: string; size?: number; shielded?: boolean }) {
   return (
-    <span className="relative inline-flex shrink-0 items-center justify-center font-semibold text-[var(--brand-white)]" style={{ width: size, height: size, background: sym === 'USDC' ? 'var(--brand-usdc)' : sym === 'ETH' ? 'var(--brand-eth)' : sym === 'WBTC' ? 'var(--brand-wbtc)' : sym === 'USDT' ? 'var(--brand-usdt)' : 'var(--color-on-accent)', fontSize: Math.max(11, size * 0.42) }}>
+    <span className="relative inline-flex shrink-0 items-center justify-center font-medium text-[var(--brand-white)]" style={{ width: size, height: size, background: sym === 'USDC' ? 'var(--brand-usdc)' : sym === 'ETH' ? 'var(--brand-eth)' : sym === 'WBTC' ? 'var(--brand-wbtc)' : sym === 'USDT' ? 'var(--brand-usdt)' : 'var(--color-on-accent)', fontSize: 'var(--text-caption)' }}>
       {sym === 'ETH' ? 'Ξ' : sym === 'WBTC' ? '₿' : sym === 'USDT' ? '₮' : '$'}
       {shielded && (
         <span className="absolute -bottom-0.5 -right-0.5 flex items-center justify-center bg-navy text-accent" style={{ width: size * 0.42, height: size * 0.42 }}>
@@ -35,16 +35,16 @@ export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick, zero
       <button type="button" onClick={onClick} className="flex w-full items-center gap-3 py-3 text-left">
         <Coin sym={sym} />
         <span className="min-w-0 flex-1">
-          <span className="block text-[15px] font-medium leading-5">{sym}</span>
-          <span className="block text-[12px] leading-4 text-ink3">
+          <span className="block text-body font-medium ">{sym}</span>
+          <span className="block text-caption  text-ink3">
             {sym}<Sep />{a.wrapped}
           </span>
         </span>
-        <span className={`mono flex min-w-0 flex-col gap-1 text-right text-[13px] leading-4 ${zero ? 'opacity-[.64]' : ''}`}>
+        <span className={`text-body flex min-w-0 flex-col gap-1 text-right text-body  ${zero ? 'opacity-[.64]' : ''}`}>
           <span className="flex items-center justify-end gap-2"><span className="size-2 shrink-0 bg-accent" /><Masked value={priv} hidden={hidden && !zero} dec={dec} /></span>
           <span className="flex items-center justify-end gap-2"><span className="size-2 shrink-0 bg-lineStrong" />{fmtPublic(pub, dec)}</span>
 
-          {TOKEN_ROW_RATIO_BAR && <span className="block w-full pt-2"><RatioTrack confidential={priv} publicValue={pub} hidden={hidden} small /><span className="mono mt-1 block text-[12px]">{hidden ? '[•••]' : <>{Math.round(priv / (pub + priv || 1) * 100)}%<Sep />{Math.round(pub / (pub + priv || 1) * 100)}%</>}</span></span>}
+          {TOKEN_ROW_RATIO_BAR && <span className="block w-full pt-2"><RatioTrack confidential={priv} publicValue={pub} hidden={hidden} small /><span className="mt-1 block text-caption">{hidden ? '[•••]' : <>{Math.round(priv / (pub + priv || 1) * 100)}%<Sep />{Math.round(pub / (pub + priv || 1) * 100)}%</>}</span></span>}
         </span>
       </button>
     )
@@ -53,22 +53,22 @@ export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick, zero
       <span className="flex items-center gap-3">
         <Coin sym={sym} />
         <span>
-          <span className="block text-[15px] font-medium leading-5">{sym}</span>
-          <span className="block text-[13px] leading-[18px] text-ink3">
+          <span className="block text-body font-medium ">{sym}</span>
+          <span className="block text-body  text-ink3">
             {a.name}<Sep />{sym} + {a.wrapped}
           </span>
         </span>
       </span>
       <span className={`text-right ${zero ? 'opacity-[.64]' : ''}`}>
-        <Masked value={priv} hidden={hidden && !zero} dec={dec} className="mono block text-[14px] font-medium leading-5" />
-        <span className="block text-[13px] leading-[18px] text-accentInk">{a.wrapped}</span>
+        <Masked value={priv} hidden={hidden && !zero} dec={dec} className="text-body block text-body font-medium " />
+        <span className="block text-body  text-accentInk">{a.wrapped}</span>
       </span>
       <span className={`text-right ${zero ? 'opacity-[.64]' : ''}`}>
-        <span className="mono block text-[14px] font-medium leading-5 tabular-nums">{fmtPublic(pub, dec)}</span>
-        <span className="block text-[13px] leading-[18px] text-ink3">{fmtUsd(pub * portfolioPrice(sym))}</span>
+        <span className="text-body block text-body font-medium  tabular-nums">{fmtPublic(pub, dec)}</span>
+        <span className="block text-body  text-ink3">{fmtUsd(pub * portfolioPrice(sym))}</span>
       </span>
       <Icon name="chevron-down" className="-rotate-90 text-ink3" />
-      {TOKEN_ROW_RATIO_BAR && <span className="col-span-4 block w-full"><RatioTrack confidential={priv} publicValue={pub} hidden={hidden} small /><span className="mono mt-1 block text-right text-[12px]">{hidden ? '[•••]' : <>{Math.round(priv / (pub + priv || 1) * 100)}%<Sep />{Math.round(pub / (pub + priv || 1) * 100)}%</>}</span></span>}
+      {TOKEN_ROW_RATIO_BAR && <span className="col-span-4 block w-full"><RatioTrack confidential={priv} publicValue={pub} hidden={hidden} small /><span className="mt-1 block text-right text-caption">{hidden ? '[•••]' : <>{Math.round(priv / (pub + priv || 1) * 100)}%<Sep />{Math.round(pub / (pub + priv || 1) * 100)}%</>}</span></span>}
     </button>
   )
 }

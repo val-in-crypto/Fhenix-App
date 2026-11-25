@@ -28,25 +28,25 @@ export default function PermitSheet() {
         <SheetClose onClick={() => !s.signing && act.closeSheet()} />
       </div>
       <div>
-        <h2 className="text-[24px] font-medium leading-[30px] tracking-[-0.01em]">{s.permit === 'expired' ? 'Renew your permit' : c[0]}</h2>
-        <p className="mt-2 text-[15px] leading-[22px] text-ink2">{c[1]}</p>
+        <h2 className="text-title font-medium  ">{s.permit === 'expired' ? 'Renew your permit' : c[0]}</h2>
+        <p className="mt-2 text-body  text-ink2">{c[1]}</p>
       </div>
       <div className="bg-surface2 p-4">
-        <div className="eyebrow text-ink3" style={{ fontSize: 11 }}>What stays confidential</div>
+        <div className="eyebrow text-ink3" >What stays confidential</div>
         <ul className="mt-3 flex flex-col gap-3">
           {rows.map(([icon, label, note]) => (
-            <li key={label} className="flex items-center gap-3 text-[14px] leading-5">
+            <li key={label} className="flex items-center gap-3 text-body ">
               <span className={`flex h-7 w-7 items-center justify-center bg-surface ${icon === 'lock' ? 'text-accentInk' : 'text-ink3'}`}>
                 <Icon name={icon} size={icon === 'lock' ? 13 : 15} />
               </span>
               <span className="flex-1">{label}</span>
-              {note && <span className="mono text-[12px] text-ink3">{note}</span>}
+              {note && <span className="text-caption text-ink3">{note}</span>}
             </li>
           ))}
         </ul>
-        <a href={PERMIT_DOCS_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-11 items-center text-[13px] text-accentInk">What is a permit? Read the docs ↗</a>
+        <a href={PERMIT_DOCS_URL} target="_blank" rel="noopener noreferrer" className="mt-3 inline-flex min-h-11 items-center text-body text-accentInk">What is a permit? Read the docs ↗</a>
       </div>
-      <label className="flex h-[52px] items-center justify-between bg-surface2 px-4 text-[14px]">
+      <label className="flex h-[52px] items-center justify-between bg-surface2 px-4 text-body">
         <span className="text-ink2">{c[5]}</span>
         <span className="relative flex items-center font-medium">
           <select aria-label={c[5]} value={days} disabled={s.signing} onChange={e => setDays(Number(e.target.value))} className="cursor-pointer appearance-none bg-transparent py-2 pr-6 text-right">
@@ -63,7 +63,7 @@ export default function PermitSheet() {
         <Button size={mobile ? 56 : 48} full arrow busy={s.signing} disabled={s.signing} onClick={() => act.signPermit(days)}>
           {s.signing ? 'Waiting for signature…' : c[6]}
         </Button>
-        <button type="button" disabled={s.signing} onClick={act.permitNotNow} className="mt-4 px-3 py-1 text-[14px] font-medium text-ink2 underline underline-offset-4 hover:text-ink">
+        <button type="button" disabled={s.signing} onClick={act.permitNotNow} className="mt-4 px-3 py-1 text-body font-medium text-ink2 underline underline-offset-4 hover:text-ink">
           {c[7]}
         </button>
       </div>

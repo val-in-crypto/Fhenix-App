@@ -61,20 +61,20 @@ function Chart({ masked }: { masked: boolean }) {
     <section className="pt-5">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-          <h2 className="text-[15px] font-medium">Confidential vs public over time</h2>
-          <span className="flex items-center gap-1.5 text-[13px] text-ink3">
+          <h2 className="text-body font-medium">Confidential vs public over time</h2>
+          <span className="flex items-center gap-1.5 text-body text-ink3">
             <span className="h-2 w-2 bg-accent" /> Confidential
           </span>
-          <span className="flex items-center gap-1.5 text-[13px] text-ink3">
+          <span className="flex items-center gap-1.5 text-body text-ink3">
             <span className="h-2 w-2 bg-line" /> Public
           </span>
-          <span className="flex items-center gap-1.5 text-[13px] text-ink3">
+          <span className="flex items-center gap-1.5 text-body text-ink3">
             <span className="h-2 w-2 rotate-45 border border-accentInk bg-surface" /> Shield event
           </span>
         </div>
         <div className="flex bg-surface2 p-0.5" role="group" aria-label="Range">
           {RANGES.map(r => (
-            <button key={r} type="button" aria-pressed={r === range} onClick={() => setRange(r)} className={`mono px-2.5 py-1.5 text-[12px] font-medium leading-4 ${r === range ? 'border border-line bg-surface text-ink' : 'border border-transparent text-ink3 hover:text-ink'}`}>
+            <button key={r} type="button" aria-pressed={r === range} onClick={() => setRange(r)} className={`px-2.5 py-1.5 text-caption font-medium  ${r === range ? 'border border-line bg-surface text-ink' : 'border border-transparent text-ink3 hover:text-ink'}`}>
               {r}
             </button>
           ))}
@@ -86,11 +86,11 @@ function Chart({ masked }: { masked: boolean }) {
         onFocus={() => setHover(24)}
         onBlur={() => setHover(null)}
         onKeyDown={event => { if (['ArrowLeft', 'ArrowRight', 'Home', 'End', 'Escape'].includes(event.key)) { event.preventDefault(); setHover(event.key === 'Escape' ? null : event.key === 'Home' ? 0 : event.key === 'End' ? 48 : Math.max(0, Math.min(48, (hover ?? 24) + (event.key === 'ArrowRight' ? 1 : -1)))) } }}>
-        {tooltip && hover !== null && <><div aria-hidden className="pointer-events-none absolute inset-y-0 w-px bg-ink3" style={{ left: `${hover / 48 * 100}%` }} /><div role="tooltip" className="pointer-events-none absolute top-0 z-10 w-[232px] border border-line bg-surface p-3 text-[12px] shadow-lg" style={{ left: `clamp(0px, calc(${hover / 48 * 100}% - 116px), calc(100% - 232px))` }}>
+        {tooltip && hover !== null && <><div aria-hidden className="pointer-events-none absolute inset-y-0 w-px bg-ink3" style={{ left: `${hover / 48 * 100}%` }} /><div role="tooltip" className="pointer-events-none absolute top-0 z-10 w-[232px] border border-line bg-surface p-3 text-caption shadow-lg" style={{ left: `clamp(0px, calc(${hover / 48 * 100}% - 116px), calc(100% - 232px))` }}>
           <p className="mb-2 font-medium text-ink3">{tooltip.date}</p><dl className="flex flex-col gap-1">
-            <div className="flex justify-between gap-2"><dt>Total</dt><dd className="mono">{masked ? '[*******]' : fmtUsd(tooltip.total)}</dd></div>
-            <div className="flex justify-between gap-2"><dt>Public</dt><dd className="mono">{fmtUsd(tooltip.total - tooltip.confidential)}{!masked && ` (${(100 - tooltip.pct).toFixed(0)}%)`}</dd></div>
-            <div className="flex justify-between gap-2"><dt>Confidential</dt><dd className="mono text-accentInk">{masked ? '[*******]' : fmtPrivate(tooltip.confidential) + ` (${tooltip.pct.toFixed(0)}%)`}</dd></div>
+            <div className="flex justify-between gap-2"><dt>Total</dt><dd className="text-body">{masked ? '[*******]' : fmtUsd(tooltip.total)}</dd></div>
+            <div className="flex justify-between gap-2"><dt>Public</dt><dd className="text-body">{fmtUsd(tooltip.total - tooltip.confidential)}{!masked && ` (${(100 - tooltip.pct).toFixed(0)}%)`}</dd></div>
+            <div className="flex justify-between gap-2"><dt>Confidential</dt><dd className="text-body text-accentInk">{masked ? '[*******]' : fmtPrivate(tooltip.confidential) + ` (${tooltip.pct.toFixed(0)}%)`}</dd></div>
           </dl>
         </div></>}
         <svg viewBox="0 0 1000 180" preserveAspectRatio="none" className="h-full w-full" role="img" aria-label="Area chart of public and confidential balance over time">
@@ -108,9 +108,9 @@ function Chart({ masked }: { masked: boolean }) {
         </svg>
         {!masked &&
           events.map(e => <span key={e.x} className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rotate-45 border border-accentInk bg-surface" style={{ left: `${e.x * 100}%`, top: `${(Y(e.y) / 180) * 100}%` }} />)}
-        {masked && <span className="mono absolute bottom-2 left-0 bg-surface/80 px-2 py-1 text-[12px] text-ink3">Confidential series hidden</span>}
+        {masked && <span className="absolute bottom-2 left-0 bg-surface/80 px-2 py-1 text-caption text-ink3">Confidential series hidden</span>}
       </div>
-      <div className="mono mt-2 flex flex-wrap justify-between gap-2 text-[12px] text-ink3">
+      <div className="mt-2 flex flex-wrap justify-between gap-2 text-caption text-ink3">
         {LABELS[range].map(l => (
           <span key={l}>{l}</span>
         ))}
@@ -156,11 +156,11 @@ export default function Dashboard() {
   return (
     <Page>
       <div className="flex flex-col gap-6">
-        {s.pendingUnshield && s.unshieldStep >= 3 && <div className="flex items-center justify-between gap-3 border border-line bg-accentSoft p-4 text-[15px]"><span>1 unshield ready to claim</span><Button size={44} disabled={s.busy} onClick={act.claim}>{s.busy ? 'Claiming…' : 'Claim'}</Button></div>}
+        {s.pendingUnshield && s.unshieldStep >= 3 && <div className="flex items-center justify-between gap-3 border border-line bg-accentSoft p-4 text-body"><span>1 unshield ready to claim</span><Button size={44} disabled={s.busy} onClick={act.claim}>{s.busy ? 'Claiming…' : 'Claim'}</Button></div>}
         {s.permit !== 'active' && !empty && (
           <div data-tour="permit-banner" className={`flex items-center gap-3 ${s.permit === 'expired' ? 'bg-dangerSoft' : 'border border-line bg-surface'} ${mobile ? 'p-3 pl-4' : 'px-5 py-3'}`} role="status">
             <Icon name="permit-key" className={s.permit === 'expired' ? 'text-danger' : 'text-accentInk'} />
-            <p className="flex-1 text-[13px] leading-[18px] text-ink">{s.permit === 'expired' ? copy.expired : copy.none}</p>
+            <p className="flex-1 text-body  text-ink">{s.permit === 'expired' ? copy.expired : copy.none}</p>
             <Button size={44} onClick={act.renew}>
               {permitCta}
             </Button>
@@ -172,19 +172,19 @@ export default function Dashboard() {
             <span className="eyebrow text-ink3">Net worth</span>
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-3">
-            <Masked value={total} hidden={masked && !empty} bare prefix="$" className={`font-semibold tracking-[-0.03em] ${mobile ? 'text-[38px] leading-[44px]' : 'text-[44px] leading-[48px]'}`} />
+            <Masked value={total} hidden={masked && !empty} bare prefix="$" className={`font-medium  ${mobile ? 'text-value ' : 'text-value '}`} />
             <button type="button" onClick={act.toggleHidden} aria-label={masked ? 'Reveal confidential balances' : 'Hide confidential balances'} aria-pressed={!masked} className="flex size-11 shrink-0 items-center justify-center border border-line bg-surface hover:border-lineStrong">
               <Icon name={masked ? 'eye' : 'eye-off'} size={18} />
             </button>
             {!mobile && <Button size={48} arrow className="ml-auto w-[168px]" onClick={() => nav('shield')}>Shield</Button>}
           </div>
-          {mobile ? <div className="mt-4"><ActionRow stretch /></div> : <p className="mt-2 text-[13px] text-ink3">{separate(empty ? `No balances yet\u001f${net.name}` : `2 assets\u001f${net.name}${net.unsupported ? '' : ' Sepolia'}`)}</p>}
+          {mobile ? <div className="mt-4"><ActionRow stretch /></div> : <p className="mt-2 text-body text-ink3">{separate(empty ? `No balances yet\u001f${net.name}` : `2 assets\u001f${net.name}${net.unsupported ? '' : ' Sepolia'}`)}</p>}
           <div className={mobile ? 'mt-4' : 'mt-6'}>
             <RatioBar priv={u.priv} pub={u.pub} hidden={masked && !empty} compact={mobile} />
           </div>
           {!empty && (
             <div className="mt-6 border-t border-line pt-2">
-              <button type="button" aria-expanded={history} aria-controls="balance-history" onClick={toggleHistory} className="mx-auto flex min-h-10 items-center gap-2 px-3 text-[14px] font-medium text-accentInk">
+              <button type="button" aria-expanded={history} aria-controls="balance-history" onClick={toggleHistory} className="mx-auto flex min-h-10 items-center gap-2 px-3 text-body font-medium text-accentInk">
                 {history ? 'Show less' : 'Show more'} <Icon name="chevron-down" size={14} className={history ? 'rotate-180' : ''} />
               </button>
               <div id="balance-history" hidden={!history}>
@@ -204,10 +204,10 @@ export default function Dashboard() {
               selectTab(next)
               document.getElementById(`overview-tab-${next}`)?.focus()
             }}>
-              {['Tokens', 'Activity'].map(label => <button key={label} id={`overview-tab-${label}`} type="button" role="tab" aria-selected={label === tab} aria-controls="overview-panel" tabIndex={label === tab ? 0 : -1} onClick={() => selectTab(label)} className={`min-h-10 border-b-2 text-[19px] font-semibold ${label === tab ? 'border-accent text-ink' : 'border-transparent text-ink3'}`}>{label}</button>)}
+              {['Tokens', 'Activity'].map(label => <button key={label} id={`overview-tab-${label}`} type="button" role="tab" aria-selected={label === tab} aria-controls="overview-panel" tabIndex={label === tab ? 0 : -1} onClick={() => selectTab(label)} className={`min-h-10 border-b-2 text-body ${label === tab ? 'border-accent text-ink' : 'border-transparent text-ink3'}`}>{label}</button>)}
             </div>
             {tab === 'Tokens' && (
-            <button type="button" onClick={s.permit === 'active' ? act.toggleHidden : act.renew} className="flex items-center gap-1.5 py-1 text-[13px] font-medium text-accentInk hover:underline">
+            <button type="button" onClick={s.permit === 'active' ? act.toggleHidden : act.renew} className="flex items-center gap-1.5 py-1 text-body font-medium text-accentInk hover:underline">
               {s.permit === 'expired' ? 'Renew permit' : s.permit === 'none' ? 'Create permit' : masked ? 'Reveal all' : mobile ? 'Hide' : 'Hide all'}
               <Icon name={s.permit !== 'active' ? 'permit-key' : masked ? 'eye' : 'eye-off'} size={14} />
             </button>
@@ -215,14 +215,14 @@ export default function Dashboard() {
           </div>
           <div id="overview-panel" role="tabpanel" aria-labelledby={`overview-tab-${tab}`}>
           {tab === 'Activity' ? <ActivityList items={s.activity} hidden={masked} /> : net.unsupported ? (
-            <p className="mt-4 flex items-start gap-2 bg-surface2 p-4 text-[13px] leading-[18px] text-ink2" role="status">
+            <p className="mt-4 flex items-start gap-2 bg-surface2 p-4 text-body  text-ink2" role="status">
               <Icon name="info" className="mt-0.5 text-ink3" />
               {copy.unsupported.replace('{network}', net.name)}
             </p>
           ) : (
             <>
               {!mobile && (
-                <div className="eyebrow mt-4 grid grid-cols-[1fr_180px_180px_24px] gap-4 px-2 text-ink3" style={{ fontSize: 11 }}>
+                <div className="eyebrow mt-4 grid grid-cols-[1fr_180px_180px_24px] gap-4 px-2 text-ink3" >
                   <span>Asset</span>
                   <span className="text-right">Confidential</span>
                   <span className="text-right">Public</span>
@@ -235,7 +235,7 @@ export default function Dashboard() {
                   <TokenRow zero={zeros.includes(sym)} key={sym} sym={sym} pub={portfolioBalance(s.balances, sym).pub} priv={portfolioBalance(s.balances, sym).priv} hidden={masked} mobile={mobile} onClick={() => act.openSheet('token', sym)} />
                 ))}
               </div>
-              {!empty && zeros.length > 0 && <button type="button" aria-expanded={showZero} onClick={() => setShowZero(!showZero)} className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 border-t border-line text-[13px] text-ink3">{showZero ? 'Hide tokens with 0 balance' : `Show tokens with 0 balance (${zeros.length})`}<Icon name="chevron-down" size={14} className={showZero ? 'rotate-180' : ''} /></button>}
+              {!empty && zeros.length > 0 && <button type="button" aria-expanded={showZero} onClick={() => setShowZero(!showZero)} className="mt-3 flex min-h-11 w-full items-center justify-center gap-2 border-t border-line text-body text-ink3">{showZero ? 'Hide tokens with 0 balance' : `Show tokens with 0 balance (${zeros.length})`}<Icon name="chevron-down" size={14} className={showZero ? 'rotate-180' : ''} /></button>}
             </>
           )}
           </div>

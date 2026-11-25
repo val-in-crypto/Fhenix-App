@@ -88,7 +88,7 @@ export default function ShieldFlow({ mode }: { mode: 'shield' | 'unshield' }) {
     <>
       <Page narrow card bottom={<>
         <Button full size={mobile ? 52 : 48} busy={busy && !reduced} disabled={disabled} arrow={!disabled} onClick={action}>{label}</Button>
-        <p className="mt-3 text-center text-[13px] leading-[18px] text-ink3">{separate(shield ? '≈ $0.12 fee\u001f~30 sec\u001fAmount is visible on-chain. Your balance is not.' : s.unshieldStep === 2 ? 'Claim unlocks after decryption\u001f~30 sec' : 'Step 1 of 3\u001fthen decrypt and claim')}</p>
+        <p className="mt-3 text-center text-body  text-ink3">{separate(shield ? '≈ $0.12 fee\u001f~30 sec\u001fAmount is visible on-chain. Your balance is not.' : s.unshieldStep === 2 ? 'Claim unlocks after decryption\u001f~30 sec' : 'Step 1 of 3\u001fthen decrypt and claim')}</p>
       </>}>
         <div data-tour="shield-form">
           <SegmentedSwitch width="fill" label="Mode" value={mode} onChange={value => { if (value !== mode) swap() }} disabled={busy || Boolean(s.pendingUnshield)} options={[{ value: 'shield', label: 'Shield' }, { value: 'unshield', label: 'Unshield' }]} />
@@ -110,11 +110,11 @@ export default function ShieldFlow({ mode }: { mode: 'shield' | 'unshield' }) {
         transaction={!mobile && result?.kind === 'shield' && explorer ? <a href={explorer + '/tx/' + hash} target="_blank" rel="noopener noreferrer">Transaction 0x9f2c…a83e ↗</a> : undefined}>
         {result?.kind === 'shield' ? <div>
           <div className="flex items-center justify-between gap-3 border border-line bg-surface2 p-4">
-            <div className="min-w-0"><p className="text-[13px] text-ink3">Confidential balance</p><Masked value={result.amount} hidden={!revealed || s.permit !== 'active'} dec={result.asset === 'ETH' ? 4 : 2} className="mono mt-1 text-[22px] text-accentInk" /> <span className="text-accentInk">f{result.asset}</span></div>
+            <div className="min-w-0"><p className="text-body text-ink3">Confidential balance</p><Masked value={result.amount} hidden={!revealed || s.permit !== 'active'} dec={result.asset === 'ETH' ? 4 : 2} className="mt-1 text-title text-accentInk" /> <span className="text-accentInk">f{result.asset}</span></div>
             <Button size={44} variant="secondary" onClick={() => s.permit !== 'active' ? act.renew() : setRevealed(!revealed)}>{revealed ? 'Hide' : 'Reveal'}</Button>
           </div>
-          <p className="mt-2 text-center text-[13px] text-ink3">Reveal shows {revealed ? fmtPrivate(result.amount) : '[*******]'} f{result.asset} to you only, with your permit.</p>
-        </div> : result && <dl className="divide-y divide-line bg-surface2 px-4 text-[14px]">
+          <p className="mt-2 text-center text-body text-ink3">Reveal shows {revealed ? fmtPrivate(result.amount) : '[*******]'} f{result.asset} to you only, with your permit.</p>
+        </div> : result && <dl className="divide-y divide-line bg-surface2 px-4 text-body">
           <div className="flex justify-between gap-3 py-3"><dt className="text-ink3">Claimed</dt><dd>{resultAmount} {result.asset}</dd></div>
           <div className="flex justify-between gap-3 py-3"><dt className="text-ink3">Confidential balance</dt><dd><Masked value={s.balances[result.asset].priv} hidden={masked} dec={dec} /> f{result.asset}</dd></div>
           <div className="flex justify-between gap-3 py-3"><dt className="text-ink3">Transaction</dt><dd>{explorer ? <a href={explorer + '/tx/' + hash} target="_blank" rel="noopener noreferrer" className="text-accentInk">0x5d10…c7e2 ↗</a> : '0x5d10…c7e2'}</dd></div>

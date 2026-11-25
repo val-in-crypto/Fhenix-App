@@ -7,7 +7,7 @@ import Icon from '../ui/Icon'
 
 const Row = ({ label, children }: { label: string; children: ReactNode }) => (
   <div className="flex items-center justify-between gap-3">
-    <span className="text-[13px] text-ink2">{label}</span>
+    <span className="text-body text-ink2">{label}</span>
     {children}
   </div>
 )
@@ -15,7 +15,7 @@ function Seg<T extends string | number>({ value, options, onChange, label }: { v
   return (
     <div className="flex bg-surface2 p-0.5" role="group" aria-label={label}>
       {options.map(([v, l]) => (
-        <button key={String(v)} type="button" aria-pressed={v === value} onClick={() => onChange(v)} className={`px-2.5 py-1.5 text-[12px] font-medium leading-4 ${v === value ? 'bg-navy text-onNavy' : 'text-ink2 hover:text-ink'}`}>
+        <button key={String(v)} type="button" aria-pressed={v === value} onClick={() => onChange(v)} className={`px-2.5 py-1.5 text-caption font-medium  ${v === value ? 'bg-navy text-onNavy' : 'text-ink2 hover:text-ink'}`}>
           {l}
         </button>
       ))}
@@ -23,7 +23,7 @@ function Seg<T extends string | number>({ value, options, onChange, label }: { v
   )
 }
 const Check = ({ label, checked, onChange, disabled }: { label: string; checked: boolean; onChange: (v: boolean) => void; disabled?: boolean }) => (
-  <label className={`flex h-8 cursor-pointer items-center justify-between gap-3 text-[13px] text-ink2 ${disabled ? 'opacity-50' : ''}`}>
+  <label className={`flex h-8 cursor-pointer items-center justify-between gap-3 text-body text-ink2 ${disabled ? 'opacity-50' : ''}`}>
     {label}
     <input type="checkbox" className="h-4 w-4 accent-accentInk" checked={checked} disabled={disabled} onChange={e => onChange(e.target.checked)} />
   </label>
@@ -134,11 +134,11 @@ export default function DemoPanel() {
           >
             <div className="flex items-center justify-between">
               <span className="eyebrow text-ink">Demo controls</span>
-              <button type="button" onClick={act.resetAll} className="border border-line px-2.5 py-1.5 text-[12px] font-medium hover:bg-surface2">
+              <button type="button" onClick={act.resetAll} className="border border-line px-2.5 py-1.5 text-caption font-medium hover:bg-surface2">
                 Reset all
               </button>
             </div>
-            <label className="flex flex-col gap-1 text-[13px] text-ink2">
+            <label className="flex flex-col gap-1 text-body text-ink2">
               Jump to
               <select
                 value=""
@@ -146,7 +146,7 @@ export default function DemoPanel() {
                   const j = J[Number(e.target.value)]
                   if (j) { setOpen(false); act.jump(j[1], j[2], j[3]) }
                 }}
-                className="h-9 border border-line bg-surface px-2 text-[13px] text-ink"
+                className="h-9 border border-line bg-surface px-2 text-body text-ink"
               >
                 <option value="" disabled>
                   Choose a screen or state…
@@ -165,7 +165,7 @@ export default function DemoPanel() {
               <Seg<Permit> label="Permit" value={s.permit} options={[['none', 'None'], ['active', 'Active'], ['expired', 'Expired']]} onChange={v => act.set({ permit: v, ...(v === 'active' ? { hidden: false } : {}) })} />
             </Row>
             <Row label="Network">
-              <select aria-label="Network" value={s.networkIdx} onChange={e => act.setNetwork(Number(e.target.value))} className="h-8 border border-line bg-surface px-2 text-[13px] text-ink">
+              <select aria-label="Network" value={s.networkIdx} onChange={e => act.setNetwork(Number(e.target.value))} className="h-8 border border-line bg-surface px-2 text-body text-ink">
                 {data.networks.map((n, i) => (
                   <option key={n.chainId} value={i}>
                     {n.name}
@@ -178,13 +178,13 @@ export default function DemoPanel() {
               <Check label="Device frame 390×844" checked={s.deviceFrame} onChange={v => act.set({ deviceFrame: v })} />
               <Check label="Reduce motion" checked={s.reduceMotion} onChange={v => act.set({ reduceMotion: v })} />
             </div>
-            <button type="button" onClick={toastSet} className="h-9 border border-line text-[13px] font-medium hover:bg-surface2">
+            <button type="button" onClick={toastSet} className="h-9 border border-line text-body font-medium hover:bg-surface2">
               Show toast set
             </button>
           </motion.div>
         )}
       </AnimatePresence>
-      <button type="button" aria-expanded={open} onClick={() => setOpen(o => !o)} className="mono flex h-8 items-center gap-1.5 bg-navy px-3 text-[12px] font-medium text-[var(--brand-white)] shadow-[0_4px_12px_rgb(var(--shadow-ink)_/_.25)] hover:bg-ink2">
+      <button type="button" aria-expanded={open} onClick={() => setOpen(o => !o)} className="flex h-8 items-center gap-1.5 bg-navy px-3 text-caption font-medium text-[var(--brand-white)] shadow-[0_4px_12px_rgb(var(--shadow-ink)_/_.25)] hover:bg-ink2">
         <Icon name={open ? 'close' : 'apps-grid'} size={12} />
         Demo
       </button>

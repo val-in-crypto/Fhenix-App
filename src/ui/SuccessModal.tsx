@@ -49,16 +49,16 @@ export default function SuccessModal({ open, onClose, illustration, eyebrow, tit
           <button type="button" aria-label="Close success" onClick={onClose} className="absolute right-3 top-3 z-10 flex size-11 items-center justify-center bg-surface2 text-ink2"><Icon name="close" size={18} /></button>
           <div className="no-scrollbar flex min-h-0 flex-col items-center gap-4 overflow-y-auto pb-4 text-center">
             <div className={`shrink-0 ${mobile ? 'h-[162px] w-[216px]' : 'h-[240px] w-[320px]'}`}>{illustration}</div>
-            <div className="mono text-[12px] font-medium uppercase text-accentInk">{eyebrow}</div>
-            <h2 ref={headline} id={id} tabIndex={-1} aria-live="polite" className={`outline-none ${mobile ? 'text-[24px] leading-8' : 'text-[28px] leading-9'} font-medium`}>{title}</h2>
-            <div className="text-[15px] leading-[22px] text-ink2">{body}</div>
+            <div className="text-caption font-medium  text-accentInk">{eyebrow}</div>
+            <h2 ref={headline} id={id} tabIndex={-1} aria-live="polite" className={`outline-none ${mobile ? 'text-title ' : 'text-title '} font-medium`}>{title}</h2>
+            <div className="text-body  text-ink2">{body}</div>
             {children && <div className="w-full text-left">{children}</div>}
           </div>
           <div className={`flex shrink-0 gap-2 ${mobile ? 'flex-col' : ''}`}>
             <Button size={mobile ? 52 : 48} full className={mobile ? 'shrink-0' : 'flex-1'} arrow onClick={onClose}>Done</Button>
             <Button size={mobile ? 52 : 48} full className={mobile ? 'shrink-0' : 'flex-1'} variant="secondary" onClick={onSecondary}>{secondaryLabel}</Button>
           </div>
-          {transaction && <div className="mt-4 shrink-0 text-center text-[12px] text-ink3">{transaction}</div>}
+          {transaction && <div className="mt-4 shrink-0 text-center text-caption text-ink3">{transaction}</div>}
         </motion.div>
       </div>}
     </AnimatePresence>

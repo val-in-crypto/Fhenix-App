@@ -6,6 +6,7 @@ export default {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   theme: {
     extend: {
+      fontSize: Object.fromEntries(['value', 'title', 'heading', 'label', 'body', 'caption', 'mono'].map(name => [name, [`var(--text-${name})`, { lineHeight: `var(--line-${name})`, letterSpacing: `var(--tracking-${name})`, fontWeight: ['value', 'title', 'heading', 'label'].includes(name) ? '500' : '400', ...(name === 'mono' ? { fontFamily: 'var(--font-mono)' } : {}) }]])),
       colors: {
         bg: token('--color-bg'),
         surface: token('--color-surface'),

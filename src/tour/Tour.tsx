@@ -70,7 +70,7 @@ export default function Tour() {
   if (status === 'paused')
     return (
       <div className="absolute left-1/2 z-30 flex -translate-x-1/2 items-center border border-line bg-surface shadow-[0_8px_24px_rgb(var(--shadow-ink)_/_.12)]" style={{ bottom: mobile ? tokens.size.tabBar + 12 : 24 }}>
-        <button type="button" onClick={() => act.tourGo(step)} className="flex h-11 items-center gap-2 whitespace-nowrap pl-4 pr-3 text-[13px] font-medium">
+        <button type="button" onClick={() => act.tourGo(step)} className="flex h-11 items-center gap-2 whitespace-nowrap pl-4 pr-3 text-body font-medium">
           <span className="h-2 w-2 bg-accent" />
           Resume tour <Sep /> Step {step + 1} of 4
         </button>
@@ -97,23 +97,23 @@ export default function Tour() {
   }
 
   const skip = (
-    <button type="button" onClick={() => setConfirm(true)} className="px-2 py-2 text-[13px] font-medium text-ink3 hover:text-ink">
+    <button type="button" onClick={() => setConfirm(true)} className="px-2 py-2 text-body font-medium text-ink3 hover:text-ink">
       Skip tour
     </button>
   )
   const actions = confirm ? (
     <>
-      <span className="mr-1 text-[13px] font-medium">Skip the tour?</span>
-      <Button size={44} variant="secondary" onClick={() => act.tourEnd('idle')} className="!text-[13px]">
+      <span className="mr-1 text-body font-medium">Skip the tour?</span>
+      <Button size={44} variant="secondary" onClick={() => act.tourEnd('idle')} className="!text-body">
         Skip
       </Button>
-      <Button size={44} variant="text" onClick={() => setConfirm(false)} className="!text-[13px]">
+      <Button size={44} variant="text" onClick={() => setConfirm(false)} className="!text-body">
         Keep going
       </Button>
     </>
   ) : step === 0 ? (
     <>
-      <Button size={44} onClick={act.tourNext} className="!text-[14px]">
+      <Button size={44} onClick={act.tourNext} className="!text-body">
         Next
       </Button>
       {skip}
@@ -121,17 +121,17 @@ export default function Tour() {
   ) : step === 1 ? (
     s.permit === 'active' ? (
       <>
-        <Button size={44} onClick={act.tourNext} className="!text-[14px]">
+        <Button size={44} onClick={act.tourNext} className="!text-body">
           Next
         </Button>
         {skip}
       </>
     ) : (
       <>
-        <Button size={44} disabled={s.signing} onClick={() => act.openSheet('permit')} className="!px-4 !text-[14px]">
+        <Button size={44} disabled={s.signing} onClick={() => act.openSheet('permit')} className="!px-4 !text-body">
           Create permit
         </Button>
-        <Button size={44} variant="secondary" busy={s.signing} disabled={s.signing} onClick={() => act.openSheet('permit')} className="!px-4 !text-[14px]">
+        <Button size={44} variant="secondary" busy={s.signing} disabled={s.signing} onClick={() => act.openSheet('permit')} className="!px-4 !text-body">
           Show me
         </Button>
         {skip}
@@ -139,20 +139,20 @@ export default function Tour() {
     )
   ) : step === 2 ? (
     <>
-      <Button size={44} disabled={s.busy} onClick={() => act.tourShield(false)} className="!px-4 !text-[14px]">
+      <Button size={44} disabled={s.busy} onClick={() => act.tourShield(false)} className="!px-4 !text-body">
         Shield 10 USDC
       </Button>
-      <Button size={44} variant="secondary" busy={s.busy} disabled={s.busy} onClick={() => act.tourShield(false)} className="!px-4 !text-[14px]">
+      <Button size={44} variant="secondary" busy={s.busy} disabled={s.busy} onClick={() => act.tourShield(false)} className="!px-4 !text-body">
         Show me
       </Button>
       {skip}
     </>
   ) : (
     <>
-      <Button size={44} onClick={() => (act.tourEnd('done'), nav('dashboard'))} className="!text-[14px]">
+      <Button size={44} onClick={() => (act.tourEnd('done'), nav('dashboard'))} className="!text-body">
         Go to dashboard
       </Button>
-      <button type="button" onClick={act.tourStart} className="px-2 py-2 text-[13px] font-medium text-ink3 hover:text-ink">
+      <button type="button" onClick={act.tourStart} className="px-2 py-2 text-body font-medium text-ink3 hover:text-ink">
         Replay tour
       </button>
     </>
@@ -192,10 +192,10 @@ export default function Tour() {
                 <PrivateNow scale={0.42} />
               </div>
             )}
-            {step === 2 && <div className="mono mb-3 inline-flex border border-warn px-2 py-1 text-[12px] text-warn">PRACTICE<Sep />no real funds</div>}
+            {step === 2 && <div className="mb-3 inline-flex border border-warn px-2 py-1 text-caption text-warn">PRACTICE<Sep />no real funds</div>}
             <div className="eyebrow text-accentInk">Step {step + 1} of 4</div>
-            <h2 className="mt-2 text-[19px] font-medium leading-6 tracking-[-0.01em]">{title}</h2>
-            <p className="mt-2 text-[14px] leading-5 text-ink2">{body}</p>
+            <h2 className="mt-2 text-title font-medium  ">{title}</h2>
+            <p className="mt-2 text-body  text-ink2">{body}</p>
             <div className="mt-4 flex flex-wrap items-center gap-2">{actions}</div>
             <div className="mt-4 flex gap-1.5" aria-hidden>
               {[0, 1, 2, 3].map(i => (

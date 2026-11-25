@@ -22,11 +22,11 @@ export default function Button({ variant = 'primary', size = 48, icon, arrow, fu
   const base = 'inline-flex select-none items-center justify-center gap-2 whitespace-nowrap px-5 '
   const look =
     variant === 'primary'
-      ? `font-semibold ${disabled ? 'bg-disabledFill text-disabledInk' : 'bg-accent text-onAccent hover:bg-accentHover'}`
+      ? `font-medium ${disabled ? 'bg-disabledFill text-disabledInk' : 'bg-accent text-onAccent hover:bg-accentHover'}`
       : variant === 'secondary'
         ? `border border-line bg-surface font-medium text-ink ${disabled ? 'opacity-60' : 'hover:border-lineStrong hover:bg-surface2'}`
         : 'px-2 font-medium text-ink3 hover:text-ink'
-  const type = big && variant === 'primary' ? 'text-[19px] leading-6' : big ? 'text-[16px] leading-6' : 'text-[15px] leading-5'
+  const type = big && variant === 'primary' ? 'text-title ' : big ? 'text-heading ' : 'text-body '
   return (
     <motion.button
       type="button"

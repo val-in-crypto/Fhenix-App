@@ -18,7 +18,7 @@ export function FilterChips({ value, onChange }: { value: Filter; onChange: (f: 
   return (
     <div className="flex bg-surface2 p-0.5" role="group" aria-label="Filter activity">
       {FILTERS.map(f => (
-        <button key={f} type="button" aria-pressed={value === f} onClick={() => onChange(f)} className={`px-3 py-1.5 text-[12px] font-medium leading-4 ${value === f ? 'border border-line bg-surface text-ink' : 'border border-transparent text-ink3 hover:text-ink'}`}>
+        <button key={f} type="button" aria-pressed={value === f} onClick={() => onChange(f)} className={`px-3 py-1.5 text-caption font-medium  ${value === f ? 'border border-line bg-surface text-ink' : 'border border-transparent text-ink3 hover:text-ink'}`}>
           {f}
         </button>
       ))}
@@ -45,11 +45,11 @@ export default function ActivityList({ items, hidden }: Props) {
 
   return (
     <div className="mt-4">
-      {items.length > 0 && <div className="flex flex-wrap items-center justify-between gap-2"><FilterChips value={filter} onChange={value => { setFilter(value); setLimit(20) }} /><button type="button" className="min-h-11 text-[13px] font-medium text-accentInk" onClick={toggleValues}>{hideValues ? 'Show values' : 'Hide values'}</button></div>}
+      {items.length > 0 && <div className="flex flex-wrap items-center justify-between gap-2"><FilterChips value={filter} onChange={value => { setFilter(value); setLimit(20) }} /><button type="button" className="min-h-11 text-body font-medium text-accentInk" onClick={toggleValues}>{hideValues ? 'Show values' : 'Hide values'}</button></div>}
       {items.length === 0 ? (
         <div className="py-8 text-center">
-          <div className="text-[15px] font-medium">No activity yet</div>
-          <div className="mt-1 text-[13px] text-ink3">Your shields, unshields and transfers will appear here.</div>
+          <div className="text-body font-medium">No activity yet</div>
+          <div className="mt-1 text-body text-ink3">Your shields, unshields and transfers will appear here.</div>
         </div>
       ) : (
         <ul className="mt-2">
@@ -69,10 +69,10 @@ export default function ActivityList({ items, hidden }: Props) {
                     <Icon name={iconOf(a.kind)} size={18} />
                   </span>
                   <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[14px] font-medium leading-5">{a.label.replace(/privately/gi, 'confidentially')}</span>
-                    <span className="block truncate text-[12px] leading-4 text-ink3">{separate(a.when)}</span>
+                    <span className="block truncate text-body font-medium ">{a.label.replace(/privately/gi, 'confidentially')}</span>
+                    <span className="block truncate text-caption  text-ink3">{separate(a.when)}</span>
                   </span>
-                  <span className={`mono shrink-0 text-right text-[13px] font-medium leading-4 ${a.priv || a.amount?.includes('[') ? 'text-accentInk' : ''}`}>
+                  <span className={`text-body shrink-0 text-right text-body font-medium  ${a.priv || a.amount?.includes('[') ? 'text-accentInk' : ''}`}>
                     {a.status === 'pending' ? (
                       <span className="bracket-pulse text-ink3">pending <Sep /> {a.amount}</span>
                     ) : a.priv ? (
@@ -89,13 +89,13 @@ export default function ActivityList({ items, hidden }: Props) {
               </motion.li>
             ))}
           </AnimatePresence>
-          {list.length === 0 &&<li className="py-6 text-center text-[13px] text-ink3">Nothing here yet.</li>}
+          {list.length === 0 &&<li className="py-6 text-center text-body text-ink3">Nothing here yet.</li>}
         </ul>
       )}
 
       {matched.length > limit && (
         <div className="pt-2 text-center">
-          <button type="button" onClick={() => setLimit(limit + 20)} className="py-1 text-[13px] font-medium text-accentInk hover:underline">
+          <button type="button" onClick={() => setLimit(limit + 20)} className="py-1 text-body font-medium text-accentInk hover:underline">
             Show more activity
           </button>
         </div>

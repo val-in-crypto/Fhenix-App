@@ -23,7 +23,7 @@ export default function SegmentedSwitch<T extends string>({ options, value, onCh
             event.preventDefault()
             move(event.key === 'Home' ? 0 : event.key === 'End' ? options.length - 1 : index + (['ArrowRight', 'ArrowDown'].includes(event.key) ? 1 : -1))
           }}
-          className={`flex min-w-0 items-center justify-center gap-2 border px-3 ${width === 'fill' ? `flex-1 ${mobile ? 'text-[15px]' : 'text-[14px]'}` : 'text-[13px]'} ${option.value === value ? 'border-accent bg-accentSoft font-semibold text-ink' : 'border-transparent font-medium text-ink3'}`}>
+          className={`flex min-w-0 items-center justify-center gap-2 border px-3 ${width === 'fill' ? `flex-1 ${mobile ? 'text-body' : 'text-body'}` : 'text-body'} ${option.value === value ? 'border-accent bg-accentSoft font-medium text-ink' : 'border-transparent font-medium text-ink3'}`}>
           <span aria-hidden className="size-2 shrink-0" style={{ background: option.value === value ? 'var(--color-accent)' : 'var(--color-swatch-off)' }} />{option.label}
         </button>
       ))}

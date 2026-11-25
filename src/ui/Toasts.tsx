@@ -35,13 +35,13 @@ export default function Toasts() {
                 <Icon name={fail ? 'alert' : x.kind === 'success' ? 'check' : 'info'} size={fail ? 16 : x.kind === 'success' ? 16 : 14} />
               </span>
               <div className="min-w-0 flex-1">
-                <div className="text-[14px] font-medium leading-5">{separate(x.title)}</div>
-                {x.body && <div className="text-[13px] leading-[18px] text-ink3">{separate(x.body)}</div>}
+                <div className="text-body font-medium ">{separate(x.title)}</div>
+                {x.body && <div className="text-body  text-ink3">{separate(x.body)}</div>}
               </div>
               {x.action && (
                 <button
                   type="button"
-                  className="shrink-0 px-2 py-2 text-[13px] font-medium text-accentInk hover:underline"
+                  className="shrink-0 px-2 py-2 text-body font-medium text-accentInk hover:underline"
                   onClick={() => {
                     if (x.action?.route) nav(x.action.route)
                     act.dismissToast(x.id)

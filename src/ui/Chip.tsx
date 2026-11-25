@@ -12,7 +12,7 @@ const tones = {
 
 export default function Chip({ tone = 'accent', dot, children, className = '' }: { tone?: keyof typeof tones; dot?: boolean; children: ReactNode; className?: string }) {
   return (
-    <span className={`mono inline-flex items-center gap-1.5 whitespace-nowrap px-2.5 py-1.5 text-[12px] font-medium leading-4 ${tones[tone]} ${className}`}>
+    <span className={`inline-flex items-center gap-1.5 whitespace-nowrap px-2.5 py-1.5 text-caption font-medium  ${tones[tone]} ${className}`}>
       {dot && <span className="round h-1.5 w-1.5 bg-current" />}
       {separate(children)}
     </span>

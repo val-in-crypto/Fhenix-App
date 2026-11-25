@@ -16,15 +16,15 @@ export default function RatioBar({ priv, pub, hidden, compact, detail }: { priv:
   const total = priv + pub
   const pct = total ? priv / total * 100 : 0
   if (detail) return <div>
-    <div className="mono mb-2 flex justify-between gap-3 text-[12px] uppercase">
+    <div className="mb-2 flex justify-between gap-3 text-caption ">
       <span className="text-accentInk">{hidden ? '' : `${pct.toFixed(0)}% `}Confidential</span><span className="text-ink3">{hidden ? '' : `${total ? (100 - pct).toFixed(0) : '0'}% `}Public</span>
     </div>
     <RatioTrack confidential={priv} publicValue={pub} hidden={hidden} />
   </div>
   return <div>
     <div className="mb-2 flex items-end justify-between gap-3">
-      <div className="min-w-0"><div className="eyebrow text-accentInk">Confidential</div><div className="mt-2 flex flex-wrap items-baseline gap-2"><span className={`${compact ? 'text-[15px]' : 'text-[19px]'} font-semibold`}>{hidden ? MASK : fmtPrivate(priv)}</span>{!hidden && <span className="mono text-[12px] text-ink3">{pct.toFixed(1)}%</span>}</div></div>
-      <div className="min-w-0 text-right"><div className="eyebrow text-ink3">Public</div><div className="mt-2 flex flex-wrap items-baseline justify-end gap-2">{!hidden && <span className="mono text-[12px] text-ink3">{total ? (100 - pct).toFixed(1) : '0.0'}%</span>}<span className={`${compact ? 'text-[15px]' : 'text-[19px]'} font-semibold`}>{fmtUsd(pub)}</span></div></div>
+      <div className="min-w-0"><div className="eyebrow text-accentInk">Confidential</div><div className="mt-2 flex flex-wrap items-baseline gap-2"><span className={`text-label font-medium`}>{hidden ? MASK : fmtPrivate(priv)}</span>{!hidden && <span className="text-caption text-ink3">{pct.toFixed(1)}%</span>}</div></div>
+      <div className="min-w-0 text-right"><div className="eyebrow text-ink3">Public</div><div className="mt-2 flex flex-wrap items-baseline justify-end gap-2">{!hidden && <span className="text-caption text-ink3">{total ? (100 - pct).toFixed(1) : '0.0'}%</span>}<span className={`text-label font-medium`}>{fmtUsd(pub)}</span></div></div>
     </div>
     <RatioTrack confidential={priv} publicValue={pub} hidden={hidden} />
   </div>

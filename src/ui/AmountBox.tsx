@@ -31,11 +31,11 @@ export default function AmountBox({ label, balance, onMax, value, onChange, toke
       className={`p-5 ${send ? 'flex h-[155px] flex-col gap-3' : ''} ${swapEdge === 'bottom' ? 'h-[159px] pb-6' : ''} ${confidential ? 'confidential-box border-accentSoft bg-accentSoft' : visibility ? 'border-line bg-surface' : 'border-line bg-surface'}`}
     >
       <div className="flex items-center justify-between gap-3">
-        <span className={send ? 'text-[13px] font-medium leading-[18px] text-ink2' : 'text-[15px] leading-5 text-ink3'}>{label}</span>
-        <span className="flex items-center gap-2 text-[13px] leading-[18px] text-ink3">
+        <span className={send ? 'text-body font-medium  text-ink2' : 'text-body  text-ink3'}>{label}</span>
+        <span className="flex items-center gap-2 text-body  text-ink3">
           {balance}
           {onMax && (
-            <button type="button" onClick={onMax} disabled={disabled} className={`mono ${send ? 'px-2.5 py-1.5 font-semibold' : 'px-2 py-1 font-medium'} text-[12px] leading-4 ${confidential ? `${send ? 'bg-accentSoft' : 'bg-surface'} text-accentInk hover:bg-accentSoft` : 'bg-surface2 text-ink2 hover:bg-line'}`}>
+            <button type="button" onClick={onMax} disabled={disabled} className={`text-body ${send ? 'px-2.5 py-1.5 font-medium' : 'px-2 py-1 font-medium'} text-caption  ${confidential ? `${send ? 'bg-accentSoft' : 'bg-surface'} text-accentInk hover:bg-accentSoft` : 'bg-surface2 text-ink2 hover:bg-line'}`}>
               {maxLabel}
             </button>
           )}
@@ -49,16 +49,16 @@ export default function AmountBox({ label, balance, onMax, value, onChange, toke
           readOnly={!onChange || disabled}
           onChange={e => onChange?.(e.target.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'))}
           placeholder="0.00"
-          className="w-full min-w-0 bg-transparent text-[38px] font-semibold leading-[44px] tracking-[-0.03em] text-ink placeholder:text-ink3"
+          className="w-full min-w-0 bg-transparent text-value font-medium   text-ink placeholder:text-ink3"
         />
-        <span className={`flex h-11 shrink-0 items-center gap-2 border border-line bg-surface text-[15px] ${send ? 'pl-1.5 pr-3 font-semibold' : 'px-2.5 font-medium'}`}>
+        <span className={`flex h-11 shrink-0 items-center gap-2 border border-line bg-surface text-body ${send ? 'pl-1.5 pr-3 font-medium' : 'px-2.5 font-medium'}`}>
           <Coin sym={token.replace(/^f/, '')} size={send ? 28 : 24} shielded={token.startsWith('f')} />
           {token}
           <Icon name="chevron-down" className="text-ink3" />
         </span>
       </div>
       <div className={`${send ? '' : 'mt-2'} flex items-center justify-between gap-3`}>
-        <span className={`${send ? 'text-[13px] leading-[17px]' : 'mono text-[12px] leading-4'} ${confidential ? 'text-accentInk' : 'text-ink3'}`}>≈ {usd}</span>
+        <span className={`${send ? '' : 'text-caption '} ${confidential ? 'text-accentInk' : 'text-ink3'}`}>≈ {usd}</span>
         {visibility && <span className="eyebrow text-ink3">{visibility}</span>}
         {confidential && (
           <span className="eyebrow flex items-center gap-1.5 text-accentInk">
@@ -77,8 +77,8 @@ export function ReceiveBox({ amount, unit, confidential, label = 'You receive' }
     <div
       className={`flex items-center justify-between h-[66px] gap-2 border px-5 pb-5 pt-6 ${confidential ? 'confidential-box border-accentSoft bg-accentSoft' : 'border-line bg-surface'}`}
     >
-      <span className="text-[15px] leading-5 text-ink3">{label}</span>
-      <span className="text-[15px] font-medium tabular-nums">
+      <span className="text-body  text-ink3">{label}</span>
+      <span className="text-body font-medium tabular-nums">
         {amount} <span className={'text-accentInk'}>{unit}</span>
       </span>
     </div>

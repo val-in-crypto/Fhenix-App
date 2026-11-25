@@ -65,7 +65,7 @@ function Dropdown({ button, children, align = 'left' }: { button: (open: boolean
   )
 }
 const MenuItem = ({ icon, children, onClick, right }: { icon?: ReactNode; children: ReactNode; onClick: () => void; right?: ReactNode }) => (
-  <button type="button" role="menuitem" onClick={onClick} className="flex h-11 w-full items-center gap-2.5 px-3 text-left text-[14px] hover:bg-surface2">
+  <button type="button" role="menuitem" onClick={onClick} className="flex h-11 w-full items-center gap-2.5 px-3 text-left text-body hover:bg-surface2">
     {icon}
     <span className="flex-1">{children}</span>
     {right}
@@ -77,7 +77,7 @@ function NetworkItems({ close }: { close: () => void }) {
   const { s, act } = useStore()
   return (
     <>
-      <div className="eyebrow px-3 pb-1 pt-2 text-ink3" style={{ fontSize: 11 }}>Wallet network</div>
+      <div className="eyebrow px-3 pb-1 pt-2 text-ink3" >Wallet network</div>
       {data.networks.map((n, i) => (
         <MenuItem
           key={n.chainId}
@@ -103,7 +103,7 @@ export function WalletChip() {
       button={(open, toggle) => (
         <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-11 items-center gap-2 border border-line bg-surface pl-2 pr-2.5 hover:border-lineStrong">
           <span className="round h-6 w-6" style={{ background: 'var(--wallet-identicon)' }} />
-          <span className="mono text-[12px] font-medium">{data.account.short}</span>
+          <span className="mono">{data.account.short}</span>
           <Icon name="copy" size={14} className="text-ink3" />
           <Icon name="chevron-down" className="text-ink3" />
         </button>
@@ -132,7 +132,7 @@ export function NetworkChip() {
     <Dropdown
       align="right"
       button={(open, toggle) => (
-        <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-11 items-center gap-2 border border-line bg-surface px-3 text-[13px] font-medium hover:border-lineStrong">
+        <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-11 items-center gap-2 border border-line bg-surface px-3 text-body font-medium hover:border-lineStrong">
           <ChainIcon chainId={n.chainId} />
           {n.name}
         </button>
@@ -154,7 +154,7 @@ export function ActionRow({ stretch }: { stretch?: boolean }) {
   return (
     <div className={`flex gap-2 ${stretch ? 'w-full' : ''}`}>
       {items.map(([r, label, icon]) => (
-        <Button key={r} variant="secondary" size={44} icon={icon} onClick={() => go(r)} className={stretch ? 'flex-1 !px-2 text-[14px]' : 'min-w-[124px]'}>
+        <Button key={r} variant="secondary" size={44} icon={icon} onClick={() => go(r)} className={stretch ? 'flex-1 !px-2 text-body' : 'min-w-[124px]'}>
           {label}
         </Button>
       ))}
@@ -166,7 +166,7 @@ export function ActionRow({ stretch }: { stretch?: boolean }) {
 export { EXPLORER_URL, DOCS_URL } from '../config/links'
 import { EXPLORER_URL, DOCS_URL } from '../config/links'
 
-const sideRow = 'relative flex h-10 w-full shrink-0 items-center gap-3 px-4 text-left text-[14px]'
+const sideRow = 'relative flex h-10 w-full shrink-0 items-center gap-3 px-4 text-left text-body'
 const divider = <div aria-hidden className="shrink-0 py-3"><div className="h-px bg-line" /></div>
 
 function Sidebar({ route }: { route: Route }) {
@@ -174,18 +174,18 @@ function Sidebar({ route }: { route: Route }) {
   const row = (n: (typeof NAV)[number]) => {
     const active = isActive(n, route) && route !== 'welcome'
     return (
-      <button key={n.route} type="button" aria-current={active ? 'page' : undefined} onClick={() => go(n.route)} className={`${sideRow} ${active ? 'bg-surface font-semibold text-ink' : 'text-ink2 hover:bg-surface/60'}`}>
+      <button key={n.route} type="button" aria-current={active ? 'page' : undefined} onClick={() => go(n.route)} className={`${sideRow} ${active ? 'bg-surface font-medium text-ink' : 'text-ink2 hover:bg-surface/60'}`}>
         {active && <span className="absolute inset-y-2 left-0 w-0.5 bg-accent" />}
         <Icon name={n.icon} size={18} />
         <span className="flex-1">{n.label}</span>
-        {n.badge && <span className="mono bg-surface2 px-2 py-0.5 text-[12px] text-ink2">{n.badge}</span>}
+        {n.badge && <span className="bg-surface2 px-2 py-0.5 text-caption text-ink2">{n.badge}</span>}
       </button>
     )
   }
   const soon = (label: string, icon: string) => (
     <button type="button" disabled aria-disabled="true" title="Coming soon" className={`${sideRow} text-ink2`}>
       <Icon name={icon} size={18} /><span className="flex-1">{label}</span>
-      <span className="mono bg-surface2 px-2 py-0.5 text-[12px] text-ink3">Soon</span>
+      <span className="bg-surface2 px-2 py-0.5 text-caption text-ink3">Soon</span>
     </button>
   )
   const external = (label: string, url: string, icon: string) => (
@@ -228,7 +228,7 @@ export function PermitChip({ header = false }: { header?: boolean }) {
     </button>
   }
   return (
-    <button type="button" onClick={event => event.metaKey || event.ctrlKey ? nav('permits') : act.renew()} className="flex h-10 items-center gap-2 border border-line bg-surface px-3 text-[13px] font-medium hover:border-lineStrong">
+    <button type="button" onClick={event => event.metaKey || event.ctrlKey ? nav('permits') : act.renew()} className="flex h-10 items-center gap-2 border border-line bg-surface px-3 text-body font-medium hover:border-lineStrong">
       <span aria-hidden className={`round size-2 ${active ? 'bg-live' : 'border border-ink3'}`} />{separate(label)}
     </button>
   )
@@ -238,10 +238,10 @@ const mobileTitles: Partial<Record<Route, string>> = { shield: 'Shield', unshiel
 
 function TopBar({ route }: { route: Route }) {
   const { s, act, mobile } = useStore()
-  const connect = <Button size={44} onClick={() => act.startConnect(false)} className="!text-[15px]">Connect</Button>
+  const connect = <Button size={44} onClick={() => act.startConnect(false)} className="!text-body">Connect</Button>
   if (mobile) return (
     <header className="z-20 flex shrink-0 items-center justify-between gap-2 px-5" style={{ height: tokens.size.topBarMobile }}>
-      {mobileTitles[route] ? <h1 className="text-[19px] font-semibold">{mobileTitles[route]}</h1> : <Logo height={22} />}
+      {mobileTitles[route] ? <h1 className="text-title font-medium">{mobileTitles[route]}</h1> : <Logo height={22} />}
       {s.connected ? <WalletChip /> : connect}
     </header>
   )
@@ -261,7 +261,7 @@ function TabBar({ route }: { route: Route }) {
         {NAV.map(n => {
           const on = isActive(n, route)
           return (
-            <button key={n.route} type="button" aria-current={on ? 'page' : undefined} onClick={() => go(n.route)} className={`relative flex flex-1 flex-col items-center gap-1 pb-1 pt-2.5 text-[12px] leading-4 max-[369px]:text-[11px] ${on ? 'font-semibold text-ink' : 'font-medium text-ink3'}`}>
+            <button key={n.route} type="button" aria-current={on ? 'page' : undefined} onClick={() => go(n.route)} className={`relative flex flex-1 flex-col items-center gap-1 pb-1 pt-2.5 text-caption  max-[369px]:text-caption ${on ? 'font-medium text-ink' : 'font-medium text-ink3'}`}>
               {on && <motion.span layoutId="tab-ind" className="absolute top-0 h-0.5 w-5 bg-accent" />}
               <Icon name={n.icon} size={20} />
               {n.label}

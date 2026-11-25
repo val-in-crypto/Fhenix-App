@@ -260,7 +260,7 @@ function Stage({ time, at = 0, tag = 1 }: { time?: MotionValue<number>; at?: num
           <rect data-k="tagEnc" x="-26" y="-10" width="52" height="20" fill="var(--illo-shielded-1)" stroke="var(--color-accent-ink)" />
           <rect data-k="tagLock" x="-27" y="-11" width="54" height="22" stroke="var(--color-accent)" strokeWidth="2" />
           {[0, 1, 2, 3, 4, 5].map(i => (
-            <g key={i} transform={`translate(${(i - 2.5) * 7.4} 4)`} fontFamily="Geist Mono" fontSize="11" fontWeight="600" textAnchor="middle">
+            <g key={i} transform={`translate(${(i - 2.5) * 7.4} 4)`} fontFamily="Geist" fontSize="var(--text-caption)" fontWeight="500" textAnchor="middle">
               <text data-k={`cp${i}`} fill={INK}>{PLAIN[i]}</text>
               <text data-k={`cn${i}`} fill="var(--color-ink-3)">{NOISE[i]}</text>
               <text data-k={`ce${i}`} fill="var(--color-accent-ink)" fontSize={ENC[i] === '•' ? 15 : 11} dy={ENC[i] === '•' ? 1.2 : 0}>{ENC[i]}</text>
@@ -314,8 +314,8 @@ function Chrome({ mobile }: { mobile: boolean }) {
         ))}
         {STEPS.map((s, i) => (
           <g key={i} data-k={`cap${i}`} style={move}>
-            <text x="16" y="251.3" fill="var(--color-accent-ink)" fontFamily="Geist Mono" fontSize="12" fontWeight="500" letterSpacing="0.02em">{`0${i + 1} / 03`}</text>
-            <text x="78" y="253" fill={INK} fontFamily="Geist" fontSize="17" fontWeight="600">{s.tab}</text>
+            <text x="16" y="251.3" fill="var(--color-accent-ink)" fontFamily="Geist" fontSize="12" fontWeight="500" letterSpacing="0.02em">{`0${i + 1} / 03`}</text>
+            <text x="78" y="253" fill={INK} fontFamily="Geist" fontSize="var(--text-caption)" fontWeight="500">{s.tab}</text>
             <text fill="var(--color-ink-2)" fontFamily="Geist" fontSize="14">
               <tspan x="16" y="278">{s.lines[0]}</tspan>
               <tspan x="16" y="296">{s.lines[1]}</tspan>
@@ -334,8 +334,8 @@ function Chrome({ mobile }: { mobile: boolean }) {
         const x = 24 + 200 * i
         const label = (on: boolean) => (
           <text data-k={`${on ? 'on' : 'off'}${i}`} x={x + 76} y="28.5" textAnchor="middle">
-            <tspan fill={on ? 'var(--color-accent-ink)' : GREY} fontFamily="Geist Mono" fontSize="12" fontWeight="500" letterSpacing="0.02em">{`0${i + 1}`}</tspan>
-            <tspan dx="8" fill={on ? INK : GREY} fontFamily="Geist" fontSize="13" fontWeight={on ? 600 : 500}>{s.tab}</tspan>
+            <tspan fill={on ? 'var(--color-accent-ink)' : GREY} fontFamily="Geist" fontSize="12" fontWeight="500" letterSpacing="0.02em">{`0${i + 1}`}</tspan>
+            <tspan dx="8" fill={on ? INK : GREY} fontFamily="Geist" fontSize="var(--text-caption)" fontWeight={500}>{s.tab}</tspan>
           </text>
         )
         return (
@@ -343,14 +343,14 @@ function Chrome({ mobile }: { mobile: boolean }) {
             {label(false)}
             {label(true)}
             <rect data-k={`line${i}`} x={x} y="46" width="152" height="2" fill="var(--color-accent)" style={{ transformOrigin: `${x}px 46px`, ...move }} />
-            <g fontFamily="Geist Mono" fontSize="12" fontWeight="500" letterSpacing="0.08em" textAnchor="middle">
+            <g fontFamily="Geist" fontSize="12" fontWeight="500" letterSpacing="0.08em" textAnchor="middle">
               <text x={135 + 165 * i} y="402.3" fill={GREY}>{s.col}</text>
               <text data-k={`col${i}`} x={135 + 165 * i} y="402.3" fill={INK}>{s.col}</text>
             </g>
             <g data-k={`cap${i}`} style={move}>
-              <text x="24" y="432.3" fill="var(--color-accent-ink)" fontFamily="Geist Mono" fontSize="12" fontWeight="500" letterSpacing="0.02em">{`0${i + 1} / 03`}</text>
-              <text x="86" y="433.3" fill={INK} fontFamily="Geist" fontSize="15" fontWeight="600">{s.tab}</text>
-              <text x="24" y="457.1" fill="var(--color-ink-2)" fontFamily="Geist" fontSize="13">{s.text}</text>
+              <text x="24" y="432.3" fill="var(--color-accent-ink)" fontFamily="Geist" fontSize="12" fontWeight="500" letterSpacing="0.02em">{`0${i + 1} / 03`}</text>
+              <text x="86" y="433.3" fill={INK} fontFamily="Geist" fontSize="var(--text-caption)" fontWeight="500">{s.tab}</text>
+              <text x="24" y="457.1" fill="var(--color-ink-2)" fontFamily="Geist" fontSize="var(--text-caption)">{s.text}</text>
             </g>
           </g>
         )
@@ -372,10 +372,10 @@ function StaticRow({ mobile, style, className }: { mobile: boolean; style: CSSPr
               <Stage at={at} tag={0} />
             </svg>
             <figcaption className="mt-2">
-              <div className="mono text-[11px] font-medium text-accentInk">{`0${i + 1} / 03`}</div>
-              <div className={`font-semibold text-ink ${mobile ? 'text-[12px] leading-4' : 'text-[15px] leading-5'}`}>{STEPS[i].tab}</div>
-              <div className="mono mt-1 text-[11px] leading-4 text-ink2">{STEPS[i].value}</div>
-              {!mobile && <p className="mt-1 text-[12px] leading-4 text-ink2">{STEPS[i].text}</p>}
+              <div className="text-caption font-medium text-accentInk">{`0${i + 1} / 03`}</div>
+              <div className={`font-medium text-ink ${mobile ? 'text-caption ' : 'text-body '}`}>{STEPS[i].tab}</div>
+              <div className="mt-1 text-caption  text-ink2">{STEPS[i].value}</div>
+              {!mobile && <p className="mt-1 text-caption  text-ink2">{STEPS[i].text}</p>}
             </figcaption>
           </figure>
         ))}

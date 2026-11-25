@@ -32,8 +32,8 @@ function SendRows({ rows, highlightAmount, stackRecipient }: { rows: [string, Re
     <dl className="divide-y divide-line border-y border-line">
       {rows.map(([label, value]) => (
         <div key={label} className={`grid ${stackRecipient && label === copy.to ? 'grid-cols-1' : 'grid-cols-[minmax(64px,1fr)_minmax(0,3fr)]'} items-start gap-2 py-3 sm:gap-4 ${label === copy.to ? 'max-[1023px]:grid-cols-1' : ''} ${highlightAmount && label === 'Amount' ? 'confidential-box bg-accentSoft px-3' : ''}`}>
-          <dt className={`pt-0.5 text-[13px] leading-5 ${secondary}`}>{label}</dt>
-          <dd className="min-w-0 break-words text-[15px] leading-5">{value}</dd>
+          <dt className={`pt-0.5 text-body  ${secondary}`}>{label}</dt>
+          <dd className="min-w-0 break-words text-body ">{value}</dd>
         </div>
       ))}
     </dl>
@@ -45,8 +45,8 @@ function RecipientSummary({ recipient, mobile, firstTime }: { recipient: Recipie
     <div className="flex flex-col gap-2">
       {(recipient.name || firstTime) && (
         <div className="flex flex-wrap items-center gap-2">
-          {recipient.name && <span className="min-w-0 break-words font-semibold">{recipient.name}</span>}
-          {firstTime && <span className="mono bg-surface2 px-2 py-1 text-[12px] font-medium text-ink2">{copy.firstTime}</span>}
+          {recipient.name && <span className="min-w-0 break-words font-medium">{recipient.name}</span>}
+          {firstTime && <span className="bg-surface2 px-2 py-1 text-caption font-medium text-ink2">{copy.firstTime}</span>}
         </div>
       )}
       <FullAddress address={recipient.address} mobile={mobile} />
@@ -148,7 +148,7 @@ export default function Send() {
     setAmount(balance.toFixed(8).replace(/\.?0+$/, '') || '0')
   }
   const cta = (label: string, onClick: () => void, disabled = false) => (
-    <Button size={mobile ? 52 : 48} full={mobile || !reviewing} arrow={!disabled} disabled={disabled} onClick={onClick} className={`${reviewing && !mobile ? 'flex-1' : 'shrink-0'} !text-[15px]`}>
+    <Button size={mobile ? 52 : 48} full={mobile || !reviewing} arrow={!disabled} disabled={disabled} onClick={onClick} className={`${reviewing && !mobile ? 'flex-1' : 'shrink-0'} !text-body`}>
       {label}
     </Button>
   )
@@ -180,7 +180,7 @@ export default function Send() {
     <Page desktopClassName="!pr-10 !pt-4" bottom={mobile && (
       <div className="flex flex-col gap-2">
         {actions}
-        {note && <p className={`text-center text-[13px] leading-5 ${secondary}`}>{separate(note)}</p>}
+        {note && <p className={`text-center text-body  ${secondary}`}>{separate(note)}</p>}
       </div>
     )}>
       <div ref={content} className={`mx-auto flex w-full max-w-[560px] flex-col gap-6 ${mobile ? '' : 'border border-line bg-surface p-8'}`}>
@@ -189,19 +189,19 @@ export default function Send() {
             <>
               <div className="flex flex-col gap-2">
                 <div className="flex flex-wrap items-baseline justify-between gap-2">
-                  <h1 className="text-[24px] font-semibold leading-8">{copy.review}</h1>
+                  <h1 className="text-title font-medium ">{copy.review}</h1>
                 </div>
-                {!mobile && <p className={`text-[15px] leading-6 ${secondary}`}>{copy.reviewHelper}</p>}
+                {!mobile && <p className={`text-body  ${secondary}`}>{copy.reviewHelper}</p>}
               </div>
               <SendRows highlightAmount={confidential} rows={[
-                [copy.from, <span className="flex items-center gap-2"><Identicon address={s.address} size={32} /><span><span className="block font-semibold">{copy.account}</span><span className={`mono text-[13px] ${secondary}`}>{data.account.short}</span></span></span>],
+                [copy.from, <span className="flex items-center gap-2"><Identicon address={s.address} size={32} /><span><span className="block font-medium">{copy.account}</span><span className={`mono ${secondary}`}>{data.account.short}</span></span></span>],
                 [copy.balance, <span className="flex items-center gap-2"><span className={`size-2 ${confidential ? 'bg-accent' : 'bg-lineStrong'}`} />{balanceLabel(activeMode)} {unit}</span>],
                 [copy.to, <RecipientSummary recipient={recipient} mobile={mobile} firstTime={firstTime} />],
-                ['Amount', <span className={`mono inline-block font-medium ${confidential ? 'text-accentInk' : ''}`}>{formatted} {unit}</span>],
+                ['Amount', <span className={`text-body inline-block font-medium ${confidential ? 'text-accentInk' : ''}`}>{formatted} {unit}</span>],
                 [copy.network, <div className="flex flex-wrap items-center gap-1">{networkDisplay} <span className={secondary}><Sep />{copy.walletNetwork}</span></div>],
                 [mobile ? copy.fee : copy.networkFee, send.fee],
               ]} />
-              <p className={`flex items-start gap-2 bg-surface2 p-4 text-[15px] leading-5 ${secondary}`}>
+              <p className={`flex items-start gap-2 bg-surface2 p-4 text-body  ${secondary}`}>
                 <Icon name={confidential ? 'lock' : 'info'} size={18} className="mt-0.5" />{confidential ? copy.lockNote : 'Amount will be visible on-chain, along with the recipient.'}
               </p>
             </>
@@ -210,7 +210,7 @@ export default function Send() {
               <RecipientField field={field} mobile={mobile} warnings={warnings} />
               <section className="flex flex-col gap-2" aria-label="Amount">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h2 className="text-[18px] font-semibold">Amount</h2>
+                  <h2 className="text-heading font-medium">Amount</h2>
                   <BalanceSwitch value={mode} onChange={setMode} />
                 </div>
                 <AmountBox
@@ -228,9 +228,9 @@ export default function Send() {
                   visibility={confidential ? undefined : 'Visible on-chain'}
                 />
                           {over && (!confidential || s.permit === 'active') ? (
-                  <p role="alert" className="text-[15px] text-danger">Amount exceeds your {confidential ? 'confidential' : 'public'} balance of {confidential ? fmtPrivate(isMasked(s) ? undefined : balance) : fmtPublic(balance)} {unit}.</p>
-                ) : recipient && hasAmount && <p className={`text-[15px] leading-5 ${secondary}`}>{recipientName} receives {formatted} {unit}. {confidential ? `Only you and ${recipientName} can read the amount.` : 'The amount will be visible on-chain.'}</p>}
-                {confidential && over && s.permit === 'active' && s.balances[sym].pub >= numericAmount - balance && <button type="button" className="min-h-11 text-left text-[14px] font-medium text-accentInk" onClick={() => { act.selectFlowAsset(sym); location.hash = `#/shield?token=${sym}&amount=${(Math.ceil((numericAmount - balance) * 1e6) / 1e6).toFixed(6)}` }}>You have {fmtPublic(s.balances[sym].pub)} {sym} public. Shield it first →</button>}
+                  <p role="alert" className="text-body text-danger">Amount exceeds your {confidential ? 'confidential' : 'public'} balance of {confidential ? fmtPrivate(isMasked(s) ? undefined : balance) : fmtPublic(balance)} {unit}.</p>
+                ) : recipient && hasAmount && <p className={`text-body  ${secondary}`}>{recipientName} receives {formatted} {unit}. {confidential ? `Only you and ${recipientName} can read the amount.` : 'The amount will be visible on-chain.'}</p>}
+                {confidential && over && s.permit === 'active' && s.balances[sym].pub >= numericAmount - balance && <button type="button" className="min-h-11 text-left text-body font-medium text-accentInk" onClick={() => { act.selectFlowAsset(sym); location.hash = `#/shield?token=${sym}&amount=${(Math.ceil((numericAmount - balance) * 1e6) / 1e6).toFixed(6)}` }}>You have {fmtPublic(s.balances[sym].pub)} {sym} public. Shield it first →</button>}
               </section>
             </>
           )}
@@ -243,7 +243,7 @@ export default function Send() {
       secondaryLabel="Send another" onSecondary={() => setResult(undefined)}>
       {result && <div className="bg-surface2 px-3"><SendRows stackRecipient rows={[
         ['To', <RecipientSummary recipient={result.recipient} mobile={mobile} />],
-        ['Amount', <span className={`mono ${result.confidential ? 'text-accentInk' : ''}`}>{displayAmount(result.amount, result.confidential)} {result.confidential ? 'f' : ''}{result.sym}</span>],
+        ['Amount', <span className={`text-body ${result.confidential ? 'text-accentInk' : ''}`}>{displayAmount(result.amount, result.confidential)} {result.confidential ? 'f' : ''}{result.sym}</span>],
         ['From', result.confidential ? 'Confidential balance' : 'Public balance'],
         ['Network', <span className="flex items-center gap-2"><ChainIcon chainId={data.networks[result.networkIdx].chainId} />{data.networks[result.networkIdx].name}</span>],
         ['Transaction', <a href={(TOKEN_NETWORKS[data.networks[result.networkIdx].chainId]?.explorer ?? EXPLORER_URL) + '/tx/' + TX_HASHES.send} target="_blank" rel="noopener noreferrer" className="mono inline-flex items-center gap-1 text-accentInk">{send.tx}<Icon name="arrow-up-right" size={14} /></a>],

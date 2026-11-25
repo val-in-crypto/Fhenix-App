@@ -1,4 +1,13 @@
 :root {
+  --font-sans: 'Geist Sans', system-ui, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --text-value: 40px; --line-value: 48px; --tracking-value: -.02em;
+  --text-title: 22px; --line-title: 28px; --tracking-title: -.01em;
+  --text-heading: 16px; --line-heading: 24px; --tracking-heading: -.005em;
+  --text-label: 14px; --line-label: 20px; --tracking-label: 0;
+  --text-body: 14px; --line-body: 20px; --tracking-body: 0;
+  --text-caption: 12px; --line-caption: 16px; --tracking-caption: 0;
+  --text-mono: 12px; --line-mono: 16px; --tracking-mono: 0;
   color-scheme: light;
   --color-bg: #F1F4F5;
   --color-surface: #FFFFFF;
