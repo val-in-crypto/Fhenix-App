@@ -20,7 +20,7 @@ import { separate } from '../ui/Sep'
 export default function ShieldFlow({ mode }: { mode: 'shield' | 'unshield' }) {
   const { s, act, mobile } = useStore()
   const { reduced } = useMotion()
-  
+
   const shield = mode === 'shield'
   const practice = s.tour.status === 'active' && s.tour.step === 2
   const sym = practice ? 'USDC' : s.pendingUnshield?.asset ?? s.flowAsset

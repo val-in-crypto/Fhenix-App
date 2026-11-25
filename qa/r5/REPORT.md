@@ -24,6 +24,10 @@ The package supersedes the older plan for R47+. The supplied Genesis V2 sidebar 
 - R57 has no completed padding spec; existing card paddings were retained except explicit new components/table values. The 15-issue earlier QA document was not supplied in this package and is not marked closed.
 - Wallet/network/transaction behavior remains a prototype mock. App destinations and permit documentation retain their existing placeholders.
 
+## Pull request creation
+
+All eight ordered branches are pushed. The GitHub connector returned HTTP 403 (resource not accessible by integration), and the available browser is signed out of GitHub. PRs were not created. The comparison links below preserve the intended stacked PR bases.
+
 ## Ordered branches and changed files
 
 ### 01 foundations
