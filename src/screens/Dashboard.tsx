@@ -129,7 +129,7 @@ export default function Dashboard() {
   const empty = total === 0
   const zeros = SYMS.filter(sym => { const balance = portfolioBalance(s.balances, sym); return balance.pub === 0 && balance.priv === 0 })
   const displayed = empty || showZero ? SYMS : SYMS.filter(sym => !zeros.includes(sym))
-  const pad = mobile ? 'p-5' : 'p-6'
+  const pad = mobile ? 'p-5' : 'p-5'
   const { t } = useMotion()
   const [history, setHistory] = useState(() => {
     try { return sessionStorage.getItem(HISTORY_KEY) === 'open' } catch { return false }
@@ -222,10 +222,10 @@ export default function Dashboard() {
           ) : (
             <>
               {!mobile && (
-                <div className="eyebrow mt-4 grid grid-cols-[1fr_180px_180px_24px] gap-4 px-2 text-ink3" >
+                <div className="token-grid eyebrow mt-4 text-ink3" >
                   <span>Asset</span>
-                  <span className="text-right">Confidential</span>
-                  <span className="text-right">Public</span>
+                  <span>Confidential</span>
+                  <span>Public</span>
                   <span />
                 </div>
               )}

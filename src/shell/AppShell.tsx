@@ -249,7 +249,7 @@ export function Page({ children, bottom, narrow, card, desktopClassName = '' }: 
       </div>
     )
   return (
-    <div className={`px-8 pb-10 pt-1 ${desktopClassName}`}>
+    <div className={`pl-8 pr-10 pb-10 pt-0 ${desktopClassName}`}>
       <div className={narrow ? 'mx-auto' : 'max-w-[1184px]'} style={narrow ? { width: 536 } : undefined}>
         {card ? (
           <div className="border border-line bg-surface p-6">

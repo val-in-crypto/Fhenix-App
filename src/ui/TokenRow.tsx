@@ -1,5 +1,4 @@
 import { TOKEN_ROW_RATIO_BAR } from '../config/flags'
-import { RatioTrack } from './RatioBar'
 import { Sep, separate } from './Sep'
 import { fmtPublic, fmtUsd } from '../lib/format'
 import { portfolioAssets, portfolioPrice, type PortfolioSym } from '../config/assets'
@@ -44,31 +43,26 @@ export default function TokenRow({ sym, pub, priv, hidden, mobile, onClick, zero
           <span className="flex items-center justify-end gap-2"><span className="size-2 shrink-0 bg-accent" /><Masked value={priv} hidden={hidden && !zero} dec={dec} /></span>
           <span className="flex items-center justify-end gap-2"><span className="size-2 shrink-0 bg-lineStrong" />{fmtPublic(pub, dec)}</span>
 
-          {TOKEN_ROW_RATIO_BAR && <span className="block w-full pt-2"><RatioTrack confidential={priv} publicValue={pub} hidden={hidden} small /><span className="mt-1 block text-caption">{hidden ? '[•••]' : <>{Math.round(priv / (pub + priv || 1) * 100)}%<Sep />{Math.round(pub / (pub + priv || 1) * 100)}%</>}</span></span>}
+
         </span>
       </button>
     )
+  const pct = Math.round(priv / (pub + priv || 1) * 100)
   return (
-    <button type="button" onClick={onClick} className="grid w-full grid-cols-[1fr_180px_180px_24px] items-center gap-4 px-2 py-3 text-left hover:bg-surface2">
-      <span className="flex items-center gap-3">
-        <Coin sym={sym} />
-        <span>
-          <span className="block text-body font-medium ">{sym}</span>
-          <span className="block text-body  text-ink3">
-            {a.name}<Sep />{sym} + {a.wrapped}
-          </span>
-        </span>
+    <button type="button" onClick={onClick} className="token-grid min-h-16 w-full items-center py-3 text-left hover:bg-surface2">
+      <span className="flex min-w-0 items-center gap-4">
+        <Coin sym={sym} size={36} />
+        <span className="min-w-0"><span className="block text-label">{sym}</span><span className="block text-caption text-ink3">{a.name}</span></span>
       </span>
-      <span className={`text-right ${zero ? 'opacity-[.64]' : ''}`}>
-        <Masked value={priv} hidden={hidden && !zero} dec={dec} className="text-body block text-body font-medium " />
-        <span className="block text-body  text-accentInk">{a.wrapped}</span>
+      <span className={`text-label ${zero ? 'opacity-[.64]' : ''}`}><Masked value={priv} hidden={hidden && !zero} dec={dec} /></span>
+      <span className={`text-label tabular-nums ${zero ? 'opacity-[.64]' : ''}`}>{fmtPublic(pub, dec)}</span>
+      <span className="flex items-center gap-5">
+        {TOKEN_ROW_RATIO_BAR && <span className="flex w-[138px] items-center gap-4">
+          <span className="block h-1 w-24 shrink-0 bg-line" role="img" aria-label={hidden && !zero ? 'Confidential share hidden' : `${pct}% confidential`}><span className="token-mini-fill block h-full" style={{width: `${hidden && !zero ? 0 : pct}%`}} /></span>
+          <span className="w-[26px] text-caption">{hidden && !zero ? '[•••]' : `${pct}%`}</span>
+        </span>}
+        <Icon name="chevron-down" size={16} className="-rotate-90 text-ink3" />
       </span>
-      <span className={`text-right ${zero ? 'opacity-[.64]' : ''}`}>
-        <span className="text-body block text-body font-medium  tabular-nums">{fmtPublic(pub, dec)}</span>
-        <span className="block text-body  text-ink3">{fmtUsd(pub * portfolioPrice(sym))}</span>
-      </span>
-      <Icon name="chevron-down" className="-rotate-90 text-ink3" />
-      {TOKEN_ROW_RATIO_BAR && <span className="col-span-4 block w-full"><RatioTrack confidential={priv} publicValue={pub} hidden={hidden} small /><span className="mt-1 block text-right text-caption">{hidden ? '[•••]' : <>{Math.round(priv / (pub + priv || 1) * 100)}%<Sep />{Math.round(pub / (pub + priv || 1) * 100)}%</>}</span></span>}
     </button>
   )
 }
