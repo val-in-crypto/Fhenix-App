@@ -3,6 +3,7 @@ import { motion, type HTMLMotionProps } from 'framer-motion'
 import type { ReactNode } from 'react'
 import { useMotion } from '../lib/motion'
 import Icon from './Icon'
+import PendingDots from './PendingDots'
 
 type Props = Omit<HTMLMotionProps<'button'>, 'children'> & {
   children?: ReactNode
@@ -26,7 +27,7 @@ export default function Button({ variant = 'primary', size = 48, icon, arrow, fu
       : variant === 'secondary'
         ? `border border-line bg-surface font-medium text-ink ${disabled ? 'opacity-60' : 'hover:border-lineStrong hover:bg-surface2'}`
         : 'px-2 font-medium text-ink3 hover:text-ink'
-  const type = big && variant === 'primary' ? 'text-title ' : big ? 'text-heading ' : 'text-body '
+  const type = 'text-label '
   return (
     <motion.button
       type="button"
@@ -37,9 +38,10 @@ export default function Button({ variant = 'primary', size = 48, icon, arrow, fu
       style={{ height: size, ...style }}
       {...rest}
     >
-      {busy && !reduced ? <Icon name="spinner" size={18} /> : icon ? <Icon name={icon} size={20} className={variant === 'secondary' ? 'text-ink2' : ''} /> : null}
-      {separate(busy && reduced ? 'Waiting…' : children)}
-      {arrow && !busy && !disabled && <Icon name="pixel-arrow" size={big ? 12 : 10} />}
+      {!busy && icon ? <Icon name={icon} size={20} className={variant === 'secondary' ? 'text-ink2' : ''} /> : null}
+      {separate(busy && typeof children === 'string' && /confirm in wallet/i.test(children) ? 'Confirm in your wallet' : children)}
+      {busy && <PendingDots />}
+      {arrow && !busy && !disabled && <Icon name="pixel-arrow" size={12} />}
     </motion.button>
   )
 }

@@ -65,6 +65,7 @@ export default function Send() {
   const { s, act, mobile } = useStore()
   const { reduced, speed } = useMotion()
   const field = useRecipientField()
+  const [selectedAsset,setSelectedAsset] = useState<Sym>(() => { const token=query().get('token')??query().get('asset'); return ['USDC','ETH','WBTC','USDT'].includes(token??'')?token as Sym:'USDC' })
   const [amount, setAmount] = useState('')
   const [result, setResult] = useState<{ recipient: Recipient; amount: string; confidential: boolean; sym: Sym; networkIdx: number }>()
   const [mode, setMode] = useState<BalanceMode>(() => query().get('mode') === 'public' ? 'pub' : 'priv')
@@ -89,7 +90,7 @@ export default function Send() {
   const numericAmount = Number(value) || 0
   const activeMode = sent || pending ? s.sendBalance : mode
   const confidential = activeMode === 'priv'
-  const sym: Sym = sent || pending ? s.sendAsset : (query().get('token') ?? query().get('asset')) === 'ETH' ? 'ETH' : 'USDC'
+  const sym: Sym = sent || pending ? s.sendAsset : selectedAsset
   const unit = confidential ? `f${sym}` : sym
   const balance = s.balances[sym][activeMode]
   const hasAmount = numericAmount > 0
@@ -148,7 +149,7 @@ export default function Send() {
     setAmount(balance.toFixed(8).replace(/\.?0+$/, '') || '0')
   }
   const cta = (label: string, onClick: () => void, disabled = false) => (
-    <Button size={mobile ? 52 : 48} full={mobile || !reviewing} arrow={!disabled} disabled={disabled} onClick={onClick} className={`${reviewing && !mobile ? 'flex-1' : 'shrink-0'} !text-body`}>
+    <Button size={mobile ? 52 : 48} full={mobile || !reviewing} arrow={!disabled} busy={pending} disabled={disabled} onClick={onClick} className={`${reviewing && !mobile ? 'flex-1' : 'shrink-0'} !text-body`}>
       {label}
     </Button>
   )
@@ -222,6 +223,7 @@ export default function Send() {
                   value={amount}
                   onChange={updateAmount}
                   token={unit}
+                  onTokenChange={token=>{setSelectedAsset(token);setAmount('')}}
                   usd={fmtUsd(numericAmount * prices[sym])}
                   invalid={over && (!confidential || s.permit === 'active')}
                   confidential={confidential}

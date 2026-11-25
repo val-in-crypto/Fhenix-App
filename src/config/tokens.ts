@@ -2,10 +2,10 @@ import { getAddress } from 'viem'
 import type { Sym } from '../state/store'
 
 type ContractPair = { public: string; confidential: string }
-type TokenNetwork = { explorer: string; contracts: Record<Sym, ContractPair> }
+type TokenNetwork = { explorer: string; contracts: Partial<Record<Sym, ContractPair>> }
 
 /** Prototype contract fixtures. Replace with verified deployments before wallet integration. */
-const fixtures: Record<Sym, ContractPair> = {
+const fixtures: Partial<Record<Sym, ContractPair>> = {
   USDC: { public: getAddress('0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48'), confidential: getAddress('0x4f2d000000000000000000000000000000009a1e') },
   ETH: { public: getAddress('0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'), confidential: getAddress('0x7f2d000000000000000000000000000000009a1e') },
 }

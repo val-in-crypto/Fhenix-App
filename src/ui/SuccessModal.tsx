@@ -40,7 +40,7 @@ export default function SuccessModal({ open, onClose, illustration, eyebrow, tit
   }, [open])
   return (
     <AnimatePresence>
-      {open && <div className={`absolute inset-0 z-40 flex ${mobile ? 'items-end' : 'items-center justify-center p-6'}`}>
+      {open && <div className={`absolute inset-0 z-40 flex ${mobile ? 'items-end' : 'items-center justify-center p-6 pl-[280px]'}`}>
         <motion.div className="absolute inset-0" style={{ background: 'var(--scrim)' }} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: t(200) }} onClick={onClose} />
         <motion.div ref={panel} role="dialog" aria-modal="true" aria-labelledby={id} className={`relative flex min-h-0 flex-col border border-line bg-surface shadow-xl ${mobile ? 'w-full max-h-[calc(100%-56px)] px-6 pb-[max(32px,env(safe-area-inset-bottom))]' : 'max-h-full w-[520px] p-8'}`}
           initial={{ opacity: 0, y: reduced ? 0 : 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: reduced ? 0 : 8 }} transition={{ duration: t(200), ease: easeOut }}

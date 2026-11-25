@@ -1,9 +1,12 @@
-import type { ReactNode } from 'react'
+import { useState, type ReactNode } from 'react'
+import TokenPicker from './TokenPicker'
+import type { Sym } from '../state/store'
 import Icon from './Icon'
 import Field from './Field'
 import { Coin } from './TokenRow'
 
 type Props = {
+  onTokenChange?: (sym: Sym) => void
   label: string
   balance?: ReactNode
   onMax?: () => void
@@ -24,9 +27,10 @@ type Props = {
 }
 
 /** One amount box for shield, unshield and send. */
-export default function AmountBox({ label, balance, onMax, value, onChange, token, usd, confidential, swapEdge = 'none', disabled, invalid, visibility, maxLabel = 'MAX', layout = 'default' }: Props) {
+export default function AmountBox({ onTokenChange, label, balance, onMax, value, onChange, token, usd, confidential, swapEdge = 'none', disabled, invalid, visibility, maxLabel = 'MAX', layout = 'default' }: Props) {
   const send = layout === 'send'
-  return (
+  const [picker,setPicker] = useState(false)
+  return (<>
     <Field invalid={invalid} disabled={disabled}
       className={`p-5 ${send ? 'flex h-[155px] flex-col gap-3' : ''} ${swapEdge === 'bottom' ? 'h-[159px] pb-6' : ''} ${confidential ? 'confidential-box border-accentSoft bg-accentSoft' : visibility ? 'border-line bg-surface' : 'border-line bg-surface'}`}
     >
@@ -51,11 +55,11 @@ export default function AmountBox({ label, balance, onMax, value, onChange, toke
           placeholder="0.00"
           className="w-full min-w-0 bg-transparent text-value font-medium   text-ink placeholder:text-ink3"
         />
-        <span className={`flex h-11 shrink-0 items-center gap-2 border border-line bg-surface text-body ${send ? 'pl-1.5 pr-3 font-medium' : 'px-2.5 font-medium'}`}>
+        <button type="button" aria-label="Select token" disabled={!onTokenChange || disabled} onClick={()=>setPicker(true)} className={`flex h-11 shrink-0 items-center gap-2 border border-line bg-surface text-body ${send ? 'pl-1.5 pr-3 font-medium' : 'px-2.5 font-medium'}`}>
           <Coin sym={token.replace(/^f/, '')} size={send ? 28 : 24} shielded={token.startsWith('f')} />
           {token}
           <Icon name="chevron-down" className="text-ink3" />
-        </span>
+        </button>
       </div>
       <div className={`${send ? '' : 'mt-2'} flex items-center justify-between gap-3`}>
         <span className={`${send ? '' : 'text-caption '} ${confidential ? 'text-accentInk' : 'text-ink3'}`}>≈ {usd}</span>
@@ -68,6 +72,8 @@ export default function AmountBox({ label, balance, onMax, value, onChange, toke
         )}
       </div>
     </Field>
+    {onTokenChange && <TokenPicker open={picker} onClose={()=>setPicker(false)} onSelect={onTokenChange} selected={token.replace(/^f/,'')} confidential={Boolean(confidential)} />}
+    </>
   )
 }
 

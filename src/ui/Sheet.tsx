@@ -54,7 +54,7 @@ export default function Sheet({ open, onClose, label, width = tokens.size.dialog
   return (
     <AnimatePresence>
       {open && (
-        <div className={`absolute inset-0 z-40 flex ${mobile ? 'items-end' : 'items-center justify-center p-6'}`}>
+        <div className={`absolute inset-0 z-40 flex ${mobile ? 'items-end' : 'items-center justify-center p-6 pl-[280px]'}`}>
           <motion.div
             className="absolute inset-0"
             style={{ background: 'var(--scrim)' }}

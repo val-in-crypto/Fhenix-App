@@ -9,6 +9,7 @@ import ThemeSwitch from '../ui/ThemeSwitch'
 import Chip from '../ui/Chip'
 import Icon from '../ui/Icon'
 import AppLogo from '../ui/AppLogo'
+import SegmentedSwitch from '../ui/SegmentedSwitch'
 
 const descriptions: Record<string, string> = {
   AlphaEngine: 'Confidential DeFi execution that hides trade intents and strategy details to reduce MEV.',
@@ -56,23 +57,17 @@ function CardsCarousel({ children, mobile }: { children: ReactNode[]; mobile: bo
 
 export default function Apps() {
   const { act, mobile } = useStore()
-  const cards = data.apps.map(app => <button key={app.name} type="button" onClick={() => act.toast({ kind: 'info', title: app.tag === 'Live' ? app.name : 'Coming soon' })} className="flex h-[231px] w-full flex-col gap-2 border border-line bg-surface px-6 py-5 text-left hover:border-accent">
+  const [filter,setFilter] = useState('all')
+  const cards = data.apps.filter(app=>filter==='all'||app.tag.toLowerCase()===filter).map(app => <button key={app.name} type="button" onClick={() => act.toast({ kind: 'info', title: app.tag === 'Live' ? app.name : 'Coming soon' })} className="flex min-h-[212px] w-full flex-col gap-4 border border-line bg-surface px-6 py-5 text-left hover:border-accent">
     <span className="flex w-full items-start justify-between"><AppLogo app={app.name} /><Chip tone={app.tag === 'Live' ? 'live' : 'neutral'} dot={app.tag === 'Live'}>{app.tag}</Chip></span>
-    <span className="text-heading font-medium ">{app.name}</span>
+    <span className="text-heading font-medium">{app.name}</span>
     <span className="line-clamp-2 text-body  text-ink2">{descriptions[app.name]}</span>
-    <span className="mt-auto flex items-center gap-2 text-caption font-medium">{app.tag === 'Live' ? 'ENTER' : 'NOTIFY ME'}<Icon name="pixel-arrow" size={10} /></span>
+    <span className="mt-auto flex w-full items-center justify-between gap-2 border-t border-line pt-4 text-label">{app.tag === 'Live' ? 'Open app' : 'Notify me'}<Icon name="pixel-arrow" size={10} /></span>
   </button>)
   const allCards = [...cards, <BuildCard key="build" />]
   return <Page>
-    {mobile && <>
-      <h2 className="eyebrow text-ink3">Ecosystem</h2>
-      <ul className="mt-2 divide-y divide-line border border-line bg-surface px-4">
-        {[{ label: 'fUSD', icon: 'fusd' }, { label: 'TGE', icon: 'tge' }].map(item => <li key={item.label} className="flex min-h-16 items-center gap-3 py-3"><Icon name={item.icon} /><span className="flex-1"><strong className="block font-medium">{item.label}</strong><span className="text-body text-ink3">Coming soon</span></span><Chip tone="neutral">Soon</Chip></li>)}
-        <li><a href={EXPLORER_URL} target="_blank" rel="noopener noreferrer" className="flex min-h-16 items-center gap-3 py-3"><Icon name="explorer" /><span className="min-w-0 flex-1"><strong className="block font-medium">Fhenix Explorer</strong><span className="text-caption text-ink3">explorer.fhenix.io/status</span></span><Icon name="arrow-up-right" size={16} /></a></li>
-      </ul>
-      <h2 className="eyebrow mt-6 text-ink3">Apps</h2>
-    </>}
-    {mobile || APPS_DESKTOP_CAROUSEL ? <CardsCarousel mobile={mobile}>{allCards}</CardsCarousel> : <div className="grid grid-cols-3 gap-5">{allCards}</div>}
+    <div className="mb-6"><SegmentedSwitch label="App status" value={filter} onChange={setFilter} options={[{value:'all',label:'All'},{value:'live',label:'Live'},{value:'soon',label:'Soon'}]} /></div>
+    {!mobile && APPS_DESKTOP_CAROUSEL ? <CardsCarousel mobile={false}>{allCards}</CardsCarousel> : <div className={`grid gap-4 ${mobile?'grid-cols-1':'grid-cols-3'}`}>{allCards}</div>}
     <p className="mt-6 flex items-start gap-2 text-body  text-ink3"><Icon name="arrow-up-right" size={14} />Live apps open their own site in a new tab. Check each app's terms before you connect.</p>
     {mobile && <div className="mt-6 border border-line bg-surface"><ThemeSwitch /></div>}
   </Page>

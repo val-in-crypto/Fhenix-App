@@ -14,15 +14,6 @@ import ChainIcon from '../ui/ChainIcon'
 import ThemeSwitch from '../ui/ThemeSwitch'
 import Icon from '../ui/Icon'
 
-const NAV: { route: Route; label: string; icon: string; badge?: string; also?: Route[] }[] = [
-  { route: 'dashboard', label: 'Dashboard', icon: 'wallet', also: ['welcome'] },
-  { route: 'shield', label: 'Shield', icon: 'shield', also: ['unshield'] },
-  { route: 'send', label: 'Send', icon: 'send' },
-  { route: 'apps', label: 'Apps', icon: 'apps-grid', badge: String(data.apps.filter(app => app.tag === 'Live').length) },
-  { route: 'permits', label: 'Permits', icon: 'permit-key' },
-]
-const isActive = (n: (typeof NAV)[number], r: Route) => n.route === r || !!n.also?.includes(r)
-
 function useGo() {
   const { s, act } = useStore()
   return (r: Route) => (s.connected ? nav(r) : act.startConnect(false))
@@ -192,25 +183,33 @@ function TopBar({ route }: { route: Route }) {
 /* ---------- mobile ---------- */
 function TabBar({ route }: { route: Route }) {
   const go = useGo()
-  return (
-    <nav className="mobile-tabs shrink-0 border-t border-line bg-bg" style={{ minHeight: `calc(${tokens.size.tabBar}px + env(safe-area-inset-bottom))` }} aria-label="Main">
-      <div className="flex px-2">
-        {NAV.map(n => {
-          const on = isActive(n, route)
-          return (
-            <button key={n.route} type="button" aria-current={on ? 'page' : undefined} onClick={() => go(n.route)} className={`relative flex flex-1 flex-col items-center gap-1 pb-1 pt-2.5 text-caption  max-[369px]:text-caption ${on ? 'font-medium text-ink' : 'font-medium text-ink3'}`}>
-              {on && <motion.span layoutId="tab-ind" className="absolute top-0 h-0.5 w-5 bg-accent" />}
-              <Icon name={n.icon} size={20} />
-              {n.label}
-            </button>
-          )
-        })}
-      </div>
-      <div className="mt-2.5 flex justify-center" aria-hidden>
-        <span className="round h-[5px] w-[134px] bg-ink" />
-      </div>
+  const theme = useTheme()
+  const [menu,setMenu] = useState(false)
+  const { t } = useMotion()
+  const panel = useRef<HTMLDivElement>(null)
+  useEffect(()=>{
+    if(!menu)return
+    const prev=document.activeElement as HTMLElement
+    panel.current?.querySelector<HTMLElement>('button')?.focus()
+    const key=(e:KeyboardEvent)=>{
+      if(e.key==='Escape')setMenu(false)
+      if(e.key!=='Tab')return
+      const items=Array.from(panel.current?.querySelectorAll<HTMLElement>('button:not(:disabled),a[href]')??[])
+      const current=items.indexOf(document.activeElement as HTMLElement)
+      if(current<0||!e.shiftKey&&current===items.length-1||e.shiftKey&&current===0){e.preventDefault();items[e.shiftKey?items.length-1:0]?.focus()}
+    }
+    document.addEventListener('keydown',key,true)
+    return()=>{document.removeEventListener('keydown',key,true);prev?.focus()}
+  },[menu])
+  const tabs=[{label:'Menu',icon:'menu',route:null},{label:'Dashboard',icon:'wallet',route:'dashboard'},{label:'Shield',icon:'shield',route:'shield'},{label:'Send',icon:'send',route:'send'},{label:'Trade',icon:'trading-candles',route:null}] as const
+  return <>
+    <nav className="mobile-tabs shrink-0 border-t border-line bg-bg pb-[env(safe-area-inset-bottom)]" aria-label="Main tabs">
+      <div className="flex px-2">{tabs.map(tab=>{const active=tab.label==='Menu'?menu||['apps','permits'].includes(route):tab.route===route||tab.route==='shield'&&route==='unshield';return <button key={tab.label} type="button" aria-current={active?'page':undefined} aria-label={tab.label==='Trade'?'Trade coming soon':tab.label} disabled={tab.label==='Trade'} onClick={()=>tab.label==='Menu'?setMenu(true):tab.route&&go(tab.route)} className={`relative flex min-h-16 flex-1 flex-col items-center gap-1 pb-2 pt-3 text-caption ${active?'text-ink':'text-ink3'}`}>
+        {active&&<span className="absolute top-0 h-0.5 w-5 bg-accent"/>}{tab.label==='Menu'?<span aria-hidden className="flex size-5 flex-col justify-center gap-1"><span className="h-px w-4 bg-current"/><span className="h-px w-4 bg-current"/><span className="h-px w-4 bg-current"/></span>:<Icon name={tab.icon} size={20}/>}{tab.label}
+      </button>})}</div>
     </nav>
-  )
+    <AnimatePresence>{menu&&<div className="absolute inset-0 z-40"><motion.div className="absolute inset-0" style={{background:'var(--scrim)'}} initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}} onClick={()=>setMenu(false)}/><motion.div ref={panel} role="dialog" aria-modal="true" aria-label="Menu" className="absolute inset-y-0 left-0 bg-bg" initial={{x:'-100%'}} animate={{x:0}} exit={{x:'-100%'}} transition={{duration:t(200)}}><Sidebar route={route} darkMode={theme==='dark'?'on':'off'} onNavigate={target=>{setMenu(false);go(target)}}/></motion.div></div>}</AnimatePresence>
+  </>
 }
 
 /* ---------- page layout ---------- */
@@ -242,7 +241,7 @@ export function Page({ children, bottom, narrow, card, desktopClassName = '' }: 
   if (mobile)
     return (
       <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-        <div className="no-scrollbar min-h-0 min-w-0 w-full flex-1 overflow-y-auto overscroll-contain px-5 pb-6 pt-2" data-scroll>
+        <div className="no-scrollbar min-h-0 min-w-0 w-full flex-1 overflow-y-auto overscroll-contain px-5 pb-4 pt-4" data-scroll>
           {children}
         </div>
         {bottom && <MobileActionBar>{bottom}</MobileActionBar>}

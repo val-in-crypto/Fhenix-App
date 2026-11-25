@@ -16,108 +16,9 @@ import TokenRow from '../ui/TokenRow'
 import { HERO_GRADIENT } from '../config/flags'
 import { portfolioBalance, portfolioSymbols } from '../config/assets'
 
-const card = 'border border-line bg-surface'
+const card = 'dashboard-card border border-line bg-surface'
 const HISTORY_KEY = 'fhenix.history'
 const SYMS = portfolioSymbols
-
-/* ---------- desktop chart ---------- */
-const RANGES = ['1W', '1M', '3M', '1Y'] as const
-const LABELS: Record<string, string[]> = {
-  '1W': ['Nov 10', 'Nov 12', 'Nov 14', 'Nov 16'],
-  '1M': ['Oct 17', 'Oct 24', 'Oct 31', 'Nov 7', 'Nov 16'],
-  '3M': ['Aug 16', 'Sep 16', 'Oct 16', 'Nov 16'],
-  '1Y': ['Nov 2025', 'Feb', 'May', 'Aug', 'Nov 2026'],
-}
-function Chart({ masked }: { masked: boolean }) {
-  const [hover, setHover] = useState<number | null>(null)
-  const [range, setRange] = useState<(typeof RANGES)[number]>('1M')
-  const { top, priv, events } = useMemo(() => {
-    const n = 48
-    const seed = RANGES.indexOf(range) * 1.7
-    const ev = [0.2, 0.47, 0.73, 0.9].map(x => x + (seed % 0.9) * 0.03)
-    const levels = [0.1, 0.16, 0.2, 0.3, 0.34]
-    const top: [number, number][] = []
-    const priv: [number, number][] = []
-    for (let i = 0; i <= n; i++) {
-      const x = i / n
-      const total = 0.64 + 0.1 * x + 0.025 * Math.sin(i * 0.5 + seed) + (x > 0.93 ? (x - 0.93) * 1.6 : 0)
-      const k = ev.filter(e => x >= e).length
-      top.push([x, total])
-      priv.push([x, levels[k] + 0.004 * Math.sin(i + seed)])
-    }
-    return { top, priv, events: ev.map((e, k) => ({ x: e, y: levels[k + 1] })) }
-  }, [range])
-  const tooltip = hover === null ? null : {
-    total: top[hover][1] * 4500,
-    confidential: priv[hover][1] * 4500,
-    pct: priv[hover][1] / top[hover][1] * 100,
-    date: new Date(Date.UTC(2026, 10, 16) - (48 - hover) * ({ '1W': 7, '1M': 30, '3M': 92, '1Y': 365 }[range]) / 48 * 86400000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }),
-  }
-  const X = (x: number) => x * 1000
-  const Y = (v: number) => 180 - v * 190
-  const line = (p: [number, number][]) => p.map(([x, v], i) => `${i ? 'L' : 'M'}${X(x).toFixed(1)} ${Y(v).toFixed(1)}`).join(' ')
-  const area = (p: [number, number][]) => `${line(p)} L1000 180 L0 180 Z`
-  return (
-    <section className="pt-5">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
-          <h2 className="text-body font-medium">Confidential vs public over time</h2>
-          <span className="flex items-center gap-1.5 text-body text-ink3">
-            <span className="h-2 w-2 bg-accent" /> Confidential
-          </span>
-          <span className="flex items-center gap-1.5 text-body text-ink3">
-            <span className="h-2 w-2 bg-line" /> Public
-          </span>
-          <span className="flex items-center gap-1.5 text-body text-ink3">
-            <span className="h-2 w-2 rotate-45 border border-accentInk bg-surface" /> Shield event
-          </span>
-        </div>
-        <div className="flex bg-surface2 p-0.5" role="group" aria-label="Range">
-          {RANGES.map(r => (
-            <button key={r} type="button" aria-pressed={r === range} onClick={() => setRange(r)} className={`px-2.5 py-1.5 text-caption font-medium  ${r === range ? 'border border-line bg-surface text-ink' : 'border border-transparent text-ink3 hover:text-ink'}`}>
-              {r}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="relative mt-4 h-[168px]" tabIndex={0} role="group" aria-label="Balance history chart. Use arrow keys to explore."
-        onPointerMove={event => { const box = event.currentTarget.getBoundingClientRect(); setHover(Math.max(0, Math.min(48, Math.round((event.clientX - box.left) / box.width * 48)))) }}
-        onPointerLeave={() => setHover(null)}
-        onFocus={() => setHover(24)}
-        onBlur={() => setHover(null)}
-        onKeyDown={event => { if (['ArrowLeft', 'ArrowRight', 'Home', 'End', 'Escape'].includes(event.key)) { event.preventDefault(); setHover(event.key === 'Escape' ? null : event.key === 'Home' ? 0 : event.key === 'End' ? 48 : Math.max(0, Math.min(48, (hover ?? 24) + (event.key === 'ArrowRight' ? 1 : -1)))) } }}>
-        {tooltip && hover !== null && <><div aria-hidden className="pointer-events-none absolute inset-y-0 w-px bg-ink3" style={{ left: `${hover / 48 * 100}%` }} /><div role="tooltip" className="pointer-events-none absolute top-0 z-10 w-[232px] border border-line bg-surface p-3 text-caption shadow-lg" style={{ left: `clamp(0px, calc(${hover / 48 * 100}% - 116px), calc(100% - 232px))` }}>
-          <p className="mb-2 font-medium text-ink3">{tooltip.date}</p><dl className="flex flex-col gap-1">
-            <div className="flex justify-between gap-2"><dt>Total</dt><dd className="text-body">{masked ? '[*******]' : fmtUsd(tooltip.total)}</dd></div>
-            <div className="flex justify-between gap-2"><dt>Public</dt><dd className="text-body">{fmtUsd(tooltip.total - tooltip.confidential)}{!masked && ` (${(100 - tooltip.pct).toFixed(0)}%)`}</dd></div>
-            <div className="flex justify-between gap-2"><dt>Confidential</dt><dd className="text-body text-accentInk">{masked ? '[*******]' : fmtPrivate(tooltip.confidential) + ` (${tooltip.pct.toFixed(0)}%)`}</dd></div>
-          </dl>
-        </div></>}
-        <svg viewBox="0 0 1000 180" preserveAspectRatio="none" className="h-full w-full" role="img" aria-label="Area chart of public and confidential balance over time">
-          <path d={area(top)} fill="var(--color-line)" opacity=".5" />
-          <path d={line(top)} stroke="var(--chart-stroke)" strokeWidth="1" fill="none" vectorEffect="non-scaling-stroke" />
-          {!masked && (
-            <>
-              <path d={area(priv)} fill="var(--color-accent)" opacity=".28" />
-              <path d={line(priv)} stroke="var(--color-accent-ink)" strokeWidth="1.5" fill="none" vectorEffect="non-scaling-stroke" />
-              {events.map(e => (
-                <path key={e.x} d={`M${X(e.x)} ${Y(e.y)} V180`} stroke="var(--color-accent-ink)" strokeDasharray="2 3" vectorEffect="non-scaling-stroke" />
-              ))}
-            </>
-          )}
-        </svg>
-        {!masked &&
-          events.map(e => <span key={e.x} className="absolute h-2 w-2 -translate-x-1/2 -translate-y-1/2 rotate-45 border border-accentInk bg-surface" style={{ left: `${e.x * 100}%`, top: `${(Y(e.y) / 180) * 100}%` }} />)}
-        {masked && <span className="absolute bottom-2 left-0 bg-surface/80 px-2 py-1 text-caption text-ink3">Confidential series hidden</span>}
-      </div>
-      <div className="mt-2 flex flex-wrap justify-between gap-2 text-caption text-ink3">
-        {LABELS[range].map(l => (
-          <span key={l}>{l}</span>
-        ))}
-      </div>
-    </section>
-  )
-}
 
 export default function Dashboard() {
   const { s, act, mobile } = useStore()
@@ -129,11 +30,8 @@ export default function Dashboard() {
   const empty = total === 0
   const zeros = SYMS.filter(sym => { const balance = portfolioBalance(s.balances, sym); return balance.pub === 0 && balance.priv === 0 })
   const displayed = empty || showZero ? SYMS : SYMS.filter(sym => !zeros.includes(sym))
-  const pad = mobile ? 'p-5' : 'p-5'
+  const pad = mobile ? 'py-4' : 'p-5'
   const { t } = useMotion()
-  const [history, setHistory] = useState(() => {
-    try { return sessionStorage.getItem(HISTORY_KEY) === 'open' } catch { return false }
-  })
   const tab = s.activityOpen ? 'Activity' : 'Tokens'
   useEffect(() => {
     const openActivity = () => {
@@ -143,10 +41,6 @@ export default function Dashboard() {
     window.addEventListener('hashchange', openActivity)
     return () => window.removeEventListener('hashchange', openActivity)
   }, [act])
-  const toggleHistory = () => {
-    try { sessionStorage.setItem(HISTORY_KEY, history ? 'closed' : 'open') } catch { /* browsing session only */ }
-    setHistory(!history)
-  }
   const selectTab = (label: string) => {
     if (label === 'Tokens' && /^#\/?activity$/.test(location.hash)) window.history.replaceState(null, '', '#/dashboard')
     act.set({ activityOpen: label === 'Activity' })
@@ -173,25 +67,12 @@ export default function Dashboard() {
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <Masked value={total} hidden={masked && !empty} bare prefix="$" className={`font-medium  ${mobile ? 'text-value ' : 'text-value '}`} />
-            <button type="button" onClick={act.toggleHidden} aria-label={masked ? 'Reveal confidential balances' : 'Hide confidential balances'} aria-pressed={!masked} className="flex size-11 shrink-0 items-center justify-center border border-line bg-surface hover:border-lineStrong">
-              <Icon name={masked ? 'eye' : 'eye-off'} size={18} />
-            </button>
-            {!mobile && <Button size={48} arrow className="ml-auto w-[168px]" onClick={() => nav('shield')}>Shield</Button>}
+            {!mobile && <Button size={48} arrow className="overview-shield ml-auto w-[168px]" onClick={() => nav('shield')}>Shield</Button>}
           </div>
-          {mobile ? <div className="mt-4"><ActionRow stretch /></div> : <p className="mt-2 text-body text-ink3">{separate(empty ? `No balances yet\u001f${net.name}` : `2 assets\u001f${net.name}${net.unsupported ? '' : ' Sepolia'}`)}</p>}
+          {mobile ? <div className="mt-4"><Button full size={52} arrow className="overview-shield" onClick={() => nav('shield')}>Shield</Button></div> : <p className="mt-2 text-body text-ink3">{separate(empty ? `No balances yet\u001f${net.name}` : `2 assets\u001f${net.name}${net.unsupported ? '' : ' Sepolia'}`)}</p>}
           <div className={mobile ? 'mt-4' : 'mt-6'}>
             <RatioBar priv={u.priv} pub={u.pub} hidden={masked && !empty} compact={mobile} />
           </div>
-          {!empty && (
-            <div className="mt-6 border-t border-line pt-2">
-              <button type="button" aria-expanded={history} aria-controls="balance-history" onClick={toggleHistory} className="mx-auto flex min-h-10 items-center gap-2 px-3 text-body font-medium text-accentInk">
-                {history ? 'Show less' : 'Show more'} <Icon name="chevron-down" size={14} className={history ? 'rotate-180' : ''} />
-              </button>
-              <div id="balance-history" hidden={!history}>
-                {history && <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: t(160) }}><Chart masked={masked} /></motion.div>}
-              </div>
-            </div>
-          )}
         </section>
 
 
@@ -206,12 +87,6 @@ export default function Dashboard() {
             }}>
               {['Tokens', 'Activity'].map(label => <button key={label} id={`overview-tab-${label}`} type="button" role="tab" aria-selected={label === tab} aria-controls="overview-panel" tabIndex={label === tab ? 0 : -1} onClick={() => selectTab(label)} className={`min-h-10 border-b-2 text-body ${label === tab ? 'border-accent text-ink' : 'border-transparent text-ink3'}`}>{label}</button>)}
             </div>
-            {tab === 'Tokens' && (
-            <button type="button" onClick={s.permit === 'active' ? act.toggleHidden : act.renew} className="flex items-center gap-1.5 py-1 text-body font-medium text-accentInk hover:underline">
-              {s.permit === 'expired' ? 'Renew permit' : s.permit === 'none' ? 'Create permit' : masked ? 'Reveal all' : mobile ? 'Hide' : 'Hide all'}
-              <Icon name={s.permit !== 'active' ? 'permit-key' : masked ? 'eye' : 'eye-off'} size={14} />
-            </button>
-            )}
           </div>
           <div id="overview-panel" role="tabpanel" aria-labelledby={`overview-tab-${tab}`}>
           {tab === 'Activity' ? <ActivityList items={s.activity} hidden={masked} /> : net.unsupported ? (

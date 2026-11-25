@@ -2,6 +2,7 @@ import tokens from '../assets/tokens.json'
 import { copy, data, useStore } from '../state/store'
 import Chip from '../ui/Chip'
 import Icon from '../ui/Icon'
+import PendingDots from '../ui/PendingDots'
 import Sheet, { SheetClose } from '../ui/Sheet'
 
 export default function ConnectSheet() {
@@ -26,7 +27,7 @@ export default function ConnectSheet() {
                 </span>
                 <span className="flex-1 text-heading font-medium">{busy ? 'Connecting…' : w.name}</span>
                 {busy ? (
-                  <Icon name="spinner" size={18} className="text-accentInk" />
+                  <PendingDots />
                 ) : (
                   <>
                     {w.detected && <Chip className=" !">Detected</Chip>}

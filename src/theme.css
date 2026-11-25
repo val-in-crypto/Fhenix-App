@@ -231,3 +231,13 @@
 .app-logo[data-app="Obolos"] { background: var(--app-obolos-tile); }
 .app-logo[data-app="Privara"] { background: var(--brand-white); }
 .app-logo[data-app="Privara"] > span { background: var(--app-privara-ink); }
+
+:root { --shield-start: #0FD9DE; --shield-mid: #ABFDFF; --shield-edge: #88FDFF; --shield-shadow: rgba(0,0,0,.05); --shield-mobile-shadow: rgba(15,217,222,.15); --amount-border: rgba(10,217,220,.4); }
+.overview-shield { background: linear-gradient(102deg,var(--shield-start),var(--shield-mid) 44%,var(--color-accent)); border: 1px solid var(--shield-edge); box-shadow: 0 2px 4px var(--shield-shadow); }
+.pending-dots { display:inline-flex; width:20px; height:4px; gap:4px; }
+.pending-dots > span { width:4px; height:4px; background:currentColor; animation: pending-dot 700ms ease-in-out infinite alternate; }
+.pending-dots > span:nth-child(2) { animation-delay:150ms; }.pending-dots > span:nth-child(3) { animation-delay:300ms; }
+@keyframes pending-dot { from {opacity:0} 57%,to {opacity:1} }
+@media (max-width:767px) { .mobile-shell .dashboard-card { background:transparent; border:0; border-bottom:1px solid var(--color-line); box-shadow:none; }.dashboard-card.overview-hero { background:transparent; }.overview-shield {box-shadow:0 8px 24px var(--shield-mobile-shadow);} :root:not([data-theme="dark"]) .overview-shield {background:var(--color-accent);border-color:var(--color-accent);} }
+@media (prefers-reduced-motion:reduce) { .pending-dots > span {animation:none;opacity:1;} }
+.reduce-motion .pending-dots > span { animation:none;opacity:1; }

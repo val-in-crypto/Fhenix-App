@@ -5,7 +5,7 @@ import { fmtPublic, num, trimAmt } from '../lib/format'
 
 export { data }
 export const copy = data.copy
-export const prices: Record<Sym, number> = data.prices
+export const prices: Record<Sym, number> = { ...data.prices, WBTC: 0, USDT: 1 }
 
 /* ---------- hash router ---------- */
 export type Route = 'welcome' | 'dashboard' | 'shield' | 'unshield' | 'send' | 'apps' | 'permits'
@@ -28,7 +28,7 @@ export const useRoute = (): Route => useSyncExternalStore(subHash, parse)
 
 /* ---------- types ---------- */
 export type Permit = 'none' | 'active' | 'expired'
-export type Sym = 'USDC' | 'ETH'
+export type Sym = 'USDC' | 'ETH' | 'WBTC' | 'USDT'
 export type Balances = Record<Sym, { pub: number; priv: number }>
 export interface Activity {
   id: string
@@ -92,8 +92,8 @@ export interface State {
 }
 
 const ETH_PRIV = 428.35 / prices.ETH // displays as 0.1338, keeps the $1,428.35 summary exact
-export const fullBalances = (): Balances => ({ USDC: { pub: 1250, priv: 1000 }, ETH: { pub: 0.2, priv: ETH_PRIV } })
-export const zeroBalances = (): Balances => ({ USDC: { pub: 0, priv: 0 }, ETH: { pub: 0, priv: 0 } })
+export const fullBalances = (): Balances => ({ USDC: { pub: 1250, priv: 1000 }, ETH: { pub: 0.2, priv: ETH_PRIV }, WBTC: { pub: 0, priv: 0 }, USDT: { pub: 0, priv: 0 } })
+export const zeroBalances = (): Balances => ({ USDC: { pub: 0, priv: 0 }, ETH: { pub: 0, priv: 0 }, WBTC: { pub: 0, priv: 0 }, USDT: { pub: 0, priv: 0 } })
 
 export const fresh = (): State => ({
   connected: false,
@@ -139,7 +139,7 @@ export const usd = (b: Balances) => ({
   pub: b.USDC.pub * prices.USDC + b.ETH.pub * prices.ETH,
   priv: b.USDC.priv * prices.USDC + b.ETH.priv * prices.ETH,
 })
-export const isMasked = (s: State) => s.hidden || s.permit !== 'active'
+export const isMasked = (s: State) => s.permit !== 'active' || s.tour.status === 'active'
 export const TOUR_ROUTES: Route[] = ['dashboard', 'dashboard', 'shield', 'dashboard']
 
 /* ---------- persistence ---------- */
@@ -153,6 +153,7 @@ function load(): State {
   } catch {
     /* ignore */
   }
+  s.balances = { ...zeroBalances(), ...s.balances }
   // in-flight mock transactions don't survive a reload
   if (s.shieldStep > 0) s.shieldStep = 0
   if (s.unshieldStep === 1) s.unshieldStep = 0

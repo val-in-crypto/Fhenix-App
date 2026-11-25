@@ -61,7 +61,7 @@ export default function PermitSheet() {
       </label>
       <div className="flex flex-col items-center">
         <Button size={mobile ? 56 : 48} full arrow busy={s.signing} disabled={s.signing} onClick={() => act.signPermit(days)}>
-          {s.signing ? 'Waiting for signature…' : c[6]}
+          {s.signing ? 'Confirm in your wallet' : c[6]}
         </Button>
         <button type="button" disabled={s.signing} onClick={act.permitNotNow} className="mt-4 px-3 py-1 text-body font-medium text-ink2 underline underline-offset-4 hover:text-ink">
           {c[7]}
