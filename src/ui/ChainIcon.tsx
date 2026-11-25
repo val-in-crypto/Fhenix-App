@@ -5,7 +5,8 @@ import generic from '../assets/icons/chain-generic.svg?raw'
 
 const chains: Record<number, string> = { 1: ethereum, 11155111: ethereum, 8453: base, 84532: base, 42161: arbitrum, 421614: arbitrum }
 
-export default function ChainIcon({ chainId }: { chainId: number }) {
+export default function ChainIcon({ chainId, size = 16 }: { chainId: number; size?: number }) {
   const icon = chains[chainId] ?? generic
-  return <span className={`chain-icon inline-flex shrink-0 ${icon === ethereum ? 'chain-ethereum' : ''}`} aria-hidden dangerouslySetInnerHTML={{ __html: icon }} />
+  const nativeSize = Number(/width="([\d.]+)"/.exec(icon)?.[1] ?? 16)
+  return <span className="chain-icon inline-flex shrink-0" aria-hidden style={{ width: size, height: size }}><span style={{ transform: `scale(${size / nativeSize})`, transformOrigin: 'top left' }} dangerouslySetInnerHTML={{ __html: icon }} /></span>
 }

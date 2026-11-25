@@ -4,6 +4,8 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 import BrandLogo from '../ui/BrandLogo'
 import Sidebar from './Sidebar'
 import { useTheme } from '../lib/theme'
+import VerticalSeparator from '../ui/VerticalSeparator'
+import Sheet, { SheetClose } from '../ui/Sheet'
 import tokens from '../assets/tokens.json'
 import { useMotion } from '../lib/motion'
 import { data, nav, useStore, type Route } from '../state/store'
@@ -36,7 +38,15 @@ function Dropdown({ button, children, align = 'left' }: { button: (open: boolean
   useEffect(() => {
     if (!open) return
     const down = (e: PointerEvent) => !ref.current?.contains(e.target as Node) && setOpen(false)
-    const key = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false)
+    const key = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { setOpen(false); ref.current?.querySelector<HTMLButtonElement>('[aria-haspopup]')?.focus() }
+      if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(e.key)) return
+      const rows = Array.from(ref.current?.querySelectorAll<HTMLElement>('[role="menuitem"]:not(:disabled)') ?? [])
+      if (!rows.length) return
+      e.preventDefault()
+      const index = rows.indexOf(document.activeElement as HTMLElement)
+      rows[e.key === 'Home' ? 0 : e.key === 'End' ? rows.length - 1 : (index + (e.key === 'ArrowDown' ? 1 : -1) + rows.length) % rows.length]?.focus()
+    }
     document.addEventListener('pointerdown', down)
     document.addEventListener('keydown', key)
     return () => {
@@ -96,45 +106,40 @@ function NetworkItems({ close }: { close: () => void }) {
 }
 
 export function WalletChip() {
-  const { act, mobile } = useStore()
-  return (
-    <Dropdown
-      align="right"
-      button={(open, toggle) => (
-        <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-11 items-center gap-2 border border-line bg-surface pl-2 pr-2.5 hover:border-lineStrong">
-          <span className="round h-6 w-6" style={{ background: 'var(--wallet-identicon)' }} />
-          <span className="mono">{data.account.short}</span>
-          <Icon name="copy" size={14} className="text-ink3" />
-          <Icon name="chevron-down" className="text-ink3" />
-        </button>
-      )}
-    >
-      {close => (
-        <>
-          <MenuItem icon={<Icon name="copy" className="text-ink2" />} onClick={() => (act.copyAddress(), close())}>
-            Copy address
-          </MenuItem>
-          {mobile && <NetworkItems close={close} />}
-          <div className="my-1 h-px bg-line" />
-          <MenuItem icon={<Icon name="close" size={16} className="text-ink2" />} onClick={() => (close(), act.disconnect())}>
-            Disconnect
-          </MenuItem>
-        </>
-      )}
-    </Dropdown>
-  )
+  const { s, act, mobile } = useStore()
+  const [walletOpen, setWalletOpen] = useState(false)
+  const network = data.networks[s.networkIdx]
+  const contents = (close: () => void) => <>
+    <MenuItem icon={<Icon name="copy" size={16} />} onClick={() => { act.copyAddress(); close() }}><span className="mono">{s.address.slice(0, 6)}…{s.address.slice(-4)}</span></MenuItem>
+    <div className="my-1 h-px bg-line" /><NetworkItems close={close} />
+    <div className="my-1 h-px bg-line" />
+    <div className="flex items-center justify-between px-3 py-2 text-body"><span>Permit</span><span className={s.permit === 'active' ? 'text-live' : s.permit === 'expired' ? 'text-warn' : 'text-ink3'}>{s.permit === 'active' ? `Active | ${Math.max(0, s.permitDays - 1)} days` : s.permit === 'expired' ? 'Expired' : 'None'}</span></div>
+    <MenuItem onClick={() => { close(); nav('permits') }}>Manage permits</MenuItem>
+    {s.permit !== 'active' && <MenuItem onClick={() => { close(); act.renew() }}>{s.permit === 'expired' ? 'Renew' : '+ Create permit'}</MenuItem>}
+    <div className="my-1 h-px bg-line" />
+    <MenuItem icon={<Icon name="close" size={16} />} onClick={() => { close(); act.disconnect() }}>Disconnect</MenuItem>
+  </>
+  if (mobile) return <>
+    <div className="flex h-11 w-48 shrink-0 items-center gap-2 border border-line bg-surface pl-1.5 pr-3" role="group" aria-label="Wallet">
+      <ChainIcon chainId={network.chainId} size={20} /><VerticalSeparator />
+      <button type="button" aria-label="Copy wallet address" onClick={act.copyAddress} className="flex h-full min-w-0 flex-1 items-center gap-1.5"><span className="mono whitespace-nowrap">{data.account.short}</span><Icon name="copy" size={16} /></button>
+      <VerticalSeparator /><button type="button" aria-label="Open wallet" aria-haspopup="dialog" aria-expanded={walletOpen} onClick={() => setWalletOpen(true)} className="flex h-full shrink-0 items-center"><Icon name="chevron-down" size={16} /></button>
+    </div>
+    <Sheet open={walletOpen} onClose={() => setWalletOpen(false)} label="Wallet"><div className="flex items-center justify-between"><h2 className="text-title">Wallet</h2><SheetClose onClick={() => setWalletOpen(false)} /></div><div role="menu" aria-label="Wallet options">{contents(() => setWalletOpen(false))}</div></Sheet>
+  </>
+  return <Dropdown align="right" button={(open, toggle) => <button type="button" aria-label="Open wallet" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-11 items-center gap-2 border border-line bg-surface pl-[7px] pr-3"><ChainIcon chainId={network.chainId} size={20} /><VerticalSeparator /><span className="mono">{data.account.short}</span><Icon name="chevron-down" size={16} /></button>}>{contents}</Dropdown>
 }
 
 export function NetworkChip() {
-  const { s } = useStore()
+  const { s, mobile } = useStore()
   const n = data.networks[s.networkIdx]
   return (
     <Dropdown
       align="right"
       button={(open, toggle) => (
-        <button type="button" aria-haspopup="menu" aria-expanded={open} onClick={toggle} className="flex h-11 items-center gap-2 border border-line bg-surface px-3 text-body font-medium hover:border-lineStrong">
+        <button type="button" aria-label={`Network: ${n.name}`} aria-haspopup="menu" aria-expanded={open} onClick={toggle} className={`flex h-11 items-center gap-2 border border-line bg-surface text-body hover:border-lineStrong ${mobile ? 'w-11 justify-center' : 'px-3'}`}>
           <ChainIcon chainId={n.chainId} />
-          {n.name}
+          {!mobile && n.name}
         </button>
       )}
     >
@@ -173,13 +178,13 @@ function TopBar({ route }: { route: Route }) {
   const connect = <Button size={44} onClick={() => act.startConnect(false)} className="!text-body">Connect</Button>
   if (mobile) return (
     <header className="z-20 flex shrink-0 items-center justify-between gap-2 px-5" style={{ height: tokens.size.topBarMobile }}>
-      {mobileTitles[route] ? <h1 className="text-title font-medium">{mobileTitles[route]}</h1> : <Logo height={22} />}
-      {s.connected ? <WalletChip /> : connect}
+      {mobileTitles[route] ? <h1 className="text-title font-medium">{mobileTitles[route]}</h1> : <span className="max-[389px]:w-28 max-[389px]:[&_.r5-brand]:origin-left max-[389px]:[&_.r5-brand]:scale-[.86]"><Logo height={22} /></span>}
+      {s.connected ? <WalletChip /> : <><NetworkChip />{connect}</>}
     </header>
   )
   return (
-    <header className="z-20 flex h-[108px] shrink-0 items-center justify-end gap-2 px-8">
-      {s.connected ? <><NetworkChip /><WalletChip /></> : connect}
+    <header className="z-20 flex h-[116px] shrink-0 items-start justify-end gap-2 pb-6 pl-8 pr-10 pt-8">
+      {s.connected ? <WalletChip /> : <><NetworkChip />{connect}</>}
     </header>
   )
 }
