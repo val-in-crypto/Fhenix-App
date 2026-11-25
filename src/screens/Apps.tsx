@@ -8,6 +8,7 @@ import { separate } from '../ui/Sep'
 import ThemeSwitch from '../ui/ThemeSwitch'
 import Chip from '../ui/Chip'
 import Icon from '../ui/Icon'
+import AppLogo from '../ui/AppLogo'
 
 const descriptions: Record<string, string> = {
   AlphaEngine: 'Confidential DeFi execution that hides trade intents and strategy details to reduce MEV.',
@@ -19,7 +20,7 @@ const descriptions: Record<string, string> = {
 
 function BuildCard() {
   return <div className="confidential-box flex h-[231px] flex-col gap-3 border border-[var(--color-confidential-border)] bg-accentSoft px-6 py-5">
-    <span className="inline-flex h-6 [&>svg]:h-full [&>svg]:w-auto" aria-hidden dangerouslySetInnerHTML={{ __html: asterisk }} />
+    <AppLogo app="CoFHE" />
     <h2 className="text-title font-medium ">Build on CoFHE</h2>
     <p className="line-clamp-2 text-body  text-ink2">Ship an app with confidential state and get listed in Fhenix App.</p>
     <a href={DOCS_URL} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex min-h-11 items-center font-medium text-accentInk">Read the docs <Icon name="arrow-up-right" size={14} /></a>
@@ -56,7 +57,7 @@ function CardsCarousel({ children, mobile }: { children: ReactNode[]; mobile: bo
 export default function Apps() {
   const { act, mobile } = useStore()
   const cards = data.apps.map(app => <button key={app.name} type="button" onClick={() => act.toast({ kind: 'info', title: app.tag === 'Live' ? app.name : 'Coming soon' })} className="flex h-[231px] w-full flex-col gap-2 border border-line bg-surface px-6 py-5 text-left hover:border-accent">
-    <span className="flex w-full items-start justify-between"><span className="flex size-10 items-center justify-center border border-line bg-navy text-caption text-accent">{app.abbr}</span><Chip tone={app.tag === 'Live' ? 'live' : 'neutral'} dot={app.tag === 'Live'}>{app.tag}</Chip></span>
+    <span className="flex w-full items-start justify-between"><AppLogo app={app.name} /><Chip tone={app.tag === 'Live' ? 'live' : 'neutral'} dot={app.tag === 'Live'}>{app.tag}</Chip></span>
     <span className="text-heading font-medium ">{app.name}</span>
     <span className="line-clamp-2 text-body  text-ink2">{descriptions[app.name]}</span>
     <span className="mt-auto flex items-center gap-2 text-caption font-medium">{app.tag === 'Live' ? 'ENTER' : 'NOTIFY ME'}<Icon name="pixel-arrow" size={10} /></span>

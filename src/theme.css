@@ -226,3 +226,8 @@
 /* R5 table: 176px column gaps at the 1440px reference width. */
 .token-grid { display: grid; grid-template-columns: minmax(140px,209px) 69px 58px 174px; column-gap: clamp(12px, calc((100% - 510px) / 3), 176px); padding-inline: 16px; }
 .token-mini-fill { background: repeating-linear-gradient(135deg,var(--color-accent-ink) 0 1px,transparent 1px 4px),var(--color-accent); }
+
+:root { --app-obolos-tile: #10111b; --app-privara-ink: #000; }
+.app-logo[data-app="Obolos"] { background: var(--app-obolos-tile); }
+.app-logo[data-app="Privara"] { background: var(--brand-white); }
+.app-logo[data-app="Privara"] > span { background: var(--app-privara-ink); }
